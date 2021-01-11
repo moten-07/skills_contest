@@ -5,7 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,38 +30,45 @@ public class jGuideActivity extends AppCompatActivity {
     // 视图列表
     private View[] points;
     // 小图标列表
-    Button button;
+    Button button,button2;
     // 按钮
     private int vpIndex=0;
     // 页面计数器
     Timer timer=new Timer();
     // 计时器，在onDestroy()中注销
-
+    SharedPreferences sp;
+    // 数据存储接口
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guide);
         // 主视图绑定
         button=findViewById(R.id.btn_skip);
+        button2=findViewById(R.id.webset);
         // 按钮绑定
+        sp=jGuideActivity.this.getSharedPreferences("config", Context.MODE_PRIVATE);
+        // 初始化数据存储接口
+        if(sp.getBoolean("first_time",true)) {
+//            startActivity(new Intent(jGuideActivity.this,ActivityHome.class));
+        }
+        // 若"first_time" 存在，返回真，直接跳转主页
         for(int i=0;i<5;i++){
             viewList.add(LayoutInflater.from(this).inflate(R.layout.item_vp,null));
             // 往视图列表中添加视图
         }
         initImage();
         viewPager.setAdapter(new PagerAdapter() {
+            // 绑定适配器
             @Override
             public int getCount() {
                 return viewList.size();
             }
             // 返回可用的视图数量.
-
             @Override
             public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
                 return view==object;
                 // 确定一个页面视图是否与instantiateItem(ViewGroup, int)返回的特定关键对象相关联。
             }
-
             @NonNull
             @Override
             public Object instantiateItem(@NonNull ViewGroup container, int position) {
@@ -87,6 +98,7 @@ public class jGuideActivity extends AppCompatActivity {
                     // 循环更改下方图标，使之与页面一致
                 }
                 button.setVisibility((position == 4) ? View.VISIBLE :View.GONE) ;
+                button2.setVisibility((position == 4) ? View.VISIBLE :View.GONE) ;
                 // 按钮的可见性，仅在最后一页可见
             }
             @Override
@@ -96,13 +108,24 @@ public class jGuideActivity extends AppCompatActivity {
         });
 
         button.setOnClickListener(new View.OnClickListener() {
-            // 按钮单击事件
+            // 按钮单击事件(进入主页)
             @Override
             public void onClick(View v) {
                 // 单击后
-                // 点击后将第一次进入的属性改为flase
+                sp.edit().putBoolean("first_time",false);
+                // 点击后将第一次进入的属性"first_time"改为false
                 startActivity(new Intent(jGuideActivity.this,ActivityHome.class));
                 // 跳转到下一个页面
+            }
+        });
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder=new AlertDialog.Builder(jGuideActivity.this);
+                AlertDialog dialog=builder.create();
+                View view=View.inflate(jGuideActivity.this,R.layout.item_dialog,null);
+                dialog.setView(view);
+                builder.show();
             }
         });
 
@@ -161,4 +184,5 @@ public class jGuideActivity extends AppCompatActivity {
         timer.cancel();
         // 注销计时器
     }
+
 }

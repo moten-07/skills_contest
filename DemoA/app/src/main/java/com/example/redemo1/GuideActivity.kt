@@ -4,6 +4,7 @@ import android.content.Context
 import android.media.Image
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,7 +25,7 @@ class GuideActivity : AppCompatActivity() {
             LayoutInflater.from(this).inflate(R.layout.item_vp, null),
             LayoutInflater.from(this).inflate(R.layout.item_vp, null)
         )
-        // 视图列表，lazy:延迟初始化————提高性能，使用时初始化
+        // 视图列表，lazy:延迟初始化————提高性能，使用时再初始化
     }
     private val pointarr by lazy {
         arrayOf(poin1,poin2,poin3,poin4,poin5)
@@ -35,10 +36,10 @@ class GuideActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_guide)
 
-//        if(sp.getBoolean("first_time",true)) finish()
+        if(sp.getBoolean("first_time",true)) // finish()
         btn_skip.setOnClickListener {
-            editor.putBoolean("first_time",false)
-            finish()
+            editor.putBoolean("first_time",true)
+            // finish()
         }
 
 //        vp.offscreenPageLimit=1 // 设置预加载页面数量
