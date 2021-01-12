@@ -1,12 +1,11 @@
 package com.example.redemo1;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
@@ -43,20 +43,25 @@ public class jGuideActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guide);
         // 主视图绑定
-        button=findViewById(R.id.btn_skip);
-        button2=findViewById(R.id.webset);
-        // 按钮绑定
+
         sp=jGuideActivity.this.getSharedPreferences("config", Context.MODE_PRIVATE);
         // 初始化数据存储接口
+
         if(sp.getBoolean("first_time",true)) {
-//            startActivity(new Intent(jGuideActivity.this,ActivityHome.class));
+            finish();
+            // 关闭此页面
+            startActivity(new Intent(jGuideActivity.this,ActivityHome.class));
         }
         // 若"first_time" 存在，返回真，直接跳转主页
+
+
         for(int i=0;i<5;i++){
             viewList.add(LayoutInflater.from(this).inflate(R.layout.item_vp,null));
             // 往视图列表中添加视图
         }
+
         initImage();
+
         viewPager.setAdapter(new PagerAdapter() {
             // 绑定适配器
             @Override
@@ -84,6 +89,7 @@ public class jGuideActivity extends AppCompatActivity {
                 // 移除给定位置的页面
             }
         });
+
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -114,19 +120,18 @@ public class jGuideActivity extends AppCompatActivity {
                 // 单击后
                 sp.edit().putBoolean("first_time",false);
                 // 点击后将第一次进入的属性"first_time"改为false
+                finish();
                 startActivity(new Intent(jGuideActivity.this,ActivityHome.class));
                 // 跳转到下一个页面
             }
         });
+
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder=new AlertDialog.Builder(jGuideActivity.this);
-                AlertDialog dialog=builder.create();
-                View view=View.inflate(jGuideActivity.this,R.layout.item_dialog,null);
-                dialog.setView(view);
-                builder.show();
+                MyDialog();
             }
+            // 弹窗
         });
 
         TimerTask timerTask=new TimerTask() {
@@ -157,7 +162,9 @@ public class jGuideActivity extends AppCompatActivity {
 
         timer.schedule(timerTask,2000,3000);
         // 触发计时器，timerTask:触发事件，delay:延迟时间，period:持续时间
+
     }
+
     private void initImage(){
         // 图片绑定
         ImageView im1=(ImageView) viewList.get(1).findViewById(R.id.imageView);
@@ -168,6 +175,7 @@ public class jGuideActivity extends AppCompatActivity {
         im3.setImageResource(R.drawable.ic_baseline_all_inclusive_24);
         ImageView im4=(ImageView) viewList.get(4).findViewById(R.id.imageView);
         im4.setImageResource(R.drawable.ic_baseline_accessibility_24);
+
         points=new View[]{findViewById(R.id.poin1),
                 findViewById(R.id.poin2),
                 findViewById(R.id.poin3),
@@ -175,6 +183,9 @@ public class jGuideActivity extends AppCompatActivity {
                 findViewById(R.id.poin5)
         };
         viewPager=(ViewPager) findViewById(R.id.vp);
+        button=findViewById(R.id.btn_skip);
+        button2=findViewById(R.id.btn_web);
+        // 按钮绑定
         // 控件绑定
     }
 
@@ -183,6 +194,34 @@ public class jGuideActivity extends AppCompatActivity {
         super.onDestroy();
         timer.cancel();
         // 注销计时器
+    }
+
+    private void MyDialog(){
+        // 自定义弹窗
+        AlertDialog.Builder builder=new AlertDialog.Builder(jGuideActivity.this);
+        AlertDialog dialog=builder.create();
+        // 创建弹窗
+        View view=LayoutInflater.from(jGuideActivity.this).inflate(R.layout.item_dialog,null);
+        // 绑定弹窗视图
+        dialog.setView(view);
+        dialog.show();
+
+        Button btn_save=view.findViewById(R.id.btn_Save);
+        EditText ipconfig,webconfig;
+        ipconfig=view.findViewById(R.id.Ipconfig);
+        webconfig=view.findViewById(R.id.webconfig);
+        String ip=ipconfig.getText().toString();
+        String web=webconfig.getText().toString();
+        btn_save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 获取输入值
+                sp.edit().putString("IP",ip);
+                sp.edit().putString("web",web);
+                dialog.dismiss();
+                // 关闭弹窗
+            }
+        });
     }
 
 }
