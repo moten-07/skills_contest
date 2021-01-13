@@ -1,9 +1,12 @@
 package com.example.redemo1.framents;
 
+import android.app.Activity;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
@@ -12,11 +15,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 
+import com.example.redemo1.ActivityHome;
+import com.example.redemo1.LittleApp;
 import com.example.redemo1.R;
+import com.example.redemo1.lappAdapeter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,8 +41,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     EditText seachstr;                          // 搜索框
     View [] news_poins;                         // 轮播图下方小圆点
     ImageButton btn_seach,btn_left,btn_right;   // 按钮
-    ListView lapplist,newslist;                 // 列表
+    ListView newslist;                 // 列表
     List<View> viewList;
+
+    RecyclerView lapplist;
+    List <LittleApp> list;
+    lappAdapeter adapeter;
 
     private int vpIndex=0;
     // 页面计数器
@@ -51,6 +62,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private Object ActivityHome;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -89,6 +101,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         init(view);
+
+
         initImage(view);
         theViewPager();
         viewTimer();
@@ -117,6 +131,21 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         btn_left.setOnClickListener(this::onClick);
         btn_seach.setOnClickListener(this::onClick);
         btn_right.setOnClickListener(this::onClick);
+
+        GridLayoutManager manager=new GridLayoutManager(view.getContext(),5);
+        lapplist.setLayoutManager(manager);
+        list.add(new LittleApp(R.mipmap.subway,"地铁"));
+        list.add(new LittleApp(R.mipmap.subway,"地铁2"));
+        list.add(new LittleApp(R.mipmap.subway,"地铁3"));
+        list.add(new LittleApp(R.mipmap.subway,"地铁4"));
+        list.add(new LittleApp(R.mipmap.subway,"地铁5"));
+        list.add(new LittleApp(R.mipmap.subway,"地铁6"));
+        list.add(new LittleApp(R.mipmap.subway,"地铁7"));
+        list.add(new LittleApp(R.mipmap.subway,"地铁8"));
+        list.add(new LittleApp(R.mipmap.subway,"地铁9"));
+        list.add(new LittleApp(R.mipmap.subway,"更多服务"));
+
+
     }
 
     @Override
