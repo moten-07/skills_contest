@@ -24,6 +24,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class jGuideActivity extends AppCompatActivity {
+    // 引导页主活动（Java版本）
     public ViewPager viewPager;
     // viewPager:可滑动视图
     private List<View> viewList=new ArrayList<View>();

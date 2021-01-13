@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ActivityHome extends AppCompatActivity implements View.OnClickListener {
+    // 主页
     Toolbar toolbar;
     // 注意，需加载androidx下的toolbar包，一般是第二个
     View person,news,home,party,all;
@@ -111,6 +112,7 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
         }
     }
     private void choose(int i){
+        // 事件
         switch (i){
             case 1:
                 person.setBackgroundResource(R.mipmap.personage_in);

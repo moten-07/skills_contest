@@ -1,11 +1,12 @@
 package com.example.redemo1.framents;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.UiThread;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,16 +14,19 @@ import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.redemo1.LittleApp;
-import com.example.redemo1.LittleAppActivity;
+import com.example.redemo1.MainActivity;
 import com.example.redemo1.R;
 import com.example.redemo1.lappAdapeter;
 
@@ -50,7 +54,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     lappAdapeter adapeter;                      // 绑定应用列表的适配器
 
     private int vpIndex=0;                      // 页面计数器
-    Timer timer=new Timer();                    // 计时器
+    Timer timer;                                // 计时器
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -102,8 +106,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         // 碎片绑定
         init(view);
         initImage(view);
-        theViewPager();
-        viewTimer(view);
         return view;
     }
 
@@ -111,6 +113,21 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         // 控件绑定
         viewPager = view.findViewById(R.id.viewpager);
         seachstr = view.findViewById(R.id.seach_str);
+
+        seachstr.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH){
+                    seach(view);
+                    return true;
+                }
+                return false;
+            }
+        });
+        // 重写软键盘的回车键,在此之前要在edittext加上
+        // android:singleLine="true"(单行文本输入)
+        // android:imeOptions="actionSearch"(回车键样式)
+
         news_poins = new View[]{
           view.findViewById(R.id.news_poin1),
           view.findViewById(R.id.news_poin2),
@@ -182,13 +199,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 Log.v("this index",vpIndex+"");
                 break;
             case R.id.btn_seach:
-                String seach = seachstr.getText().toString();
-                // 获取输入内容，向服务器端查询
-                Intent intent= new Intent(v.getContext(), LittleAppActivity.class);
-                intent.putExtra("type","news");
-                intent.putExtra("where",seach);
-                startActivity(intent);
-                // 然后跳转到详情页
+                seach(v);
                 break;
         }
     }
@@ -213,12 +224,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 viewList.get(position).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent2= new Intent(v.getContext(), LittleAppActivity.class);
+                        Intent intent2= new Intent(v.getContext(), MainActivity.class);
                         intent2.putExtra("type","newsViewPager");
                         intent2.putExtra("where",vpIndex+1+"");
                         startActivity(intent2);
                     }
-                });
+                });// 轮播图点击监听
                 return view;
             }
 
@@ -249,23 +260,26 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             }
         });
     }
-    private void viewTimer(View view){
+    private void viewTimer(){
         // 轮播图设置
+        timer=new Timer();
         TimerTask task=new TimerTask() {
             @Override
             public void run() {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if(vpIndex==2){
-                            vpIndex=0;
-                        }else{
-                            vpIndex++;
+                if(!isDestroy(getActivity())) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (vpIndex == 2) {
+                                vpIndex = 0;
+                            } else {
+                                vpIndex++;
+                            }
+                            viewPager.setCurrentItem(vpIndex);
+                            Log.v("index", vpIndex + "");
                         }
-                        viewPager.setCurrentItem(vpIndex);
-                        Log.v("index",vpIndex+"");
-                    }
-                });
+                    });
+                }
             }
         };
         timer.schedule(task,1000,2000);
@@ -279,12 +293,37 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         ((ImageView)viewList.get(2).findViewById(R.id.imageView)).setImageResource(R.drawable.ic_baseline_accessibility_24);
 
     }
+    private void seach(View view){
+        // 搜索功能（软键盘重写事件要用，从onClick()移到这里来）
+        String seach = seachstr.getText().toString();
+        // 获取输入内容，向服务器端查询
+        Intent intent= new Intent(view.getContext(), MainActivity.class);
+        intent.putExtra("type","news");
+        intent.putExtra("where",seach);
+        startActivity(intent);
+        // 然后跳转到详情页
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.v("now","start");
+        viewTimer();
+        theViewPager();
+    }
 
     @Override
     public void onStop() {
         super.onStop();
-        Log.v("now","stop");
+        Log.v("now","stop\t"+timer.toString());
+        timer.cancel();
     }
+    protected boolean isDestroy(Activity activity) {
+        return activity == null || activity.isFinishing() ||
+                (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && activity.isDestroyed());
+    }
+
 
     class indexe extends RecyclerView.ItemDecoration{
         // 设置图标的间隔
@@ -301,5 +340,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             outRect.top=space;
         }
     }
+
 
 }

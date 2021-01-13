@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--  主页碎片  -->
-<!--  可滚动布局  -->
+<!--  可滚动布局ScrollView  -->
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -43,8 +43,11 @@
                 android:ems="10"
                 android:gravity="center"
                 android:hint="@string/seach_hint"
-                android:inputType="text" />
+                android:inputType="text"
+                android:singleLine="true"
+                android:imeOptions="actionSearch"/>
         </LinearLayout>
+        <!-- 轮播图区域 -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout2"
             android:layout_width="match_parent"
@@ -127,6 +130,7 @@
             app:layout_constraintTop_toBottomOf="@id/lapp_list"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"/>
+        <!--  底线  -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

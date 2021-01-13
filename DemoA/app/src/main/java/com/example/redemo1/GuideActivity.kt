@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.activity_guide.*
 import java.util.*
 
 class GuideActivity : AppCompatActivity() {
+    // 引导页主活动（kotlin版本）
     private val timer by lazy { Timer() }
     private var vpIndex: Int =0
     private val viewList: List<View> by lazy {

@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 public class lappAdapeter extends RecyclerView.Adapter<lappAdapeter.ViewHolder> {
+    // 应用服务的适配器
     List <LittleApp>list;
     Context context;
 
@@ -34,7 +35,7 @@ public class lappAdapeter extends RecyclerView.Adapter<lappAdapeter.ViewHolder> 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(context,LittleAppActivity.class);
+                Intent intent=new Intent(context, MainActivity.class);
                 int position=holder.getAdapterPosition();
                 LittleApp app=list.get(position);
                 intent.putExtra("type","littleApp");
