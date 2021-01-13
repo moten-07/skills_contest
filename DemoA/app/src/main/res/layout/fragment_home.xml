@@ -1,48 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".framents.HomeFragment"
-    android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context=".framents.HomeFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+    <!-- 搜索框 -->
     <LinearLayout
+        android:id="@+id/search_bar"
         android:layout_width="wrap_content"
         android:layout_height="44dp"
-        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
         android:background="@drawable/shap1"
-        android:layout_gravity="center"
-        android:layout_marginTop="10dp"
-        >
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
         <ImageButton
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@mipmap/icon_action"
             android:layout_gravity="center"
-            />
+            android:src="@mipmap/icon_action" />
+
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="新闻搜索"
+            android:layout_gravity="center_vertical"
             android:background="@null"
-            android:inputType="text"
+            android:ems="10"
             android:gravity="center"
-            android:layout_gravity="center_vertical"/>
+            android:hint="新闻搜索"
+            android:inputType="text" />
     </LinearLayout>
-
+    <!--  轮播图  -->
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
-        android:layout_height="200dp" />
+        android:layout_height="200dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/search_bar"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@null"
         android:orientation="horizontal"
-        android:background="@null">
+        app:layout_constraintLeft_toLeftOf="@id/viewpager"
+        app:layout_constraintRight_toRightOf="@id/viewpager"
+        app:layout_constraintBottom_toBottomOf="@id/viewpager">
 
+        <View
+            android:id="@+id/news_poin1"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_margin="20dp"
+            android:background="@drawable/bg_point1" />
+
+        <View
+            android:id="@+id/news_poin2"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_margin="20dp"
+            android:background="@drawable/bg_point2" />
+
+        <View
+            android:id="@+id/news_poin3"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_margin="20dp"
+            android:background="@drawable/bg_point2" />
     </LinearLayout>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
