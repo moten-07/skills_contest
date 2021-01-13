@@ -1,4 +1,4 @@
-package com.example.redemo1;
+package com.example.redemo1.Adapeter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +11,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.redemo1.type.LittleApp;
+import com.example.redemo1.MainActivity;
+import com.example.redemo1.R;
 
 import java.util.List;
 

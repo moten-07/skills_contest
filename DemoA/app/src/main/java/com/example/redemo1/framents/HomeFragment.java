@@ -25,10 +25,11 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.redemo1.LittleApp;
+import com.example.redemo1.Adapeter.ThemeAdapeter;
+import com.example.redemo1.Adapeter.lappAdapeter;
+import com.example.redemo1.type.LittleApp;
 import com.example.redemo1.MainActivity;
 import com.example.redemo1.R;
-import com.example.redemo1.lappAdapeter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,9 +50,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     ListView newslist;                          // 新闻列表控件
     List<View> viewList;                        // 轮播图片的列表
 
-    RecyclerView lapplist;                      // 应用列表控件
-    List <LittleApp> list;                      // 应用列表
+    RecyclerView lapplist,themelist;            // 应用列表控件,热门主题列表控件
+    List <LittleApp> list,hot_themelist;        // 应用列表,热门主题列表
     lappAdapeter adapeter;                      // 绑定应用列表的适配器
+    ThemeAdapeter hot_adapeter;                     // 热门主题适配器
 
     private int vpIndex=0;                      // 页面计数器
     Timer timer;                                // 计时器
@@ -139,10 +141,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         btn_seach = view.findViewById(R.id.btn_seach);
 
         lapplist = view.findViewById(R.id.lapp_list);
+        themelist = view.findViewById(R.id.hot_theme);
         newslist = view.findViewById(R.id.news_list);
 
         viewList=new ArrayList<>();
         list=new ArrayList<>();
+        hot_themelist=new ArrayList<>();
 
         btn_left.setOnClickListener(this::onClick);
         btn_seach.setOnClickListener(this::onClick);
@@ -151,6 +155,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         // 加判断，平板模式下spanCount要大于5，未完成
         GridLayoutManager manager=new GridLayoutManager(view.getContext(),5);
+        GridLayoutManager manager2=new GridLayoutManager(view.getContext(),2);
         // 网格布局，显示应用图标数量
         lapplist.setLayoutManager(manager);
         // 列表绑定网格布局

@@ -1,4 +1,4 @@
-package com.example.redemo1;
+package com.example.redemo1.type;
 
 public class LittleApp {
     // 应用服务类
