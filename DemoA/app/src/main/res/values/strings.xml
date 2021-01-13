@@ -17,6 +17,8 @@
         <item>全部</item>
     </string-array>
     <string name="seach_hint">新闻搜索</string>
+    <!--  底线  -->
+    <string name="endstr">------------------我是有底线的------------------</string>
     <!--  应用服务的文本  -->
     <string-array name="littie_app">
         <item></item>
