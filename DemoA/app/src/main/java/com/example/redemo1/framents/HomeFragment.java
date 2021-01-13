@@ -1,6 +1,5 @@
 package com.example.redemo1.framents;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -209,9 +208,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 }
                 viewPager.setCurrentItem(vpIndex);
                 Log.v("index",vpIndex+"");
+
             }
         };
-        timer.schedule(task,2000,3000);
+        timer.schedule(task,1000,2000);
     }
     private void initImage(View v){
         for(int i = 0;i<news_poins.length;i++){
@@ -222,4 +222,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         ((ImageView)viewList.get(2).findViewById(R.id.imageView)).setImageResource(R.drawable.ic_baseline_accessibility_24);
 
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.v("now","stop");
+    }
+
 }
