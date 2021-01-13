@@ -111,7 +111,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/lapp_list"
             android:layout_width="match_parent"
-            android:layout_height="500dp"
+            android:layout_height="200dp"
             android:layout_marginTop="280dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"

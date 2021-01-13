@@ -1,6 +1,7 @@
 package com.example.redemo1.framents;
 
 import android.app.Activity;
+import android.graphics.Rect;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -127,6 +128,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         newslist = view.findViewById(R.id.news_list);
 
         viewList=new ArrayList<>();
+        list=new ArrayList<>();
 
         btn_left.setOnClickListener(this::onClick);
         btn_seach.setOnClickListener(this::onClick);
@@ -143,7 +145,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         list.add(new LittleApp(R.mipmap.subway,"地铁7"));
         list.add(new LittleApp(R.mipmap.subway,"地铁8"));
         list.add(new LittleApp(R.mipmap.subway,"地铁9"));
-        list.add(new LittleApp(R.mipmap.subway,"更多服务"));
+        list.add(new LittleApp(R.mipmap.more,"更多服务"));
+
+        adapeter=new lappAdapeter(view.getContext(),list);
+        lapplist.setAdapter(adapeter);
+        indexe indexe=new indexe(8);
+        lapplist.addItemDecoration(indexe);
 
 
     }
@@ -256,6 +263,22 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public void onStop() {
         super.onStop();
         Log.v("now","stop");
+    }
+
+    class indexe extends RecyclerView.ItemDecoration{
+        // 设置间隔
+        int space;
+        public indexe(int space){
+            this.space=space;
+        }
+        @Override
+        public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+            super.getItemOffsets(outRect, view, parent, state);
+            outRect.bottom=space;
+            outRect.left=space;
+            outRect.right=space;
+            outRect.top=space;
+        }
     }
 
 }
