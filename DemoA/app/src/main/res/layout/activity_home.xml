@@ -23,11 +23,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@color/white">
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_weight="1">
             <View
                 android:id="@+id/icon_person"
                 android:layout_height="80dp"
@@ -42,13 +44,13 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_weight="1">
             <View
                 android:id="@+id/icon_news"
                 android:layout_height="80dp"
                 android:layout_width="80dp"
-                android:background="@mipmap/newa"
-                android:layout_weight="1"/>
+                android:background="@mipmap/newa"/>
             <TextView
                 android:id="@+id/title_news"
                 android:layout_width="wrap_content"
@@ -58,13 +60,13 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_weight="1">
             <View
                 android:id="@+id/icon_home"
                 android:layout_height="80dp"
                 android:layout_width="80dp"
-                android:background="@mipmap/home"
-                android:layout_weight="1"/>
+                android:background="@mipmap/home"/>
             <TextView
                 android:id="@+id/title_home"
                 android:layout_width="wrap_content"
@@ -74,7 +76,8 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_weight="1">
             <View
                 android:id="@+id/icon_subway"
                 android:layout_height="80dp"
@@ -89,7 +92,8 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_weight="1">
             <View
                 android:id="@+id/icon_all"
                 android:layout_height="80dp"
