@@ -12,10 +12,10 @@ import com.example.redemo1.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link SubwayFragment#newInstance} factory method to
+ * Use the {@link PartyFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SubwayFragment extends Fragment {
+public class PartyFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,7 +26,7 @@ public class SubwayFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public SubwayFragment() {
+    public PartyFragment() {
         // Required empty public constructor
     }
 
@@ -39,8 +39,8 @@ public class SubwayFragment extends Fragment {
      * @return A new instance of fragment SubwayFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static SubwayFragment newInstance(String param1, String param2) {
-        SubwayFragment fragment = new SubwayFragment();
+    public static PartyFragment newInstance(String param1, String param2) {
+        PartyFragment fragment = new PartyFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -61,6 +61,6 @@ public class SubwayFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_subway, container, false);
+        return inflater.inflate(R.layout.fragment_party, container, false);
     }
 }

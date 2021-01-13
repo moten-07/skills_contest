@@ -10,11 +10,11 @@
     <string name="guide_page_btn_save">保存修改</string>
     <!--  主页布局下的按钮文本  -->
     <string-array name="bottom_home">
-        <item>个人</item>
+        <item>个人中心</item>
         <item>新闻</item>
-        <item>主页</item>
-        <item>地铁</item>
-        <item>全部</item>
+        <item>首页</item>
+        <item>智慧党建</item>
+        <item>全部服务</item>
     </string-array>
     <string name="seach_hint">新闻搜索</string>
     <!--  底线  -->

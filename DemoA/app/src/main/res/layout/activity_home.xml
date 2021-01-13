@@ -79,10 +79,10 @@
             android:orientation="vertical"
             android:layout_weight="1">
             <View
-                android:id="@+id/icon_subway"
+                android:id="@+id/icon_party"
                 android:layout_height="80dp"
                 android:layout_width="80dp"
-                android:background="@mipmap/subway"/>
+                android:background="@mipmap/party"/>
             <TextView
                 android:id="@+id/title_subway"
                 android:layout_width="wrap_content"

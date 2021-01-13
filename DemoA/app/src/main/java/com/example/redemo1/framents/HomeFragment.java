@@ -3,17 +3,26 @@ package com.example.redemo1.framents;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.example.redemo1.R;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,6 +36,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     View [] news_poins;                         // 轮播图下方小圆点
     ImageButton btn_seach,btn_left,btn_right;   // 按钮
     ListView lapplist,newslist;                 // 列表
+    List<View> viewList;
+
+    private int vpIndex=0;
+    // 页面计数器
+    Timer timer=new Timer();
+    // 计时器
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -75,6 +90,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         init(view);
+        initImage(view);
+        theViewPager();
+        viewTimer();
         return view;
     }
 
@@ -95,6 +113,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         lapplist = view.findViewById(R.id.lapp_list);
         newslist = view.findViewById(R.id.news_list);
 
+        viewList=new ArrayList<>();
+
         btn_left.setOnClickListener(this::onClick);
         btn_seach.setOnClickListener(this::onClick);
         btn_right.setOnClickListener(this::onClick);
@@ -105,9 +125,23 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()){
             case R.id.btn_lastnew:
                 // 跳转到上一轮播图，首页则跳转到尾页
+                if(vpIndex==0){
+                    vpIndex=2;
+                }else{
+                    vpIndex-=1;
+                }
+                viewPager.setCurrentItem(vpIndex);
+                Log.v("this index",vpIndex+"");
                 break;
             case R.id.btn_nextnew:
                 // 跳转到下一轮播图，尾页则跳转至首页
+                if(vpIndex==2){
+                    vpIndex=0;
+                }else{
+                    vpIndex+=1;
+                }
+                viewPager.setCurrentItem(vpIndex);
+                Log.v("this index",vpIndex+"");
                 break;
             case R.id.seach_str:
                 String seach = seachstr.getText().toString();
@@ -116,5 +150,76 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 // 然后跳转到详情页
                 break;
         }
+    }
+    private void theViewPager(){
+        viewPager.setAdapter(new PagerAdapter() {
+            @Override
+            public int getCount() {
+                return viewList.size();
+            }
+
+            @Override
+            public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
+                return view==object;
+            }
+
+
+            @NonNull
+            @Override
+            public Object instantiateItem(@NonNull ViewGroup container, int position) {
+                View view=viewList.get(position);
+                container.removeView(view);
+                return view;
+            }
+
+            @Override
+            public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+                container.removeView(viewList.get(position));
+            }
+        });
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                // 页面跳转后切换下面小圆点状态
+                for (int i = 0;i<news_poins.length;i++){
+                    news_poins[i].setBackgroundResource((i==position) ? R.drawable.bg_point1 : R.drawable.bg_point2);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+    }
+    private void viewTimer(){
+        TimerTask task=new TimerTask() {
+            @Override
+            public void run() {
+                if(vpIndex==2){
+                    vpIndex=0;
+                }else{
+                    vpIndex++;
+                }
+                viewPager.setCurrentItem(vpIndex);
+                Log.v("index",vpIndex+"");
+            }
+        };
+        timer.schedule(task,2000,3000);
+    }
+    private void initImage(View v){
+        for(int i = 0;i<news_poins.length;i++){
+            viewList.add(LayoutInflater.from(v.getContext()).inflate(R.layout.item_vp,null));
+        }
+        ((ImageView)viewList.get(0).findViewById(R.id.imageView)).setImageResource(R.drawable.ic_baseline_account_box_24);
+        ((ImageView)viewList.get(1).findViewById(R.id.imageView)).setImageResource(R.drawable.ic_baseline_all_inclusive_24);
+        ((ImageView)viewList.get(2).findViewById(R.id.imageView)).setImageResource(R.drawable.ic_baseline_accessibility_24);
+
     }
 }
