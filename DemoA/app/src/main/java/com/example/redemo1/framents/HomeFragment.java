@@ -27,6 +27,7 @@ import android.widget.TextView;
 
 import com.example.redemo1.Adapeter.ThemeAdapeter;
 import com.example.redemo1.Adapeter.lappAdapeter;
+import com.example.redemo1.type.Hot_theme;
 import com.example.redemo1.type.LittleApp;
 import com.example.redemo1.MainActivity;
 import com.example.redemo1.R;
@@ -51,9 +52,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     List<View> viewList;                        // 轮播图片的列表
 
     RecyclerView lapplist,themelist;            // 应用列表控件,热门主题列表控件
-    List <LittleApp> list,hot_themelist;        // 应用列表,热门主题列表
-    lappAdapeter adapeter;                      // 绑定应用列表的适配器
-    ThemeAdapeter hot_adapeter;                     // 热门主题适配器
+    List <LittleApp> list;                      // 应用列表
+    List <Hot_theme> hot_themelist;             // 热门主题列表
+    lappAdapeter lappadapeter;                      // 绑定应用列表的适配器
+    ThemeAdapeter hot_adapeter;                 // 热门主题适配器
 
     private int vpIndex=0;                      // 页面计数器
     Timer timer;                                // 计时器
@@ -153,12 +155,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         btn_right.setOnClickListener(this::onClick);
         // 点击监听
 
-        // 加判断，平板模式下spanCount要大于5，未完成
+        // 加判断，平板模式下spanCount要大于5（为4），未完成
         GridLayoutManager manager=new GridLayoutManager(view.getContext(),5);
         GridLayoutManager manager2=new GridLayoutManager(view.getContext(),2);
         // 网格布局，显示应用图标数量
         lapplist.setLayoutManager(manager);
+        themelist.setLayoutManager(manager2);
         // 列表绑定网格布局
+
         list.add(new LittleApp(R.mipmap.subway,"地铁"));
         list.add(new LittleApp(R.mipmap.subway,"地铁2"));
         list.add(new LittleApp(R.mipmap.subway,"地铁3"));
@@ -169,13 +173,26 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         list.add(new LittleApp(R.mipmap.subway,"地铁8"));
         list.add(new LittleApp(R.mipmap.subway,"地铁9"));
         list.add(new LittleApp(R.mipmap.more,"更多服务"));
+
+        // 数据应该是从服务器端传来的
+        hot_themelist.add(new Hot_theme("热门主题1"));
+        hot_themelist.add(new Hot_theme("热门主题2"));
+        hot_themelist.add(new Hot_theme("热门主题3"));
+        hot_themelist.add(new Hot_theme("热门主题4"));
+        hot_themelist.add(new Hot_theme("热门主题5"));
+        hot_themelist.add(new Hot_theme("热门主题6"));
         // 添加列表数据
 
-        adapeter=new lappAdapeter(view.getContext(),list);
-        lapplist.setAdapter(adapeter);
-        // 绑定适配器
+        lappadapeter=new lappAdapeter(view.getContext(),list);
+        lapplist.setAdapter(lappadapeter);
         indexe indexe=new indexe(8);
         lapplist.addItemDecoration(indexe);
+
+        hot_adapeter=new ThemeAdapeter(hot_themelist,view.getContext());
+        themelist.setAdapter(hot_adapeter);
+        indexe indexe1=new indexe(2);
+        themelist.addItemDecoration(indexe1);
+        // 绑定适配器
         //设置间距
 
     }

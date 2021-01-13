@@ -59,11 +59,6 @@ public class lappAdapeter extends RecyclerView.Adapter<lappAdapeter.ViewHolder> 
     }
 
     @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
     public int getItemCount() {
         return list.size();
     }
