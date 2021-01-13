@@ -17,6 +17,10 @@
         <item>全部</item>
     </string-array>
     <string name="seach_hint">新闻搜索</string>
+    <!--  应用服务的文本  -->
+    <string-array name="littie_app">
+        <item></item>
+    </string-array>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

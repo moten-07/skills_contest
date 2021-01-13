@@ -8,6 +8,9 @@ import androidx.viewpager.widget.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ListView;
 
 import com.example.redemo1.R;
 
@@ -18,8 +21,11 @@ import com.example.redemo1.R;
  */
 public class HomeFragment extends Fragment {
 
-    ViewPager viewPager;
-
+    ViewPager viewPager;                        // 轮播图
+    EditText seachstr;                          // 搜索框
+    View [] news_poins;                         // 轮播图下方小圆点
+    ImageButton btn_seach,btn_left,btn_right;   // 按钮
+    ListView lapplist,newslist;                 // 列表
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -66,6 +72,14 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        init(view);
+        return view;
+    }
+
+    private void init(View view){
+        // 控件绑定
+        viewPager = view.findViewById(R.id.viewpager);
+        seachstr = view.findViewById(R.id.seach_str);
     }
 }
