@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.example.redemo1.func.SubwayActivity;
+
 public class MainActivity extends AppCompatActivity {
     TextView textView;
     // 模块功能
@@ -31,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         switch (textView.getText().toString()){
             case "地铁":
                 finish();
-                startActivity(new Intent(MainActivity.this,SubwayActivity.class));
+                startActivity(new Intent(MainActivity.this, SubwayActivity.class));
                 break;
         }
         // 根据传过来的title跳转到正确的activity，未完成

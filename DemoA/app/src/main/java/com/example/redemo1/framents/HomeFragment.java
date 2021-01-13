@@ -185,12 +185,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         lappadapeter=new lappAdapeter(view.getContext(),list);
         lapplist.setAdapter(lappadapeter);
-        indexe indexe=new indexe(8);
+        indexe indexe=new indexe(2);
         lapplist.addItemDecoration(indexe);
 
         hot_adapeter=new ThemeAdapeter(hot_themelist,view.getContext());
         themelist.setAdapter(hot_adapeter);
-        indexe indexe1=new indexe(2);
+        indexe indexe1=new indexe(10);
         themelist.addItemDecoration(indexe1);
         // 绑定适配器
         //设置间距
