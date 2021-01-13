@@ -16,6 +16,18 @@ public class LittleAppActivity extends AppCompatActivity {
 
         textView=findViewById(R.id.textView);
         Intent intent=getIntent();
-        textView.setText(intent.getStringExtra("title"));
+        switch (intent.getStringExtra("type")){
+            case "littleApp":
+                textView.setText(intent.getStringExtra("title"));
+
+                break;
+            case "news":
+                textView.setText(intent.getStringExtra("where"));
+                break;
+            case "newsViewPager":
+                textView.setText("首页轮播图"+intent.getStringExtra("where"));
+                break;
+        }
+        // 根据传过来的title跳转到正确的activity，未完成
     }
 }

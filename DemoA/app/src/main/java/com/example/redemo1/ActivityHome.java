@@ -81,6 +81,7 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
         list.add(new HomeFragment());
         list.add(new PartyFragment());
         list.add(new AllFragment());
+        // 添加碎片
     }
 
     @Override

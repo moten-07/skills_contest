@@ -1,10 +1,11 @@
 package com.example.redemo1.framents;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.UiThread;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,13 +17,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 
-import com.example.redemo1.ActivityHome;
 import com.example.redemo1.LittleApp;
+import com.example.redemo1.LittleAppActivity;
 import com.example.redemo1.R;
 import com.example.redemo1.lappAdapeter;
 
@@ -42,17 +42,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     EditText seachstr;                          // 搜索框
     View [] news_poins;                         // 轮播图下方小圆点
     ImageButton btn_seach,btn_left,btn_right;   // 按钮
-    ListView newslist;                 // 列表
-    List<View> viewList;
+    ListView newslist;                          // 新闻列表控件
+    List<View> viewList;                        // 轮播图片的列表
 
-    RecyclerView lapplist;
-    List <LittleApp> list;
-    lappAdapeter adapeter;
+    RecyclerView lapplist;                      // 应用列表控件
+    List <LittleApp> list;                      // 应用列表
+    lappAdapeter adapeter;                      // 绑定应用列表的适配器
 
-    private int vpIndex=0;
-    // 页面计数器
-    Timer timer=new Timer();
-    // 计时器
+    private int vpIndex=0;                      // 页面计数器
+    Timer timer=new Timer();                    // 计时器
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -101,12 +99,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+        // 碎片绑定
         init(view);
-
-
         initImage(view);
         theViewPager();
-        viewTimer();
+        viewTimer(view);
         return view;
     }
 
@@ -133,9 +130,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         btn_left.setOnClickListener(this::onClick);
         btn_seach.setOnClickListener(this::onClick);
         btn_right.setOnClickListener(this::onClick);
+        // 点击监听
 
+        // 加判断，平板模式下spanCount要大于5，未完成
         GridLayoutManager manager=new GridLayoutManager(view.getContext(),5);
+        // 网格布局，显示应用图标数量
         lapplist.setLayoutManager(manager);
+        // 列表绑定网格布局
         list.add(new LittleApp(R.mipmap.subway,"地铁"));
         list.add(new LittleApp(R.mipmap.subway,"地铁2"));
         list.add(new LittleApp(R.mipmap.subway,"地铁3"));
@@ -146,12 +147,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         list.add(new LittleApp(R.mipmap.subway,"地铁8"));
         list.add(new LittleApp(R.mipmap.subway,"地铁9"));
         list.add(new LittleApp(R.mipmap.more,"更多服务"));
+        // 添加列表数据
 
         adapeter=new lappAdapeter(view.getContext(),list);
         lapplist.setAdapter(adapeter);
+        // 绑定适配器
         indexe indexe=new indexe(8);
         lapplist.addItemDecoration(indexe);
-
+        //设置间距
 
     }
 
@@ -163,7 +166,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 if(vpIndex==0){
                     vpIndex=2;
                 }else{
-                    vpIndex-=1;
+                    vpIndex--;
                 }
                 viewPager.setCurrentItem(vpIndex);
                 Log.v("this index",vpIndex+"");
@@ -173,15 +176,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 if(vpIndex==2){
                     vpIndex=0;
                 }else{
-                    vpIndex+=1;
+                    vpIndex++;
                 }
                 viewPager.setCurrentItem(vpIndex);
                 Log.v("this index",vpIndex+"");
                 break;
-            case R.id.seach_str:
+            case R.id.btn_seach:
                 String seach = seachstr.getText().toString();
                 // 获取输入内容，向服务器端查询
-                // startActivity(new Intent(v.getContext(),[跳转页面].class));
+                Intent intent= new Intent(v.getContext(), LittleAppActivity.class);
+                intent.putExtra("type","news");
+                intent.putExtra("where",seach);
+                startActivity(intent);
                 // 然后跳转到详情页
                 break;
         }
@@ -203,7 +209,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             @Override
             public Object instantiateItem(@NonNull ViewGroup container, int position) {
                 View view=viewList.get(position);
-                container.removeView(view);
+                container.addView(view);
+                viewList.get(position).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent2= new Intent(v.getContext(), LittleAppActivity.class);
+                        intent2.putExtra("type","newsViewPager");
+                        intent2.putExtra("where",vpIndex+1+"");
+                        startActivity(intent2);
+                    }
+                });
                 return view;
             }
 
@@ -211,6 +226,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
                 container.removeView(viewList.get(position));
             }
+
         });
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -233,18 +249,23 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             }
         });
     }
-    private void viewTimer(){
+    private void viewTimer(View view){
+        // 轮播图设置
         TimerTask task=new TimerTask() {
             @Override
             public void run() {
-                if(vpIndex==2){
-                    vpIndex=0;
-                }else{
-                    vpIndex++;
-                }
-                viewPager.setCurrentItem(vpIndex);
-                Log.v("index",vpIndex+"");
-
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(vpIndex==2){
+                            vpIndex=0;
+                        }else{
+                            vpIndex++;
+                        }
+                        viewPager.setCurrentItem(vpIndex);
+                        Log.v("index",vpIndex+"");
+                    }
+                });
             }
         };
         timer.schedule(task,1000,2000);
@@ -266,7 +287,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     class indexe extends RecyclerView.ItemDecoration{
-        // 设置间隔
+        // 设置图标的间隔
         int space;
         public indexe(int space){
             this.space=space;

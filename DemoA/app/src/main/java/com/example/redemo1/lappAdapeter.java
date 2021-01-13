@@ -1,12 +1,10 @@
 package com.example.redemo1;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -39,6 +37,7 @@ public class lappAdapeter extends RecyclerView.Adapter<lappAdapeter.ViewHolder> 
                 Intent intent=new Intent(context,LittleAppActivity.class);
                 int position=holder.getAdapterPosition();
                 LittleApp app=list.get(position);
+                intent.putExtra("type","littleApp");
                 intent.putExtra("icon",app.getImage());
                 intent.putExtra("title",app.getTitle());
                 context.startActivity(intent);

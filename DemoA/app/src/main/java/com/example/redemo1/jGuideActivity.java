@@ -78,7 +78,7 @@ public class jGuideActivity extends AppCompatActivity {
             @Override
             public Object instantiateItem(@NonNull ViewGroup container, int position) {
                 View view=viewList.get(position);
-                container.removeView(view);
+                container.addView(view);
                 return view;
                 // 根据指定的位置创建一个page item
             }
