@@ -3,6 +3,8 @@ package com.example.redemo1;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -17,9 +19,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        textView=findViewById(R.id.textView);
-        Intent intent=getIntent();
-        switch (intent.getStringExtra("type")){
+        textView = findViewById(R.id.textView);
+
+        Intent intent = getIntent();
+        switch (intent.getStringExtra("type")) {
             case "littleApp":
                 textView.setText(intent.getStringExtra("title"));
                 break;
@@ -27,13 +30,15 @@ public class MainActivity extends AppCompatActivity {
                 textView.setText(intent.getStringExtra("where"));
                 break;
             case "newsViewPager":
-                textView.setText("首页轮播图"+intent.getStringExtra("where"));
+                textView.setText("首页轮播图" + intent.getStringExtra("where"));
                 break;
         }
-        switch (textView.getText().toString()){
+        switch (textView.getText().toString()) {
             case "地铁查询":
                 finish();
                 startActivity(new Intent(MainActivity.this, SubwayActivity.class));
+                break;
+            case "更多服务":
                 break;
         }
         // 根据传过来的title跳转到正确的activity，未完成

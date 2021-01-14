@@ -36,12 +36,11 @@ public class lappAdapeter extends RecyclerView.Adapter<lappAdapeter.ViewHolder> 
         }
         View view = LayoutInflater.from(context).inflate(R.layout.item_lapps,null);
         ViewHolder holder=new ViewHolder(view);
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
+        view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(context, MainActivity.class);
-                int position=holder.getAdapterPosition();
-                LittleApp app=list.get(position);
+                LittleApp app=list.get(holder.getAdapterPosition());
                 intent.putExtra("type","littleApp");
                 intent.putExtra("icon",app.getImage());
                 intent.putExtra("title",app.getTitle());

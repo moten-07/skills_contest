@@ -24,13 +24,16 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.example.redemo1.Adapeter.ThemeAdapeter;
+import com.example.redemo1.Adapeter.hottAdapeter;
 import com.example.redemo1.Adapeter.lappAdapeter;
+import com.example.redemo1.Adapeter.newsAdapeter;
 import com.example.redemo1.type.Hot_theme;
 import com.example.redemo1.type.LittleApp;
 import com.example.redemo1.MainActivity;
 import com.example.redemo1.R;
+import com.example.redemo1.type.news;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,15 +51,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     EditText seachstr;                          // 搜索框
     View [] news_poins;                         // 轮播图下方小圆点
     ImageButton btn_seach,btn_left,btn_right;   // 按钮
-    ListView newslist;                          // 新闻列表控件
     List<View> viewList;                        // 轮播图片的列表
 
     RecyclerView lapplist,themelist;            // 应用列表控件,热门主题列表控件
-    List <LittleApp> lappslist;                      // 应用列表
-    List <Hot_theme> hot_themelist;             // 热门主题列表
-    lappAdapeter lappadapeter;                  // 绑定应用列表的适配器
-    ThemeAdapeter hot_adapeter;                 // 热门主题适配器
+    ListView newslist;                          // 新闻列表控件
+    List <LittleApp> lappslist;                 // 应用列表
+    List <Hot_theme> hott_list;                 // 热门主题列表
+    List <news> news_list;                      // 新闻列表
 
+    lappAdapeter lappadapeter;                  // 绑定应用列表的适配器
+    hottAdapeter hottadapeter;                  // 绑定热门主题的适配器
+    newsAdapeter newsadapeter;                  // 绑定新闻列表的适配器
     private int vpIndex=0;                      // 页面计数器
     Timer timer;                                // 计时器
 
@@ -146,9 +151,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         themelist = view.findViewById(R.id.hot_theme);
         newslist = view.findViewById(R.id.news_list);
 
-        viewList=new ArrayList<>();
-        lappslist=new ArrayList<>();
-        hot_themelist=new ArrayList<>();
+        viewList  = new ArrayList<View>();
+        lappslist = new ArrayList<LittleApp>();
+        hott_list = new ArrayList<Hot_theme>();
+        news_list = new ArrayList<news>();
 
         btn_left.setOnClickListener(this::onClick);
         btn_seach.setOnClickListener(this::onClick);
@@ -175,12 +181,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         lappslist.add(new LittleApp(R.mipmap.more,"更多服务"));
 
         // 数据应该是从服务器端传来的
-        hot_themelist.add(new Hot_theme("热门主题1"));
-        hot_themelist.add(new Hot_theme("热门主题2"));
-        hot_themelist.add(new Hot_theme("热门主题3"));
-        hot_themelist.add(new Hot_theme("热门主题4"));
-        hot_themelist.add(new Hot_theme("热门主题5"));
-        hot_themelist.add(new Hot_theme("热门主题6"));
+
+        for (int i = 0 ; i < 4 ; i++){
+            hott_list.add(new Hot_theme("热门主题"+(i+1)));
+            news_list.add(new news(R.mipmap.newa_in,"标题"+(i+1)+"","内容","人数","日期"));
+        }
         // 添加列表数据
 
         lappadapeter=new lappAdapeter(view.getContext(),lappslist);
@@ -188,10 +193,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         indexe indexe=new indexe(2);
         lapplist.addItemDecoration(indexe);
 
-        hot_adapeter=new ThemeAdapeter(view.getContext(),hot_themelist);
-        themelist.setAdapter(hot_adapeter);
-        indexe indexe1=new indexe(10);
+        hottadapeter=new hottAdapeter(view.getContext(),hott_list);
+        themelist.setAdapter(hottadapeter);
+        indexe indexe1=new indexe(8);
         themelist.addItemDecoration(indexe1);
+
+        newsadapeter=new newsAdapeter(view.getContext(),news_list);
+        newslist.setAdapter(newsadapeter);
 
         // 绑定适配器
         //设置间距
@@ -305,7 +313,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 }
             }
         };
-        timer.schedule(task,1000,2000);
+        timer.schedule(task,5000,3000);
     }
     private void initImage(View v){
         // 轮播页面设置

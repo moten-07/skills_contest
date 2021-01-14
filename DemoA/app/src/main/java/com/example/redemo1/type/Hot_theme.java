@@ -1,16 +1,16 @@
 package com.example.redemo1.type;
 
 public class Hot_theme {
-    public String title;
-
-    public Hot_theme(String title){
-        this.title=title;
+    public String Title;
+    public Hot_theme(String Title){
+        this.Title=Title;
     }
+
     public String getTitle() {
-        return title;
+        return Title;
     }
 
     public void setTitle(String title) {
-        this.title = title;
+        Title = title;
     }
 }
