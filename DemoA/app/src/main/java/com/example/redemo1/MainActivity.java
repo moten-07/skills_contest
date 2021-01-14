@@ -32,6 +32,9 @@ public class MainActivity extends AppCompatActivity {
             case "newsViewPager":
                 textView.setText("首页轮播图" + intent.getStringExtra("where"));
                 break;
+            case "subway":
+                textView.setText("地铁：" + intent.getStringExtra("title"));
+                break;
         }
         switch (textView.getText().toString()) {
             case "地铁查询":

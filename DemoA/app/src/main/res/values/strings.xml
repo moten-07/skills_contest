@@ -17,11 +17,21 @@
         <item>全部服务</item>
     </string-array>
     <string name="seach_hint">新闻搜索</string>
+    <string name="subway_hint">获取定位中……</string>
     <!--  底线  -->
     <string name="endstr">--------------------我是有底线的--------------------</string>
     <!--  应用服务的文本  -->
     <string-array name="littie_app">
-        <item></item>
+        <item>地铁查询</item>
+        <item>地铁2</item>
+        <item>地铁3</item>
+        <item>地铁4</item>
+        <item>地铁5</item>
+        <item>地铁6</item>
+        <item>地铁7</item>
+        <item>地铁8</item>
+        <item>地铁9</item>
+        <item>更多服务</item>
     </string-array>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

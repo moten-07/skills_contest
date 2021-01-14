@@ -25,7 +25,7 @@
         android:id="@+id/subway_where"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="获取定位中……"
+        android:hint="@string/subway_hint"
         android:layout_marginLeft="40dp"
         app:layout_constraintTop_toTopOf="@id/location"
         app:layout_constraintLeft_toRightOf="@id/location"

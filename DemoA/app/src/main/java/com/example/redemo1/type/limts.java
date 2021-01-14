@@ -13,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import java.math.BigDecimal;
+
 import static android.content.Context.LOCATION_SERVICE;
 
 
@@ -98,14 +100,15 @@ public class limts {
         if(location!=null){
             // 判断定位信息是否为空
             StringBuilder stringBuilder = new StringBuilder();  // 创建字符串构建器，用于记录定位信息
-            stringBuilder.append("您的位置是：\n");
-            stringBuilder.append("经度：\n");
-            stringBuilder.append(location.getLongitude());
-            stringBuilder.append("\n纬度：");
-            stringBuilder.append(location.getLatitude());
+            stringBuilder.append("E:");
+            double E=new BigDecimal(location.getLongitude()).setScale(2,BigDecimal.ROUND_HALF_DOWN).doubleValue();
+            stringBuilder.append(E);
+            stringBuilder.append(",N:");
+            double N=new BigDecimal(location.getLatitude()).setScale(2,BigDecimal.ROUND_HALF_DOWN).doubleValue();
+            stringBuilder.append(N);
             setToGps(stringBuilder.toString());
         }else{
-            setToGps("没有获取到GPS信息");
+            setToGps("not get GPS");
         }
     }
 }

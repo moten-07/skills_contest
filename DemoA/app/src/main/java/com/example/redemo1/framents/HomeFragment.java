@@ -169,17 +169,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         themelist.setLayoutManager(manager2);
         // 列表绑定网格布局
 
-        lappslist.add(new LittleApp(R.mipmap.subway,"地铁查询"));
-        lappslist.add(new LittleApp(R.mipmap.subway,"地铁2"));
-        lappslist.add(new LittleApp(R.mipmap.subway,"地铁3"));
-        lappslist.add(new LittleApp(R.mipmap.subway,"地铁4"));
-        lappslist.add(new LittleApp(R.mipmap.subway,"地铁5"));
-        lappslist.add(new LittleApp(R.mipmap.subway,"地铁6"));
-        lappslist.add(new LittleApp(R.mipmap.subway,"地铁7"));
-        lappslist.add(new LittleApp(R.mipmap.subway,"地铁8"));
-        lappslist.add(new LittleApp(R.mipmap.subway,"地铁9"));
-        lappslist.add(new LittleApp(R.mipmap.more,"更多服务"));
-
+        String [] littie_app=view.getContext().getResources().getStringArray(R.array.littie_app);
+        for(String title:littie_app){
+            lappslist.add(new LittleApp(R.mipmap.subway,title));
+        }
         // 数据应该是从服务器端传来的
 
         for (int i = 0 ; i < 4 ; i++){
