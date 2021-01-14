@@ -4,13 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".func.SubwayActivity">
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/subway_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        android:theme="@style/AppDemoA.Home"
-        android:background="?attr/colorPrimary"/>
+    tools:context=".func.AllActivity">
 
 </androidx.constraintlayout.widget.ConstraintLayout>

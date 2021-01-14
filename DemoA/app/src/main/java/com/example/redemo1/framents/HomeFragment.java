@@ -54,7 +54,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     RecyclerView lapplist,themelist;            // 应用列表控件,热门主题列表控件
     List <LittleApp> list;                      // 应用列表
     List <Hot_theme> hot_themelist;             // 热门主题列表
-    lappAdapeter lappadapeter;                      // 绑定应用列表的适配器
+    lappAdapeter lappadapeter;                  // 绑定应用列表的适配器
     ThemeAdapeter hot_adapeter;                 // 热门主题适配器
 
     private int vpIndex=0;                      // 页面计数器
@@ -298,7 +298,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                                 vpIndex++;
                             }
                             viewPager.setCurrentItem(vpIndex);
-                            Log.v("index", vpIndex + "");
+                            // Log.v("index", vpIndex + "");
                         }
                     });
                 }

@@ -2,21 +2,21 @@ package com.example.redemo1;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.redemo1.framents.AllFragment;
 import com.example.redemo1.framents.HomeFragment;
 import com.example.redemo1.framents.NewsFragment;
 import com.example.redemo1.framents.PersonFragment;
 import com.example.redemo1.framents.PartyFragment;
+import com.example.redemo1.type.limts;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,10 +38,12 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
         // 更改标题栏
         init();
         start();
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET)!= PackageManager.PERMISSION_GRANTED){
-            // 申请手机网络访问权限
-            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.INTERNET},1);
+
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
+            new limts(this).getInternet();
+            // 获取网络权限
         }
+
     }
     private void init(){
         toolbar=findViewById(R.id.newBar);
@@ -158,4 +160,28 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
         // 初始绑定
         choose(3);
     }
+
+    private long exitTime=0;
+    // 点击时间
+    @Override
+    public void onBackPressed() {
+        // 复写返回键点击事件
+        // 两秒内点击两次即退出，仅在当前页面有效
+        if((System.currentTimeMillis()-exitTime)>2000){
+            Toast.makeText(ActivityHome.this,"再次点击返回键退出应用",Toast.LENGTH_SHORT).show();
+            exitTime = System.currentTimeMillis();
+        }else{
+            super.onBackPressed();
+        }
+        Log.d("time",exitTime+"");
+    }
+
+    @Override
+    protected void onUserLeaveHint() {
+        // home键的监听
+        super.onUserLeaveHint();
+    }
+
+
+
 }

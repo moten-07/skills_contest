@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:cardCornerRadius="5dp">
+    android:background="@null">
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -15,7 +15,8 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:src="@mipmap/subway"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:background="@drawable/shap2"/>
         <TextView
             android:id="@+id/lapptitle"
             android:layout_width="wrap_content"
