@@ -29,7 +29,7 @@ public class SubwayActivity extends AppCompatActivity {
             limts.getGPS(this);
             // 获取定位
         }
-        textView.setText(limts.getToGps());
+        textView.setText(limts.getToGps()); // 经纬度信息
     }
 
     private void init(){
