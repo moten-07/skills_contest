@@ -52,7 +52,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     List<View> viewList;                        // 轮播图片的列表
 
     RecyclerView lapplist,themelist;            // 应用列表控件,热门主题列表控件
-    List <LittleApp> list;                      // 应用列表
+    List <LittleApp> lappslist;                      // 应用列表
     List <Hot_theme> hot_themelist;             // 热门主题列表
     lappAdapeter lappadapeter;                  // 绑定应用列表的适配器
     ThemeAdapeter hot_adapeter;                 // 热门主题适配器
@@ -147,7 +147,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         newslist = view.findViewById(R.id.news_list);
 
         viewList=new ArrayList<>();
-        list=new ArrayList<>();
+        lappslist=new ArrayList<>();
         hot_themelist=new ArrayList<>();
 
         btn_left.setOnClickListener(this::onClick);
@@ -163,16 +163,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         themelist.setLayoutManager(manager2);
         // 列表绑定网格布局
 
-        list.add(new LittleApp(R.mipmap.subway,"地铁"));
-        list.add(new LittleApp(R.mipmap.subway,"地铁2"));
-        list.add(new LittleApp(R.mipmap.subway,"地铁3"));
-        list.add(new LittleApp(R.mipmap.subway,"地铁4"));
-        list.add(new LittleApp(R.mipmap.subway,"地铁5"));
-        list.add(new LittleApp(R.mipmap.subway,"地铁6"));
-        list.add(new LittleApp(R.mipmap.subway,"地铁7"));
-        list.add(new LittleApp(R.mipmap.subway,"地铁8"));
-        list.add(new LittleApp(R.mipmap.subway,"地铁9"));
-        list.add(new LittleApp(R.mipmap.more,"更多服务"));
+        lappslist.add(new LittleApp(R.mipmap.subway,"地铁查询"));
+        lappslist.add(new LittleApp(R.mipmap.subway,"地铁2"));
+        lappslist.add(new LittleApp(R.mipmap.subway,"地铁3"));
+        lappslist.add(new LittleApp(R.mipmap.subway,"地铁4"));
+        lappslist.add(new LittleApp(R.mipmap.subway,"地铁5"));
+        lappslist.add(new LittleApp(R.mipmap.subway,"地铁6"));
+        lappslist.add(new LittleApp(R.mipmap.subway,"地铁7"));
+        lappslist.add(new LittleApp(R.mipmap.subway,"地铁8"));
+        lappslist.add(new LittleApp(R.mipmap.subway,"地铁9"));
+        lappslist.add(new LittleApp(R.mipmap.more,"更多服务"));
 
         // 数据应该是从服务器端传来的
         hot_themelist.add(new Hot_theme("热门主题1"));
@@ -183,15 +183,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         hot_themelist.add(new Hot_theme("热门主题6"));
         // 添加列表数据
 
-        lappadapeter=new lappAdapeter(view.getContext(),list);
+        lappadapeter=new lappAdapeter(view.getContext(),lappslist);
         lapplist.setAdapter(lappadapeter);
         indexe indexe=new indexe(2);
         lapplist.addItemDecoration(indexe);
 
-        hot_adapeter=new ThemeAdapeter(hot_themelist,view.getContext());
+        hot_adapeter=new ThemeAdapeter(view.getContext(),hot_themelist);
         themelist.setAdapter(hot_adapeter);
         indexe indexe1=new indexe(10);
         themelist.addItemDecoration(indexe1);
+
         // 绑定适配器
         //设置间距
 
@@ -283,7 +284,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         });
     }
     private void viewTimer(){
-        // 轮播图设置
+        // 轮播图计时器设置
         timer=new Timer();
         TimerTask task=new TimerTask() {
             @Override
@@ -307,6 +308,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         timer.schedule(task,1000,2000);
     }
     private void initImage(View v){
+        // 轮播页面设置
         for(int i = 0;i<news_poins.length;i++){
             viewList.add(LayoutInflater.from(v.getContext()).inflate(R.layout.item_vp,null));
         }
@@ -325,7 +327,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         startActivity(intent);
         // 然后跳转到详情页
     }
-
 
     @Override
     public void onStart() {

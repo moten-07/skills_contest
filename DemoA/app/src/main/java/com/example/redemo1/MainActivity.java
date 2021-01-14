@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         switch (textView.getText().toString()){
-            case "地铁":
+            case "地铁查询":
                 finish();
                 startActivity(new Intent(MainActivity.this, SubwayActivity.class));
                 break;

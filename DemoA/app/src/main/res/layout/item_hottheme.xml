@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--热门主题的卡片-->
+<!--热门主题卡片-->
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="20dp">
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,7 +16,5 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="热门主题"/>
-
     </LinearLayout>
-
 </androidx.cardview.widget.CardView>

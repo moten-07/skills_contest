@@ -34,7 +34,7 @@ public class lappAdapeter extends RecyclerView.Adapter<lappAdapeter.ViewHolder> 
         if (context==null){
             context=parent.getContext();
         }
-        View view=LayoutInflater.from(context).inflate(R.layout.item_lapps,null);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_lapps,null);
         ViewHolder holder=new ViewHolder(view);
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,7 +63,7 @@ public class lappAdapeter extends RecyclerView.Adapter<lappAdapeter.ViewHolder> 
         return list.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
         TextView textView;
         CardView cardView;

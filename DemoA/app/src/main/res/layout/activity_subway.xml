@@ -12,5 +12,10 @@
         app:layout_constraintTop_toTopOf="parent"
         android:theme="@style/AppDemoA.Home"
         android:background="?attr/colorPrimary"/>
+    <ListView
+        android:id="@+id/subway_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/subway_bar"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
