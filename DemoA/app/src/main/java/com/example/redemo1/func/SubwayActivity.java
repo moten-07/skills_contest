@@ -24,11 +24,12 @@ public class SubwayActivity extends AppCompatActivity {
         setContentView(R.layout.activity_subway);
         setTitle("地铁查询");
         init();
-
+        limts limts=new limts(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            new limts(this).getGPS(this);
-            // 获取定位权限
+            limts.getGPS(this);
+            // 获取定位
         }
+        textView.setText(limts.getToGps());
     }
 
     private void init(){

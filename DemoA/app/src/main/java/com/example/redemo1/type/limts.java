@@ -25,8 +25,16 @@ public class limts {
             Manifest.permission.ACCESS_FINE_LOCATION // 较为精确的定位信息
     };
 
-    String getToGps;
+    String ToGps;
+    // 返回的经纬度
 
+    public void setToGps(String toGps) {
+        ToGps = toGps;
+    }
+
+    public String getToGps() {
+        return ToGps;
+    }
 
 
     public void getInternet(){
@@ -95,9 +103,9 @@ public class limts {
             stringBuilder.append(location.getLongitude());
             stringBuilder.append("\n纬度：");
             stringBuilder.append(location.getLatitude());
-            getToGps=stringBuilder.toString();
+            setToGps(stringBuilder.toString());
         }else{
-            getToGps="没有获取到GPS信息";
+            setToGps("没有获取到GPS信息");
         }
     }
 }
