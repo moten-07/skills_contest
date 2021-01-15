@@ -53,8 +53,8 @@ public class subwAdapeter extends BaseAdapter {
         Subway subway=list.get(position);
         holder.subwayTitle.setText(subway.subwayTitle);
         holder.the_subway.setText(subway.the_subway);
-        holder.subway_next.setText(subway.subway_next);
-        holder.subway_time.setText(subway.subway_time);
+        holder.subway_next.setText("下一站："+subway.subway_next);
+        holder.subway_time.setText("预计到达时间："+subway.subway_time);
 
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override

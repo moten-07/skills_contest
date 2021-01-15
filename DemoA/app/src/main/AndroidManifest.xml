@@ -3,8 +3,7 @@
     package="com.example.redemo1">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -13,17 +12,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppDemoA.Home">
-        <activity android:name=".func.AllActivity"></activity>
-        <activity android:name=".func.SubwayActivity" ></activity>
+        <activity android:name=".func.Subway2Activity"></activity>
+        <activity android:name=".func.AllActivity" />
+        <activity android:name=".func.SubwayActivity" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".ActivityHome" >
+        <activity android:name=".ActivityHome"></activity>
+        <activity android:name=".jGuideActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".jGuideActivity"></activity>
         <activity android:name=".GuideActivity" />
     </application>
 

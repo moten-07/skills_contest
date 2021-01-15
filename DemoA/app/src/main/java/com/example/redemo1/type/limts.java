@@ -27,16 +27,17 @@ public class limts {
             Manifest.permission.ACCESS_FINE_LOCATION // 较为精确的定位信息
     };
 
-    String ToGps;
-    // 返回的经纬度
+    String ToGps;   // 返回的经纬度
+    double E,N;
 
-    public void setToGps(String toGps) {
-        ToGps = toGps;
-    }
+    public void setToGps(String toGps) {ToGps = toGps;}
+    public String getToGps() {return ToGps;}
 
-    public String getToGps() {
-        return ToGps;
-    }
+    public double getE() {return E;}
+    public void setE(double e) {E = e;}
+
+    public double getN() {return N;}
+    public void setN(double n) {N = n;}
 
 
     public void getInternet(){
@@ -101,10 +102,10 @@ public class limts {
             // 判断定位信息是否为空
             StringBuilder stringBuilder = new StringBuilder();  // 创建字符串构建器，用于记录定位信息
             stringBuilder.append("E:");
-            double E=new BigDecimal(location.getLongitude()).setScale(2,BigDecimal.ROUND_HALF_DOWN).doubleValue();
+            E=location.getLongitude();
             stringBuilder.append(E);
-            stringBuilder.append(",N:");
-            double N=new BigDecimal(location.getLatitude()).setScale(2,BigDecimal.ROUND_HALF_DOWN).doubleValue();
+            stringBuilder.append("\nN:");
+            N=location.getLatitude();
             stringBuilder.append(N);
             setToGps(stringBuilder.toString());
         }else{

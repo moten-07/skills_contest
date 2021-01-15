@@ -4,11 +4,15 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.redemo1.Adapeter.subwAdapeter;
 import com.example.redemo1.R;
@@ -31,22 +35,19 @@ public class SubwayActivity extends AppCompatActivity {
         setContentView(R.layout.activity_subway);
         setTitle("地铁查询");
         init();
-        limts limts=new limts(this);
+        limts limts = new limts(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             limts.getGPS(this);
             // 获取定位
         };
-        // 根据经纬度信息判断城市，仅精确到小数点后2位，数据稍作处理(重庆可能得再加个海拔😂)
-        switch (limts.getToGps()){
-            // case "E:-122.08,N:37.42":
-            //     // 01.14测试结果
-            //     textView.setText("美国旧金山");
-            //     break;
-            default:
-                textView.setText("北京建国门站");
-                break;
-        }
-        getMap();
+//        textView.setText(limts.getToGps());// 根据经纬度信息判断城市(重庆可能得再加个海拔😂)
+        where(limts.getE(),limts.getN());
+
+        SharedPreferences sp=this.getSharedPreferences("location", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString("mylocation",textView.getText().toString());
+        editor.commit();
+        // 把地理位置存储在location.xml文件中，文件在data/data/com.example.redemo1/shared_prefs文件夹中
     }
 
     private void init(){
@@ -79,12 +80,28 @@ public class SubwayActivity extends AppCompatActivity {
     private void getMap(){
         switch (textView.getText().toString()){
             case "北京建国门站":
+            case "珠海":
                 for(int i=1;i<=4;i++){
-                    list.add(new Subway("T"+i,"ts"+i,"sn"+i,"st"+i));
+                    list.add(new Subway("地铁示例"+i,
+                            "地铁路线"+i,
+                            "示例"+i,
+                            "示例"+i));
                 }
                 adapeter=new subwAdapeter(this,list);
                 subway_list.setAdapter(adapeter);
                 break;
         }
     }
+
+    private void where(double e,double n){
+        if((e>135 || e<79) || (n>53 || n<3)){
+            Toast.makeText(this,"为您切换至默认位置：北京建国门站",Toast.LENGTH_LONG).show();
+            textView.setText("北京建国门站");
+        }else if(e>113 && n>22){
+            textView.setText("珠海");
+            Toast.makeText(this,"您的当前位置："+textView.getText(),Toast.LENGTH_SHORT).show();
+        }
+        getMap();
+    }
+
 }

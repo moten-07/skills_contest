@@ -38,6 +38,7 @@ public class jGuideActivity extends AppCompatActivity {
     Timer timer=new Timer();
     // 计时器，在onDestroy()中注销
     SharedPreferences sp;
+    SharedPreferences.Editor editor;
     // 数据存储接口
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,15 +47,16 @@ public class jGuideActivity extends AppCompatActivity {
         // 主视图绑定
 
         sp=jGuideActivity.this.getSharedPreferences("config", Context.MODE_PRIVATE);
+        editor = sp.edit();
         // 初始化数据存储接口
 
-        if(sp.getBoolean("first_time",true)) {
+        if(sp.getBoolean("first_time",false)) {
             finish();
             // 关闭此页面
             startActivity(new Intent(jGuideActivity.this,ActivityHome.class));
         }
-        // 若"first_time" 存在，返回真，直接跳转主页
-
+        // 如果first_time不存在或格式错误，返回false,继续执行下面的代码
+        // 如果存在且，则返回其值：true》关闭页面，并跳转到主页；false》继续执行
 
         for(int i=0;i<5;i++){
             viewList.add(LayoutInflater.from(this).inflate(R.layout.item_vp,null));
@@ -119,8 +121,9 @@ public class jGuideActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // 单击后
-                sp.edit().putBoolean("first_time",false);
-                // 点击后将第一次进入的属性"first_time"改为false
+                editor.putBoolean("first_time",true);
+                editor.commit();
+                // 将first_time改为true,并提交
                 finish();
                 startActivity(new Intent(jGuideActivity.this,ActivityHome.class));
                 // 跳转到下一个页面
@@ -211,14 +214,13 @@ public class jGuideActivity extends AppCompatActivity {
         EditText ipconfig,webconfig;
         ipconfig=view.findViewById(R.id.Ipconfig);
         webconfig=view.findViewById(R.id.webconfig);
-        String ip=ipconfig.getText().toString();
-        String web=webconfig.getText().toString();
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // 获取输入值
-                sp.edit().putString("IP",ip);
-                sp.edit().putString("web",web);
+                editor.putString("IP",ipconfig.getText().toString());
+                editor.putString("web",webconfig.getText().toString());
+                editor.commit();
                 dialog.dismiss();
                 // 关闭弹窗
             }

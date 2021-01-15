@@ -8,6 +8,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.example.redemo1.func.Subway2Activity;
 import com.example.redemo1.func.SubwayActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -34,14 +35,24 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case "subway":
                 textView.setText("地铁：" + intent.getStringExtra("title"));
+                finish();
+                Intent intentsubway=new Intent(MainActivity.this, Subway2Activity.class);
+                intentsubway.putExtra("title",intent.getStringExtra("title"));
+                startActivity(intentsubway);
                 break;
         }
+
+        // 没有finish()的页面会在这里处理
         switch (textView.getText().toString()) {
             case "地铁查询":
                 finish();
                 startActivity(new Intent(MainActivity.this, SubwayActivity.class));
                 break;
             case "更多服务":
+                finish();
+                Intent intent1=new Intent(MainActivity.this,ActivityHome.class);
+                intent1.putExtra("choose",5);
+                startActivity(intent1);
                 break;
         }
         // 根据传过来的title跳转到正确的activity，未完成
