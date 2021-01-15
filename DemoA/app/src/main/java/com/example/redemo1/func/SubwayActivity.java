@@ -79,9 +79,9 @@ public class SubwayActivity extends AppCompatActivity {
 
     private void getMap(){
         switch (textView.getText().toString()){
-            case "北京建国门站":
-            case "珠海":
-                for(int i=1;i<=4;i++){
+            case "北京市建国门站":
+            case "珠海市金湾区":
+                for(int i=1;i<10;i++){
                     list.add(new Subway("地铁示例"+i,
                             "地铁路线"+i,
                             "示例"+i,
@@ -95,10 +95,10 @@ public class SubwayActivity extends AppCompatActivity {
 
     private void where(double e,double n){
         if((e>135 || e<79) || (n>53 || n<3)){
-            Toast.makeText(this,"为您切换至默认位置：北京建国门站",Toast.LENGTH_LONG).show();
-            textView.setText("北京建国门站");
+            Toast.makeText(this,"为您切换至默认位置：北京市建国门站",Toast.LENGTH_LONG).show();
+            textView.setText("北京市建国门站");
         }else if(e>113 && n>22){
-            textView.setText("珠海");
+            textView.setText("珠海市金湾区");
             Toast.makeText(this,"您的当前位置："+textView.getText(),Toast.LENGTH_SHORT).show();
         }
         getMap();

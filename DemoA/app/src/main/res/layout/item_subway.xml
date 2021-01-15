@@ -36,8 +36,4 @@
             android:text="预计到达时间："
             android:layout_weight="1"/>
     </LinearLayout>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/shap3"/>
 </LinearLayout>
