@@ -69,9 +69,6 @@ public class subwAdapeter extends BaseAdapter {
     }
 
     class ViewHolder{
-        TextView subwayTitle;
-        TextView the_subway;
-        TextView subway_next;
-        TextView subway_time;      // 到达时间
+        TextView subwayTitle,the_subway,subway_next, subway_time;      // 到达时间
     }
 }

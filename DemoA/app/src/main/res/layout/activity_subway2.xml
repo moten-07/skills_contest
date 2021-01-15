@@ -28,6 +28,6 @@
         android:id="@+id/recy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/this_subway_bar"
+        app:layout_constraintTop_toBottomOf="@id/textView2"
         app:layout_constraintLeft_toLeftOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
