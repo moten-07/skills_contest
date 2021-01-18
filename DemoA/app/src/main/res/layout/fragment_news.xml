@@ -12,6 +12,7 @@
         tools:context=".framents.NewsFragment">
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/news_recycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent" />
