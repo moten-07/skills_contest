@@ -114,7 +114,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         // 碎片绑定
         init(view);
+        // 初始化
         initImage(view);
+        // 图片添加
         return view;
     }
 
@@ -127,6 +129,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH){
+                    // 软键盘的回车键
                     seach(view);
                     return true;
                 }
@@ -135,7 +138,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         });
         // 重写软键盘的回车键,在此之前要在edittext加上
         // android:singleLine="true"(单行文本输入)
-        // android:imeOptions="actionSearch"(回车键样式)
+        // android:imeOptions="actionSearch"(回车键样式，可不加)
 
         news_poins = new View[]{
           view.findViewById(R.id.news_poin1),
@@ -233,7 +236,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             public int getCount() {
                 return viewList.size();
             }
-
             @Override
             public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
                 return view==object;
@@ -261,14 +263,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
                 container.removeView(viewList.get(position));
             }
-
         });
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
 
             @Override
             public void onPageSelected(int position) {
@@ -279,9 +278,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             }
 
             @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
+            public void onPageScrollStateChanged(int state) {}
         });
     }
     private void viewTimer(){

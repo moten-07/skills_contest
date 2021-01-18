@@ -6,15 +6,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.redemo1.Adapeter.subwAdapeter;
+import com.example.redemo1.MainActivity;
 import com.example.redemo1.R;
 import com.example.redemo1.type.Subway;
 import com.example.redemo1.type.limts;
@@ -40,7 +43,7 @@ public class SubwayActivity extends AppCompatActivity {
             limts.getGPS(this);
             // 获取定位
         };
-//        textView.setText(limts.getToGps());// 根据经纬度信息判断城市(重庆可能得再加个海拔😂)
+//        textView.setText(limts.getToGps());// 根据经纬度信息判断城市
         where(limts.getE(),limts.getN());
 
         SharedPreferences sp=this.getSharedPreferences("location", Context.MODE_PRIVATE);
@@ -54,16 +57,29 @@ public class SubwayActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.subway_bar);
         setSupportActionBar(toolbar);
 
+
         subway_list = findViewById(R.id.subway_list);
         textView = findViewById(R.id.subway_where);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null){
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
         list=new ArrayList<Subway>();
 
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.more:
+                        Intent intent = new Intent(SubwayActivity.this, MainActivity.class);
+                        intent.putExtra("type","manySubway");
+                        startActivity(intent);
+                        break;
+                }
+                return true;
+            }
+        });
     }
 
     @Override
@@ -78,6 +94,7 @@ public class SubwayActivity extends AppCompatActivity {
     }
 
     private void getMap(){
+        // 地铁线路应该在网络中访问得到结果，此处简化
         switch (textView.getText().toString()){
             case "北京市建国门站":
             case "珠海市金湾区":
@@ -90,10 +107,12 @@ public class SubwayActivity extends AppCompatActivity {
                 adapeter=new subwAdapeter(this,list);
                 subway_list.setAdapter(adapeter);
                 break;
+
         }
     }
 
     private void where(double e,double n){
+        // 地理位置判断应该在网络中访问得到结果
         if((e>135 || e<79) || (n>53 || n<3)){
             Toast.makeText(this,"为您切换至默认位置：北京市建国门站",Toast.LENGTH_LONG).show();
             textView.setText("北京市建国门站");
@@ -102,6 +121,12 @@ public class SubwayActivity extends AppCompatActivity {
             Toast.makeText(this,"您的当前位置："+textView.getText(),Toast.LENGTH_SHORT).show();
         }
         getMap();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolmenu,menu);
+        return true;
     }
 
 }

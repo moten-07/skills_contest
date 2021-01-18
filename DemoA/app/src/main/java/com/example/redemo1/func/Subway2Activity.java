@@ -38,12 +38,6 @@ public class Subway2Activity extends AppCompatActivity {
         Intent intent=getIntent();
         setTitle(intent.getStringExtra("title"));
 
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null){
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
-
         init();
 
     }
@@ -52,6 +46,11 @@ public class Subway2Activity extends AppCompatActivity {
         textView = findViewById(R.id.textView2);
         toolbar = findViewById(R.id.this_subway_bar);
         setSupportActionBar(toolbar);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null){
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         SharedPreferences sp=this.getSharedPreferences("location", Context.MODE_PRIVATE);
         String mylocation = sp.getString("mylocation","北京");
@@ -70,14 +69,14 @@ public class Subway2Activity extends AppCompatActivity {
         subwatList=new ArrayList<>();
         for(String name:names){
             subwatList.add(new One_subway(R.mipmap.sss,R.mipmap.sss,((name.equals(city[1])) ? R.drawable.bg_point1 : R.drawable.bg_point2),name));
-        }
+}
         recyclerView = findViewById(R.id.recy);
-        LinearLayoutManager manager=new LinearLayoutManager(this);
-        manager.setOrientation(RecyclerView.HORIZONTAL);
-        recyclerView.setLayoutManager(manager);
-        adapeter=new subnAdapeter(this,subwatList);
-        recyclerView.setAdapter(adapeter);
-    }
+                LinearLayoutManager manager=new LinearLayoutManager(this);
+                manager.setOrientation(RecyclerView.HORIZONTAL);
+                recyclerView.setLayoutManager(manager);
+                adapeter=new subnAdapeter(this,subwatList);
+                recyclerView.setAdapter(adapeter);
+                }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -89,5 +88,6 @@ public class Subway2Activity extends AppCompatActivity {
         }
         return false;
     }
+
 
 }

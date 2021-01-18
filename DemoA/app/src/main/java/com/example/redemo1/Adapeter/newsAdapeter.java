@@ -16,6 +16,7 @@ import com.example.redemo1.type.news;
 import java.util.List;
 
 public class newsAdapeter extends BaseAdapter {
+    // 新闻适配器
     List<news>list;
     Context context;
     public newsAdapeter(Context context,List<news>list){

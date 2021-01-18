@@ -17,6 +17,7 @@ import com.example.redemo1.type.One_subway;
 import java.util.List;
 
 public class subnAdapeter extends RecyclerView.Adapter<subnAdapeter.ViewHolder> {
+    // 地铁线路适配器
     public Context context;
     public List<One_subway> list;
     public subnAdapeter(Context context, List<One_subway> list){

@@ -1,5 +1,6 @@
 package com.example.redemo1.framents;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,7 +8,13 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.redemo1.MainActivity;
 import com.example.redemo1.R;
 
 /**
@@ -15,7 +22,11 @@ import com.example.redemo1.R;
  * Use the {@link PersonFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PersonFragment extends Fragment {
+public class PersonFragment extends Fragment implements View.OnClickListener{
+   ImageView user_icon;
+   TextView user_name,user_id;
+   Button user_out;
+   LinearLayout user_info_list,user_order_list,update_pass,feed;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -61,6 +72,41 @@ public class PersonFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_person, container, false);
+        View view=inflater.inflate(R.layout.fragment_person, container, false);
+        init(view);
+        return view;
+    }
+
+    private void init(View view){
+        user_icon = view.findViewById(R.id.user_icon);
+        user_id = view.findViewById(R.id.user_id);
+        user_name = view.findViewById(R.id.user_name);
+        user_info_list = view.findViewById(R.id.user_info_list);
+        user_order_list = view.findViewById(R.id.user_order_list);
+        user_out = view.findViewById(R.id.user_out);
+
+        user_info_list.setOnClickListener(this::onClick);
+        user_order_list.setOnClickListener(this::onClick);
+        user_out.setOnClickListener(this::onClick);
+    }
+
+    @Override
+    public void onClick(View v) {
+        Intent intent;
+        switch (v.getId()){
+            case R.id.user_info_list:
+                intent = new Intent(v.getContext(), MainActivity.class);
+                intent.putExtra("type","user_info");
+                startActivity(intent);
+                break;
+            case R.id.user_order_list:
+                intent = new Intent(v.getContext(), MainActivity.class);
+                intent.putExtra("type","user_order");
+                startActivity(intent);
+                break;
+            case R.id.user_out:
+                Toast.makeText(v.getContext(),"退出",Toast.LENGTH_SHORT).show();
+                break;
+        }
     }
 }

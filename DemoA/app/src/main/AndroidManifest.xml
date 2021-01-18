@@ -12,12 +12,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppDemoA.Home">
-        <activity android:name=".func.Subway2Activity"></activity>
-        <activity android:name=".func.AllActivity"></activity>
-        <activity android:name=".func.SubwayActivity" ></activity>
-        <activity android:name=".MainActivity" ></activity>
-        <activity android:name=".ActivityHome"></activity>
-        <activity android:name=".jGuideActivity" >
+        <activity android:name=".func.manySubway"></activity>
+        <activity android:name=".func.Subway2Activity" />
+        <activity android:name=".func.SubwayActivity" />
+        <activity android:name=".MainActivity" />
+        <activity android:name=".ActivityHome" />
+        <activity android:name=".jGuideActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

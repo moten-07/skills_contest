@@ -15,6 +15,7 @@ import com.example.redemo1.type.Subway;
 import java.util.List;
 
 public class subwAdapeter extends BaseAdapter {
+    // 地铁概览适配器
     Context context;
     List<Subway> list;
     public subwAdapeter(Context context, List<Subway> list){

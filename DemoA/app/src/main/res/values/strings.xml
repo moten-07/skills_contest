@@ -35,4 +35,27 @@
     </string-array>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="sub_beijing">
+        <item>地铁一号线</item>
+        <item>地铁二号线</item>
+        <item>地铁四号线</item>
+        <item>地铁五号线</item>
+        <item>地铁六号线</item>
+        <item>地铁七号线</item>
+        <item>地铁八号线</item>
+        <item>地铁九号线</item>
+        <item>地铁十号线</item>
+        <item>地铁十三号线</item>
+        <item>地铁十四号线</item>
+        <item>地铁十五号线</item>
+        <item>地铁十六号线</item>
+        <item>地铁房山线</item>
+        <item>地铁昌平线</item>
+        <item>地铁亦庄线</item>
+        <item>地铁燕房线</item>
+        <item>西郊线</item>
+        <item>S1线</item>
+        <item>首都机场线</item>
+        <item>大兴机场线</item>
+    </string-array>
 </resources>
