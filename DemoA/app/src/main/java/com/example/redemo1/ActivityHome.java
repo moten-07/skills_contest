@@ -161,6 +161,7 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
         // 初始绑定
         Intent intent=getIntent();
         choose(intent.getIntExtra("choose",3));
+        // 如果没有传过来的数据，就默认为3（主页面）
     }
 
     private long exitTime=0;

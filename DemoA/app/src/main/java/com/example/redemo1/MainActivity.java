@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.example.redemo1.func.Subway2Activity;
 import com.example.redemo1.func.SubwayActivity;
 import com.example.redemo1.func.manySubway;
+import com.example.redemo1.func.userInfoActivity;
 
 public class MainActivity extends AppCompatActivity {
     TextView textView;
@@ -48,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case "user_info":
                 textView.setText("跳转到个人中心……");
+                finish();
+                startActivity(new Intent(this, userInfoActivity.class));
                 break;
             case "user_order":
                 textView.setText("跳转到订单列表……");
