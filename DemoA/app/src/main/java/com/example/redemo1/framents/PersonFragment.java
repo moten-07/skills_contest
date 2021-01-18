@@ -1,6 +1,8 @@
 package com.example.redemo1.framents;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -12,7 +14,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.redemo1.MainActivity;
 import com.example.redemo1.R;
@@ -27,6 +28,8 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
    TextView user_name,user_id;
    Button user_out;
    LinearLayout user_info_list,user_order_list,update_pass,feed;
+
+   SharedPreferences sp;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -83,11 +86,20 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
         user_name = view.findViewById(R.id.user_name);
         user_info_list = view.findViewById(R.id.user_info_list);
         user_order_list = view.findViewById(R.id.user_order_list);
+        update_pass = view.findViewById(R.id.update_pass);
+        feed = view.findViewById(R.id.feed);
         user_out = view.findViewById(R.id.user_out);
 
         user_info_list.setOnClickListener(this::onClick);
         user_order_list.setOnClickListener(this::onClick);
+        update_pass.setOnClickListener(this::onClick);
+        feed.setOnClickListener(this::onClick);
         user_out.setOnClickListener(this::onClick);
+
+        sp = view.getContext().getSharedPreferences("location", Context.MODE_PRIVATE);
+        user_icon.setImageResource(sp.getInt("user_icon",R.drawable.ic_baseline_account_box_24));
+        user_name.setText("昵称："+sp.getString("user_name","默认昵称"));
+        user_id.setText("账号："+sp.getString("user_id","1234567890"));
     }
 
     @Override
@@ -104,8 +116,20 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
                 intent.putExtra("type","user_order");
                 startActivity(intent);
                 break;
+            case R.id.update_pass:
+                intent = new Intent(v.getContext(), MainActivity.class);
+                intent.putExtra("type","user_update_pass");
+                startActivity(intent);
+                break;
+            case R.id.feed:
+                intent = new Intent(v.getContext(), MainActivity.class);
+                intent.putExtra("type","user_feed");
+                startActivity(intent);
+                break;
             case R.id.user_out:
-                Toast.makeText(v.getContext(),"退出",Toast.LENGTH_SHORT).show();
+                intent = new Intent(v.getContext(), MainActivity.class);
+                intent.putExtra("type","user_out");
+                startActivity(intent);
                 break;
         }
     }

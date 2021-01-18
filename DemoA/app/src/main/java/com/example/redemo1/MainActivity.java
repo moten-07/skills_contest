@@ -35,13 +35,14 @@ public class MainActivity extends AppCompatActivity {
                 textView.setText("首页轮播图" + intent.getStringExtra("where"));
                 break;
             case "subway":
-                textView.setText("地铁：" + intent.getStringExtra("title"));
+                textView.setText("跳转到：" + intent.getStringExtra("title"));
                 finish();
                 Intent intentsubway = new Intent(MainActivity.this, Subway2Activity.class);
                 intentsubway.putExtra("title", intent.getStringExtra("title"));
                 startActivity(intentsubway);
                 break;
             case "manySubway":
+                textView.setText("跳转到地铁列表……");
                 finish();
                 startActivity(new Intent(this, manySubway.class));
                 break;
@@ -50,6 +51,15 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case "user_order":
                 textView.setText("跳转到订单列表……");
+                break;
+            case "user_update_pass":
+                textView.setText("跳转到修改密码……");
+                break;
+            case "user_feed":
+                textView.setText("跳转到意见反馈……");
+                break;
+            case "user_out":
+                textView.setText("跳转到退出登录……");
                 break;
         }
 
