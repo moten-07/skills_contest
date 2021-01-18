@@ -71,7 +71,7 @@ public class NewsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_news, container, false);
         recyclerView = view.findViewById(R.id.news_recycler);
 //        recyclerView.setAdapter(new newsAdapeter(view.getContext(),news_list));
-        // 需要修改newsAdapter 让其继承RecycleAdapter，同时需要修改HomeFragment以及对应的布局
+        // 需要修改newsAdapter 让其继承RecycleAdapter，同时需要修改HomeFragment以及对应的布局，明天（01.19）做
         return  view;
     }
 }
