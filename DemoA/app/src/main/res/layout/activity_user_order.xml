@@ -19,11 +19,19 @@
             app:layout_constraintTop_toTopOf="parent"
             android:theme="@style/AppDemoA.Home"
             android:background="?attr/colorPrimary"/>
+        <!--订单分类？-->
+        <ListView
+            android:id="@+id/user_order_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/this_subway_bar"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+        <!--订单列表-->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/user_order_recy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/this_subway_bar" />
+            app:layout_constraintTop_toBottomOf="@id/user_order_type" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
