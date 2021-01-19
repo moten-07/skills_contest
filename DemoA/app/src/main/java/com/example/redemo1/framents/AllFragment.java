@@ -41,8 +41,8 @@ public class AllFragment extends Fragment {
     private List<LittleApp> list;
     private lappAdapeter adapeter;
 
-    private SQLiteDatabase db;
-    private MyOpenHelp help;
+//    private SQLiteDatabase db;
+//    private MyOpenHelp help;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -103,8 +103,8 @@ public class AllFragment extends Fragment {
         GridLayoutManager manager=new GridLayoutManager(view.getContext(),5);
         recyclerView.setLayoutManager(manager);
 
-        help = new MyOpenHelp(view.getContext(),"demoA.db",null,1);
-        db = help.getWritableDatabase();
+//        help = new MyOpenHelp(view.getContext(),"demoA.db",null,1);
+//        db = help.getWritableDatabase();
 
         for(int i = 0;i < 50;i++){
             // addLapp(help.getReadableDatabase(),"应用"+i,R.mipmap.subway_in);
@@ -116,7 +116,7 @@ public class AllFragment extends Fragment {
         seach_str.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectLapp(view);
+//                selectLapp(view);
             }
         });
 
@@ -125,20 +125,20 @@ public class AllFragment extends Fragment {
     private void selectLapp(View view){
         // 查询小程序的
         String where = seach_str.getText().toString();
-        Cursor cursor=help.getReadableDatabase().query("Little_app",null,"title=?",
-                new String[]{where},null,null,null);
+//        Cursor cursor=help.getReadableDatabase().query("Little_app",null,"title=?",
+//                new String[]{where},null,null,null);
         ArrayList <Map<String,String>> result = new ArrayList<Map<String,String>>();
-        while (cursor.moveToNext()){
-            Map<String,String> map = new HashMap<>();
-            map.put("title",cursor.getString(1));
-            map.put("icon",cursor.getString(2));
+//        while (cursor.moveToNext()){
+//            Map<String,String> map = new HashMap<>();
+//            map.put("title",cursor.getString(1));
+//            map.put("icon",cursor.getString(2));
             // 获取第二列的值
-            result.add(map);
-        }
+//            result.add(map);
+//        }
         if (result == null || result.size() == 0){
             Toast.makeText(view.getContext(),"查无此服务",Toast.LENGTH_SHORT).show();;
         }else{
-            // 显示结果
+            // 显示结果,弹窗
         }
     }
 
@@ -153,8 +153,12 @@ public class AllFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (db!=null){
-            db.close();
-        }
+//        if (db!=null){
+//            db.close();
+//        }
+    }
+
+    private void mydiag(){
+        // 搜索结果弹窗
     }
 }

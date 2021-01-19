@@ -30,4 +30,5 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/textView2"
         app:layout_constraintLeft_toLeftOf="parent"/>
+    x
 </androidx.constraintlayout.widget.ConstraintLayout>

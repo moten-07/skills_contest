@@ -4,15 +4,18 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,10 +30,9 @@ import java.util.List;
 
 public class SubwayActivity extends AppCompatActivity {
     Toolbar toolbar;
-    ListView subway_list;
+    RecyclerView subway_list;
     TextView textView;
     List<Subway> list;
-    subwAdapeter adapeter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,9 +95,22 @@ public class SubwayActivity extends AppCompatActivity {
         return false;
     }
 
-    private void getMap(){
+
+    private void where(double e,double n){
+        // 地理位置判断应该在网络中访问得到结果
+        String location = new String();
+        if((e>135 || e<79) || (n>53 || n<3)){
+            location="北京市建国门站";
+            Toast.makeText(this,"为您切换至默认位置：北京市建国门站",Toast.LENGTH_LONG).show();
+        }else if(e>113 && n>22){
+            location="珠海市金湾区";
+            Toast.makeText(this,"您的当前位置："+location,Toast.LENGTH_SHORT).show();
+        }
+        textView.setText(location);
         // 地铁线路应该在网络中访问得到结果，此处简化
-        switch (textView.getText().toString()){
+        GridLayoutManager manager = new GridLayoutManager(this,1);
+        subway_list.setLayoutManager(manager);
+        switch (location){
             case "北京市建国门站":
             case "珠海市金湾区":
                 for(int i=1;i<10;i++){
@@ -104,23 +119,10 @@ public class SubwayActivity extends AppCompatActivity {
                             "示例"+i,
                             "示例"+i));
                 }
-                adapeter=new subwAdapeter(this,list);
-                subway_list.setAdapter(adapeter);
+                Log.d("sub?",list.size()+"");
+                subway_list.setAdapter(new subwAdapeter(this,list));
                 break;
-
         }
-    }
-
-    private void where(double e,double n){
-        // 地理位置判断应该在网络中访问得到结果
-        if((e>135 || e<79) || (n>53 || n<3)){
-            Toast.makeText(this,"为您切换至默认位置：北京市建国门站",Toast.LENGTH_LONG).show();
-            textView.setText("北京市建国门站");
-        }else if(e>113 && n>22){
-            textView.setText("珠海市金湾区");
-            Toast.makeText(this,"您的当前位置："+textView.getText(),Toast.LENGTH_SHORT).show();
-        }
-        getMap();
     }
 
     @Override

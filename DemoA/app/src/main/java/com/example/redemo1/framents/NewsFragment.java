@@ -3,6 +3,7 @@ package com.example.redemo1.framents;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import com.example.redemo1.Adapeter.newsAdapeter;
 import com.example.redemo1.R;
 import com.example.redemo1.type.news;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -69,8 +71,13 @@ public class NewsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_news, container, false);
+        news_list = new ArrayList<>();
         recyclerView = view.findViewById(R.id.news_recycler);
-//        recyclerView.setAdapter(new newsAdapeter(view.getContext(),news_list));
+        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        for (int i = 1; i<=50 ; i++){
+            news_list.add(new news(R.mipmap.newa_in,"新闻"+i,"新闻"+i+"的内容","123","123"));
+        }
+        recyclerView.setAdapter(new newsAdapeter(view.getContext(),news_list));
         // 需要修改newsAdapter 让其继承RecycleAdapter，同时需要修改HomeFragment以及对应的布局，明天（01.19）做
         return  view;
     }

@@ -58,13 +58,6 @@
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="100dp"
             android:text="个人信息" />
-
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="120dp"
-            android:src="@mipmap/go" />
     </LinearLayout>
 
     <View
@@ -94,13 +87,6 @@
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="100dp"
             android:text="订单列表" />
-
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="120dp"
-            android:src="@mipmap/go" />
     </LinearLayout>
 
     <View
@@ -130,13 +116,6 @@
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="100dp"
             android:text="修改密码" />
-
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="120dp"
-            android:src="@mipmap/go" />
     </LinearLayout>
 
     <View

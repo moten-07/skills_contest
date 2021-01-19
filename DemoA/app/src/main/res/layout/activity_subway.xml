@@ -35,14 +35,21 @@
             app:layout_constraintTop_toTopOf="@id/location"
             app:layout_constraintLeft_toRightOf="@id/location"
             app:layout_constraintBottom_toBottomOf="@id/location"/>
-        <ListView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/subway_list"
             android:layout_width="match_parent"
-            android:layout_height="800dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
-            app:layout_constraintTop_toBottomOf="@id/location"
-            android:divider="@drawable/shap3"
-            android:dividerHeight="2dp"/>
+            app:layout_constraintTop_toBottomOf="@id/location"/>
+
+    <TextView
+        android:id="@+id/low"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/subway_list"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="@string/endstr"
+        android:gravity="center"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

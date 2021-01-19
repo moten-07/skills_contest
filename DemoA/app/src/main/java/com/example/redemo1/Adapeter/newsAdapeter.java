@@ -9,13 +9,16 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.redemo1.MainActivity;
 import com.example.redemo1.R;
 import com.example.redemo1.type.news;
 
 import java.util.List;
 
-public class newsAdapeter extends BaseAdapter {
+public class newsAdapeter extends RecyclerView.Adapter<newsAdapeter.ViewHolder>{
     // 新闻适配器
     List<news>list;
     Context context;
@@ -24,44 +27,16 @@ public class newsAdapeter extends BaseAdapter {
         this.context=context;
     }
 
+    @NonNull
     @Override
-    public int getCount() {
-        return list.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return list.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         ViewHolder holder;
-        if (convertView==null){
-            holder=new ViewHolder();
-            convertView = LayoutInflater.from(context).inflate(R.layout.item_news,null);
-            holder.news_icon = convertView.findViewById(R.id.news_icon);
-            holder.news_title = convertView.findViewById(R.id.news_title);
-            holder.news_content = convertView.findViewById(R.id.news_content);
-            holder.news_number = convertView.findViewById(R.id.news_number);
-            holder.news_date = convertView.findViewById(R.id.news_date);
-            convertView.setTag(holder);
-        }else{
-            holder= (ViewHolder) convertView.getTag();
+        if (context == null){
+            context = parent.getContext();
         }
-        news news=list.get(position);
-        holder.news_icon.setImageResource(news.getNews_icon());
-        holder.news_title.setText(news.getNews_title());
-        holder.news_content.setText(news.getNews_content());
-        holder.news_number.setText(news.getNews_number());
-        holder.news_date.setText(news.getNews_date());
-
-        convertView.setOnClickListener(new View.OnClickListener(){
+        View view = LayoutInflater.from(context).inflate(R.layout.item_news,null);
+        holder=new ViewHolder(view);
+        view.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(v.getContext(), MainActivity.class);
@@ -70,13 +45,36 @@ public class newsAdapeter extends BaseAdapter {
                 v.getContext().startActivity(intent);
             }
         });
-
-        return convertView;
+        return holder;
     }
 
-    class ViewHolder{
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        news news = list.get(position);
+        holder.news_icon.setImageResource(news.getNews_icon());
+        holder.news_title.setText(news.getNews_title());
+        holder.news_content.setText(news.getNews_content());
+        holder.news_number.setText(news.getNews_number());
+        holder.news_date.setText(news.news_date);
+    }
+
+    @Override
+    public int getItemCount() {
+        return list.size();
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder {
         ImageView news_icon;
         TextView news_title,news_content,news_number,news_date;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            news_icon = itemView.findViewById(R.id.news_icon);
+            news_title = itemView.findViewById(R.id.news_title);
+            news_content = itemView.findViewById(R.id.news_content);
+            news_number = itemView.findViewById(R.id.news_number);
+            news_date = itemView.findViewById(R.id.news_date);
+        }
     }
 
 }

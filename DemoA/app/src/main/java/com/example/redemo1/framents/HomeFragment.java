@@ -9,6 +9,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
@@ -22,6 +23,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,8 +55,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     ImageButton btn_seach,btn_left,btn_right;   // 按钮
     List<View> viewList;                        // 轮播图片的列表
 
-    RecyclerView lapplist,themelist;            // 应用列表控件,热门主题列表控件
-    ListView newslist;                          // 新闻列表控件
+    RecyclerView lapplist,themelist,newslist;            // 应用列表控件,热门主题列表控件,新闻列表控件
     List <LittleApp> lappslist;                 // 应用列表
     List <Hot_theme> hott_list;                 // 热门主题列表
     List <news> news_list;                      // 新闻列表
@@ -165,12 +166,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         // 点击监听
 
         // 加判断，平板模式下spanCount要大于5（为4），未完成
-        GridLayoutManager manager=new GridLayoutManager(view.getContext(),5);
-        GridLayoutManager manager2=new GridLayoutManager(view.getContext(),2);
-        // 网格布局，显示应用图标数量
-        lapplist.setLayoutManager(manager);
-        themelist.setLayoutManager(manager2);
-        // 列表绑定网格布局
+        lapplist.setLayoutManager(new GridLayoutManager(view.getContext(),5));
+        themelist.setLayoutManager(new GridLayoutManager(view.getContext(),2));
+        newslist.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        // 列表绑定网格布局/线性布局
 
         String [] littie_app=view.getContext().getResources().getStringArray(R.array.littie_app);
         for(String title:littie_app){

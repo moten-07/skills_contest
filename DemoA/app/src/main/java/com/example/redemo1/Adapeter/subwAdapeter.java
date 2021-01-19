@@ -8,13 +8,16 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.redemo1.MainActivity;
 import com.example.redemo1.R;
 import com.example.redemo1.type.Subway;
 
 import java.util.List;
 
-public class subwAdapeter extends BaseAdapter {
+public class subwAdapeter extends RecyclerView.Adapter<subwAdapeter.ViewHolder> {
     // 地铁概览适配器
     Context context;
     List<Subway> list;
@@ -22,42 +25,16 @@ public class subwAdapeter extends BaseAdapter {
         this.list=list;
         this.context=context;
     }
-    @Override
-    public int getCount() {
-        return list.size();
-    }
 
+    @NonNull
     @Override
-    public Object getItem(int position) {
-        return list.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
-        if(convertView == null){
-            holder=new ViewHolder();
-            convertView = LayoutInflater.from(context).inflate(R.layout.item_subway,null);
-            holder.subwayTitle=convertView.findViewById(R.id.subway_title);
-            holder.the_subway=convertView.findViewById(R.id.the_subway);
-            holder.subway_next=convertView.findViewById(R.id.subway_next);
-            holder.subway_time=convertView.findViewById(R.id.subway_time);
-            convertView.setTag(holder);
-        }else{
-            holder= (ViewHolder) convertView.getTag();
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        if(context == null){
+            context = parent.getContext();
         }
-        Subway subway=list.get(position);
-        holder.subwayTitle.setText(subway.subwayTitle);
-        holder.the_subway.setText(subway.the_subway);
-        holder.subway_next.setText("下一站："+subway.subway_next);
-        holder.subway_time.setText("预计到达时间："+subway.subway_time);
-
-        convertView.setOnClickListener(new View.OnClickListener() {
+        View view = LayoutInflater.from(context).inflate(R.layout.item_subway,null);
+        ViewHolder holder = new ViewHolder(view);
+        view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(v.getContext(), MainActivity.class);
@@ -66,10 +43,33 @@ public class subwAdapeter extends BaseAdapter {
                 v.getContext().startActivity(intent);
             }
         });
-        return convertView;
+        return holder;
     }
 
-    class ViewHolder{
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Subway subway = list.get(position);
+        holder.subwayTitle.setText(subway.getSubwayTitle());
+        holder.the_subway.setText(subway.the_subway);
+        holder.subway_next.setText("下一站："+subway.subway_next);
+        holder.subway_time.setText("预计到达时间："+subway.subway_time);
+    }
+
+    @Override
+    public int getItemCount() {
+        return list.size();
+    }
+
+
+    class ViewHolder extends RecyclerView.ViewHolder {
         TextView subwayTitle,the_subway,subway_next, subway_time;      // 到达时间
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            subwayTitle = itemView.findViewById(R.id.subway_title);
+            the_subway = itemView.findViewById(R.id.the_subway);
+            subway_next= itemView.findViewById(R.id.subway_next);
+            subway_time = itemView.findViewById(R.id.subway_time);
+        }
     }
 }
