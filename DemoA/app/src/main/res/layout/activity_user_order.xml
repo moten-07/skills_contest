@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--订单列表布局-->
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -18,6 +19,11 @@
             app:layout_constraintTop_toTopOf="parent"
             android:theme="@style/AppDemoA.Home"
             android:background="?attr/colorPrimary"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/user_order_recy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/this_subway_bar" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

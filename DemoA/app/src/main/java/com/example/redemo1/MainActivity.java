@@ -12,6 +12,7 @@ import com.example.redemo1.func.Subway2Activity;
 import com.example.redemo1.func.SubwayActivity;
 import com.example.redemo1.func.manySubway;
 import com.example.redemo1.func.userInfoActivity;
+import com.example.redemo1.func.userOrderActivity;
 
 public class MainActivity extends AppCompatActivity {
     TextView textView;
@@ -54,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case "user_order":
                 textView.setText("跳转到订单列表……");
+                finish();
+                startActivity(new Intent(this, userOrderActivity.class));
                 break;
             case "user_update_pass":
                 textView.setText("跳转到修改密码……");
