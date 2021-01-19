@@ -1,6 +1,1 @@
-
-# 移动应用开发
-# android
-# 广科
-# 2021
-# 代码参考及部分注释
+It's uploadable here
