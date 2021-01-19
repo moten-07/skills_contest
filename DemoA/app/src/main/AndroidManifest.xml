@@ -9,10 +9,12 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppDemoA.Home">
-        <activity android:name=".func.userInfoActivity"></activity>
+        <activity android:name=".func.userOrderActivity"></activity>
+        <activity android:name=".func.userInfoActivity" />
         <activity android:name=".func.manySubway" />
         <activity android:name=".func.Subway2Activity" />
         <activity android:name=".func.SubwayActivity" />

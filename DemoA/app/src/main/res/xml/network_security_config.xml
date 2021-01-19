@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true" />
+</network-security-config>
+<!--允许明文通信（http），API27+需要-->
+<!--Manifest中加上：android:networkSecurityConfig="@xml/network_security_config"-->

@@ -36,6 +36,7 @@ import com.example.redemo1.type.LittleApp;
 import com.example.redemo1.MainActivity;
 import com.example.redemo1.R;
 import com.example.redemo1.type.news;
+import com.youth.banner.Banner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,6 +67,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private int vpIndex=0;                      // 页面计数器
     Timer timer;                                // 计时器
 
+//    Banner banner;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -198,6 +200,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         // 绑定适配器
         //设置间距
+
+//        banner=new Banner(view.getContext());
 
     }
 

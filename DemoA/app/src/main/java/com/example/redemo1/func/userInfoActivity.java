@@ -14,6 +14,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MenuItem;
@@ -26,6 +28,12 @@ import android.widget.Toast;
 
 import com.example.redemo1.R;
 
+import java.lang.ref.WeakReference;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
 public class userInfoActivity extends AppCompatActivity {
     Toolbar toolbar;
     EditText user_info_newname,user_info_newsex,user_info_newphone;
@@ -33,7 +41,7 @@ public class userInfoActivity extends AppCompatActivity {
     Button user_info_newicon,user_info_save;
     SharedPreferences sp;
     ImageView user_info_icon;
-
+    String imgurl;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +75,8 @@ public class userInfoActivity extends AppCompatActivity {
         user_info_newicon = findViewById(R.id.user_info_newicon);
         user_info_save = findViewById(R.id.user_info_save);
 
+        user_info_icon.setImageResource(R.drawable.ic_baseline_account_box_24);
+
         user_info_newname.setText(sp.getString("user_info_name","默认昵称"));
         user_info_newsex.setText(sp.getString("user_info_sex","默认性别"));
         user_info_newphone.setText(sp.getString("user_info_phone","1234567890"));
@@ -95,7 +105,7 @@ public class userInfoActivity extends AppCompatActivity {
 
     private String toId(){
         String Id = sp.getString("user_paper","123456789012345678");
-        // 别问我上传证件的功能在哪，没这需求，要有也容易，但不想做
+        // 别问我上传证件的功能在哪，没这需求，要有也容易,无非就是sp.edit().putString("user_paper",[imageid])，但不想做
         StringBuilder sb = new StringBuilder(Id);
         sb.replace(2,14,"**************");
         return sb.toString();
@@ -114,6 +124,7 @@ public class userInfoActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        // 读取相册图片文件
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1){
             if (resultCode == RESULT_OK){
@@ -129,4 +140,50 @@ public class userInfoActivity extends AppCompatActivity {
             }
         }
     }
+
+
+    private void sendOkHttp(final String imgurl){
+        // okhttp读取网络图片文件
+        this.imgurl=imgurl;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    OkHttpClient client =new OkHttpClient();
+                    Request request = new Request.Builder().url(imgurl).build();
+                    Response response = client.newCall(request).execute();
+                    Bitmap bitmap = BitmapFactory.decodeStream(response.body().byteStream());
+                    Message message = new Message();
+                    message.what = 369;
+                    message.obj = bitmap;
+                    handler.sendMessage(message);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    class MyHandler extends Handler{
+        WeakReference<userInfoActivity> myactivity;
+        public MyHandler(userInfoActivity activity){
+            myactivity = new WeakReference<>(activity);
+        }
+
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            userInfoActivity activity = myactivity.get();
+            if (activity != null){
+                if (msg.what == 369){
+                    Bitmap bitmap = (Bitmap)msg.obj;
+                    user_info_icon.setImageBitmap(bitmap);
+                    Log.d("bitmap",bitmap+"");
+                }else{
+                    return;
+                }
+            }
+        }
+    }
+    MyHandler handler = new MyHandler(this);
 }
