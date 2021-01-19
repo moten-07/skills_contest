@@ -24,7 +24,10 @@ public class limts {
     public limts(Activity activity){ this.activity=activity;}
     String [] limits=new String[]{
             Manifest.permission.INTERNET,
-            Manifest.permission.ACCESS_FINE_LOCATION // 较为精确的定位信息
+            Manifest.permission.ACCESS_FINE_LOCATION,   // 较为精确的定位信息
+            Manifest.permission.WRITE_EXTERNAL_STORAGE, // 允许写入
+            Manifest.permission.CAMERA,                 // 调用摄像头
+            Manifest.permission.RECORD_AUDIO            // 麦克风
     };
 
     String ToGps;   // 返回的经纬度

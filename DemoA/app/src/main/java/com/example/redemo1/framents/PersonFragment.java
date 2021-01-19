@@ -98,7 +98,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
 
         sp = view.getContext().getSharedPreferences("location", Context.MODE_PRIVATE);
         user_icon.setImageResource(sp.getInt("user_icon",R.drawable.ic_baseline_account_box_24));
-        user_name.setText("昵称："+sp.getString("user_name","默认昵称"));
+        user_name.setText("昵称："+sp.getString("user_info_name","默认昵称"));
         user_id.setText("账号："+sp.getString("user_id","1234567890"));
     }
 
