@@ -23,51 +23,46 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.redemo1.Adapeter.hottAdapeter;
 import com.example.redemo1.Adapeter.lappAdapeter;
 import com.example.redemo1.Adapeter.newsAdapeter;
+import com.example.redemo1.Adapeter.newtAdapeter;
 import com.example.redemo1.type.Hot_theme;
 import com.example.redemo1.type.LittleApp;
 import com.example.redemo1.MainActivity;
 import com.example.redemo1.R;
 import com.example.redemo1.type.news;
-import com.youth.banner.Banner;
+import com.example.redemo1.type.newsType;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link HomeFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
-    ViewPager viewPager;                        // 轮播图
-    EditText seachstr;                          // 搜索框
-    View [] news_poins;                         // 轮播图下方小圆点
+    ViewPager viewPager,news_lists;             // 轮播图,新闻视图控件
+    EditText seach_str;                         // 搜索框
+    View [] news_poins;                         // 轮播图下方指示点
     ImageButton btn_seach,btn_left,btn_right;   // 按钮
-    List<View> viewList;                        // 轮播图片的列表
+    List<View> viewList,newList;                // 轮播图页面的列表，新闻页面的列表
 
-    RecyclerView lapplist,themelist,newslist;            // 应用列表控件,热门主题列表控件,新闻列表控件
+    RecyclerView lapp_list,theme_list,news_type_list;
+    // 应用列表控件,热门主题列表控件,分类列表控件
     List <LittleApp> lappslist;                 // 应用列表
     List <Hot_theme> hott_list;                 // 热门主题列表
+    List <newsType> newt_list;                    // 新闻分类列表
     List <news> news_list;                      // 新闻列表
 
     lappAdapeter lappadapeter;                  // 绑定应用列表的适配器
     hottAdapeter hottadapeter;                  // 绑定热门主题的适配器
-    newsAdapeter newsadapeter;                  // 绑定新闻列表的适配器
-    private int vpIndex=0;                      // 页面计数器
-    Timer timer;                                // 计时器
+    newsAdapeter newsAdapeter;                  // 绑定一类新闻的适配器
 
-//    Banner banner;
+    private int vpIndex=0;          // 页面计数器
+    Timer timer;                                // 计时器
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -113,22 +108,24 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         // 碎片绑定
         init(view);
-        // 初始化
+        // 初始化控件绑定
+        insertData(view);
+        // 数据处理
         initImage(view);
         // 图片添加
         return view;
     }
 
     private void init(View view){
-        // 控件绑定
         viewPager = view.findViewById(R.id.viewpager);
-        seachstr = view.findViewById(R.id.seach_str);
+        news_lists = view.findViewById(R.id.news_lists);
 
-        seachstr.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        seach_str = view.findViewById(R.id.seach_str);
+
+        seach_str.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH){
@@ -139,10 +136,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 return false;
             }
         });
-        // 重写软键盘的回车键,在此之前要在edittext加上
+        // 在Edittext中重写软键盘的回车键,仅此处有效,在此之前要在edittext加上
         // android:singleLine="true"(单行文本输入)
         // android:imeOptions="actionSearch"(回车键样式，可不加)
-
         news_poins = new View[]{
           view.findViewById(R.id.news_poin1),
           view.findViewById(R.id.news_poin2),
@@ -153,56 +149,93 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         btn_right = view.findViewById(R.id.btn_nextnew);
         btn_seach = view.findViewById(R.id.btn_seach);
 
-        lapplist = view.findViewById(R.id.lapp_list);
-        themelist = view.findViewById(R.id.hot_theme);
-        newslist = view.findViewById(R.id.news_list);
+        lapp_list = view.findViewById(R.id.lapp_list);
+        theme_list = view.findViewById(R.id.theme_list);
+        news_type_list =view.findViewById(R.id.news_type_list);
 
-        viewList  = new ArrayList<View>();
-        lappslist = new ArrayList<LittleApp>();
-        hott_list = new ArrayList<Hot_theme>();
-        news_list = new ArrayList<news>();
+        viewList  = new ArrayList<>();
+        newList = new ArrayList<>();
+        lappslist = new ArrayList<>();
+        hott_list = new ArrayList<>();
+        newt_list = new ArrayList<>();
+        news_list = new ArrayList<>();
+
 
         btn_left.setOnClickListener(this::onClick);
         btn_seach.setOnClickListener(this::onClick);
         btn_right.setOnClickListener(this::onClick);
         // 点击监听
-
+    }
+    private void insertData(View view){
         // 加判断，平板模式下spanCount要大于5（为4），未完成
-        lapplist.setLayoutManager(new GridLayoutManager(view.getContext(),5));
-        themelist.setLayoutManager(new GridLayoutManager(view.getContext(),2));
-        newslist.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        lapp_list.setLayoutManager(new GridLayoutManager(view.getContext(),5));
+        theme_list.setLayoutManager(new GridLayoutManager(view.getContext(),2));
+
+        LinearLayoutManager manager = new LinearLayoutManager(view.getContext());
+        manager.setOrientation(RecyclerView.HORIZONTAL);
+        news_type_list.setLayoutManager(manager);
         // 列表绑定网格布局/线性布局
 
+        // 添加列表数据
+        // 数据应该是从服务器端传来的
+        // 应用领域
         String [] littie_app=view.getContext().getResources().getStringArray(R.array.littie_app);
         for(String title:littie_app){
             lappslist.add(new LittleApp(R.mipmap.subway,title));
         }
-        // 数据应该是从服务器端传来的
-
+        // 热门主题
         for (int i = 0 ; i < 4 ; i++){
             hott_list.add(new Hot_theme("热门主题"+(i+1)));
-            news_list.add(new news(R.mipmap.newa_in,"标题"+(i+1)+"","内容","人数","日期"));
+            news_list.add(new news(R.mipmap.newa_in,"标题"+(i+1),"内容"+(i+1),""+(i+1)*10,(i+1)+"天前"));
         }
-        // 添加列表数据
+        // 新闻分类
+        for(int i = 0 ;i < 8 ; i++){
+            newt_list.add(new newsType("分类"+(i+1)));
+        }
+        // 添加多页新闻列表
+        newsAdapeter =new newsAdapeter(view.getContext(),news_list);
+        for (int i = 0;i<newt_list.size();i++){
+            newList.add(LayoutInflater.from(view.getContext()).inflate(R.layout.item_news,null));
 
-        lappadapeter=new lappAdapeter(view.getContext(),lappslist);
-        lapplist.setAdapter(lappadapeter);
-        indexe indexe=new indexe(2);
-        lapplist.addItemDecoration(indexe);
+            ((RecyclerView)newList.get(i).findViewById(R.id.newone_list)).setLayoutManager(
+                    new LinearLayoutManager(view.getContext()));
+            ((RecyclerView)newList.get(i).findViewById(R.id.newone_list)).setAdapter(newsAdapeter);
+        }
 
-        hottadapeter=new hottAdapeter(view.getContext(),hott_list);
-        themelist.setAdapter(hottadapeter);
-        indexe indexe1=new indexe(8);
-        themelist.addItemDecoration(indexe1);
-
-        newsadapeter=new newsAdapeter(view.getContext(),news_list);
-        newslist.setAdapter(newsadapeter);
 
         // 绑定适配器
-        //设置间距
+        lappadapeter=new lappAdapeter(view.getContext(),lappslist);
+        lapp_list.setAdapter(lappadapeter);
+        indexe indexe=new indexe(2);
+        lapp_list.addItemDecoration(indexe);
 
-//        banner=new Banner(view.getContext());
+        hottadapeter=new hottAdapeter(view.getContext(),hott_list);
+        theme_list.setAdapter(hottadapeter);
+        indexe indexe1=new indexe(8);
+        theme_list.addItemDecoration(indexe1);
 
+        // 多新闻列表的适配器绑定
+        news_lists.setAdapter(new PagerAdapter() {
+            @Override
+            public int getCount() { return newt_list.size(); }
+            @Override
+            public boolean isViewFromObject(@NonNull View view, @NonNull Object object) { return view==object; }
+
+            @NonNull
+            @Override
+            public Object instantiateItem(@NonNull ViewGroup container, int position) {
+                View view1 = newList.get(position);
+                container.addView(view1);
+                return view1;
+            }
+            @Override
+            public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+                container.removeView(newList.get(position));
+            }
+        });
+
+        newtAdapeter newtadapeter = new newtAdapeter(view.getContext(),newt_list);
+        news_type_list.setAdapter(newtadapeter);
     }
 
     @Override
@@ -236,14 +269,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private void theViewPager(){
         viewPager.setAdapter(new PagerAdapter() {
             @Override
-            public int getCount() {
-                return viewList.size();
-            }
+            public int getCount() { return viewList.size(); }
             @Override
-            public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
-                return view==object;
-            }
-
+            public boolean isViewFromObject(@NonNull View view, @NonNull Object object) { return view==object; }
 
             @NonNull
             @Override
@@ -271,10 +299,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
-
             @Override
             public void onPageSelected(int position) {
-                // 页面跳转后切换下面小圆点状态
+                // 页面跳转后切换指示点状态
                 for (int i = 0;i<news_poins.length;i++){
                     news_poins[i].setBackgroundResource((i==position) ? R.drawable.bg_point1 : R.drawable.bg_point2);
                 }
@@ -316,11 +343,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         ((ImageView)viewList.get(0).findViewById(R.id.imageView)).setImageResource(R.drawable.ic_baseline_account_box_24);
         ((ImageView)viewList.get(1).findViewById(R.id.imageView)).setImageResource(R.drawable.ic_baseline_all_inclusive_24);
         ((ImageView)viewList.get(2).findViewById(R.id.imageView)).setImageResource(R.drawable.ic_baseline_accessibility_24);
+        // 添加多新闻列表
+
 
     }
     private void seach(View view){
         // 搜索功能（软键盘重写事件要用，从onClick()移到这里来）
-        String seach = seachstr.getText().toString();
+        String seach = seach_str.getText().toString();
         // 获取输入内容，向服务器端查询
         Intent intent= new Intent(view.getContext(), MainActivity.class);
         intent.putExtra("type","news");

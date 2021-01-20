@@ -8,6 +8,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.example.redemo1.func.NewActivity;
 import com.example.redemo1.func.Subway2Activity;
 import com.example.redemo1.func.SubwayActivity;
 import com.example.redemo1.func.manySubway;
@@ -32,9 +33,15 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case "news":
                 textView.setText(intent.getStringExtra("where"));
-                break;
             case "newsViewPager":
                 textView.setText("首页轮播图" + intent.getStringExtra("where"));
+
+                finish();
+                Intent intentnew = new Intent(MainActivity.this, NewActivity.class);
+                intentnew.putExtra("title", intent.getStringExtra("title"));
+                // 这里的url应该由服务器获取，存储在某个地方，需要时调出来，因为我没有，所以连接上百度
+                intentnew.putExtra("url","https://www.baidu.com/s?ie=UTF-8&wd="+intent.getStringExtra("where"));
+                startActivity(intentnew);
                 break;
             case "subway":
                 textView.setText("跳转到：" + intent.getStringExtra("title"));

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -34,7 +33,7 @@ public class newsAdapeter extends RecyclerView.Adapter<newsAdapeter.ViewHolder>{
         if (context == null){
             context = parent.getContext();
         }
-        View view = LayoutInflater.from(context).inflate(R.layout.item_news,null);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_newone,null);
         holder=new ViewHolder(view);
         view.setOnClickListener(new View.OnClickListener(){
             @Override

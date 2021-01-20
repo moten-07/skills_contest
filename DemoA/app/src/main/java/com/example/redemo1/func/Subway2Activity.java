@@ -69,14 +69,16 @@ public class Subway2Activity extends AppCompatActivity {
         subwatList=new ArrayList<>();
         for(String name:names){
             subwatList.add(new One_subway(R.mipmap.sss,R.mipmap.sss,((name.equals(city[1])) ? R.drawable.bg_point1 : R.drawable.bg_point2),name));
-}
+        }
+
         recyclerView = findViewById(R.id.recy);
-                LinearLayoutManager manager=new LinearLayoutManager(this);
-                manager.setOrientation(RecyclerView.HORIZONTAL);
-                recyclerView.setLayoutManager(manager);
-                adapeter=new subnAdapeter(this,subwatList);
-                recyclerView.setAdapter(adapeter);
-                }
+        LinearLayoutManager manager=new LinearLayoutManager(this);
+        manager.setOrientation(RecyclerView.HORIZONTAL);        // 纵向排列
+        recyclerView.setLayoutManager(manager);
+
+        adapeter=new subnAdapeter(this,subwatList);
+        recyclerView.setAdapter(adapeter);
+    }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {

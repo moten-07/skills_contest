@@ -115,16 +115,27 @@
             app:layout_constraintTop_toBottomOf="@id/layout2"/>
         <!--  热门主题  -->
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/hot_theme"
+            android:id="@+id/theme_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/lapp_list"/>
-        <!--  新闻列表  -->
+        <!--  新闻列表，应该是左右滑动切换  -->
+        <!--分类标题栏-->
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/news_list"
+            android:id="@+id/news_type_list"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintTop_toBottomOf="@id/theme_list"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:background="@drawable/shap1"/>
+        <!--具体内容列表-->
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/news_lists"
             android:layout_width="match_parent"
             android:layout_height="800dp"
-            app:layout_constraintTop_toBottomOf="@id/hot_theme"/>
+            android:layout_marginTop="50dp"
+            app:layout_constraintTop_toBottomOf="@id/theme_list"/>
         <!--  底线  -->
         <TextView
             android:id="@+id/low"
