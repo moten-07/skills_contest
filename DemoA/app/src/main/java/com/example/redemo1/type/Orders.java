@@ -30,4 +30,10 @@ public class Orders {
     public void setOrderDate(String orderDate) {
         OrderDate = orderDate;
     }
+
+    public Orders(String OrderId,String OrderType,String OrderDate){
+        this.OrderId = OrderId;
+        this.OrderType = OrderType;
+        this.OrderDate = OrderDate;
+    }
 }

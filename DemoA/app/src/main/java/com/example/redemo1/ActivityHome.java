@@ -35,7 +35,6 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        setTitle(R.string.title);
         // 更改标题栏
         init();
         start();
@@ -121,26 +120,31 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
                 person.setBackgroundResource(R.mipmap.personage_in);
                 t_person.setTextColor(getResources().getColor(R.color.btn_in));
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame,list.get(0)).commit();
+                setTitle("个人中心");
                 break;
             case 2:
                 news.setBackgroundResource(R.mipmap.newa_in);
                 t_news.setTextColor(getResources().getColor(R.color.btn_in));
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame,list.get(1)).commit();
+                setTitle("新闻");
                 break;
             case 3:
                 home.setBackgroundResource(R.mipmap.home_in);
                 t_home.setTextColor(getResources().getColor(R.color.btn_in));
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame,list.get(2)).commit();
+                setTitle(R.string.title);
                 break;
             case 4:
                 party.setBackgroundResource(R.mipmap.party_in);
                 t_party.setTextColor(getResources().getColor(R.color.btn_in));
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame,list.get(3)).commit();
+                setTitle("智慧党建");
                 break;
             case 5:
                 all.setBackgroundResource(R.mipmap.all_in);
                 t_all.setTextColor(getResources().getColor(R.color.btn_in));
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame,list.get(4)).commit();
+                setTitle("全部服务");
                 break;
             case 0:
                 person.setBackgroundResource(R.mipmap.personage);

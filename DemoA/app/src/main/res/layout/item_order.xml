@@ -22,6 +22,7 @@
             app:layout_constraintTop_toTopOf="@id/order_id"
             app:layout_constraintLeft_toRightOf="@id/order_id"/>
         <TextView
+            android:id="@+id/order_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="订单日期"

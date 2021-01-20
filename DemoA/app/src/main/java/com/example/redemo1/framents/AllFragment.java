@@ -125,16 +125,7 @@ public class AllFragment extends Fragment {
     private void selectLapp(View view){
         // 查询小程序的
         String where = seach_str.getText().toString();
-//        Cursor cursor=help.getReadableDatabase().query("Little_app",null,"title=?",
-//                new String[]{where},null,null,null);
         ArrayList <Map<String,String>> result = new ArrayList<Map<String,String>>();
-//        while (cursor.moveToNext()){
-//            Map<String,String> map = new HashMap<>();
-//            map.put("title",cursor.getString(1));
-//            map.put("icon",cursor.getString(2));
-            // 获取第二列的值
-//            result.add(map);
-//        }
         if (result == null || result.size() == 0){
             Toast.makeText(view.getContext(),"查无此服务",Toast.LENGTH_SHORT).show();;
         }else{

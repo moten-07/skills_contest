@@ -78,7 +78,6 @@ public class NewsFragment extends Fragment {
             news_list.add(new news(R.mipmap.newa_in,"新闻"+i,"新闻"+i+"的内容","123","123"));
         }
         recyclerView.setAdapter(new newsAdapeter(view.getContext(),news_list));
-        // 需要修改newsAdapter 让其继承RecycleAdapter，同时需要修改HomeFragment以及对应的布局，明天（01.19）做
         return  view;
     }
 }
