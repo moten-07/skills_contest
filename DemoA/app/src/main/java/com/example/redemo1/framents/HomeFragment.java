@@ -186,11 +186,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         // 热门主题
         for (int i = 0 ; i < 4 ; i++){
             hott_list.add(new Hot_theme("热门主题"+(i+1)));
-            news_list.add(new news(R.mipmap.newa_in,"标题"+(i+1),"内容"+(i+1),""+(i+1)*10,(i+1)+"天前"));
+            news_list.add(new news(R.mipmap.newa_in,"新闻"+(i+1),"内容"+(i+1),""+(i+1)*10,(i+1)+"天前"));
         }
         // 新闻分类
         for(int i = 0 ;i < 8 ; i++){
-            newt_list.add(new newsType("分类"+(i+1)));
+            newt_list.add(new newsType("新闻分类"+(i+1)));
         }
         // 添加多页新闻列表
         newsAdapeter =new newsAdapeter(view.getContext(),news_list);
