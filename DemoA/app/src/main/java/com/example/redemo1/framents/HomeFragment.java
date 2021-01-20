@@ -9,6 +9,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
@@ -26,10 +27,12 @@ import android.widget.TextView;
 
 import com.example.redemo1.Adapeter.hottAdapeter;
 import com.example.redemo1.Adapeter.lappAdapeter;
+import com.example.redemo1.Adapeter.newsAdapeter;
 import com.example.redemo1.type.Hot_theme;
 import com.example.redemo1.type.LittleApp;
 import com.example.redemo1.MainActivity;
 import com.example.redemo1.R;
+import com.example.redemo1.type.news;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
@@ -193,11 +196,46 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         indexe indexe1=new indexe(8);
         theme_list.addItemDecoration(indexe1);
 
-        for (int i=0;i<titles.length;i++){
-            newsList.add(LayoutInflater.from(view.getContext()).inflate(R.layout.item_news,null));
-            tabLayout.addTab(tabLayout.newTab().setText(titles[i]));
+        List<news>list =new ArrayList<>();
+        for (int i = 0; i<5;i++){
+            list.add(new news(R.mipmap.newa_in,
+                    "title"+(i+1),
+                    "content"+(i+1),
+                    ""+(i+1)*10,
+                    (i+1)+"天前"));
         }
+        newsAdapeter newsAdapeter =new newsAdapeter(view.getContext(),list);
+        for (int i = 0;i<titles.length;i++){
+            View view1 =LayoutInflater.from(view.getContext()).inflate(R.layout.item_news,null);
+            newsList.add(view1);
+            RecyclerView recyclerView =newsList.get(i).findViewById(R.id.newone_list);
+            recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+            recyclerView.setAdapter(newsAdapeter);
+        }
+
+        news_lists.setAdapter(new PagerAdapter() {
+            @Override
+            public int getCount(){return titles.length;}
+            @Override
+            public boolean isViewFromObject(@NonNull View view, @NonNull Object object) { return view == object; }
+
+            @NonNull
+            @Override
+            public Object instantiateItem(@NonNull ViewGroup container, int position) {
+                View view1 = newsList.get(position);
+                container.addView(view1);
+                return view1;
+            }
+
+            @Override
+            public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+                container.removeView(newsList.get(position));
+            }
+        });
         tabLayout.setupWithViewPager(news_lists);
+        for (int i = 0 ;i<titles.length;i++){
+            tabLayout.getTabAt(i).setText(titles[i]);
+        }
     }
 
     @Override
