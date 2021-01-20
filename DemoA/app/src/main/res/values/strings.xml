@@ -58,4 +58,16 @@
         <item>首都机场线</item>
         <item>大兴机场线</item>
     </string-array>
+    <string-array name="newsType">
+        <item>最新</item>
+        <item>热门</item>
+        <item>世界</item>
+        <item>娱乐</item>
+        <item>军事</item>
+        <item>财经</item>
+        <item>体育</item>
+        <item>汽车</item>
+        <item>教育</item>
+        <item>科技</item>
+    </string-array>
 </resources>

@@ -9,7 +9,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
@@ -23,19 +22,15 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.redemo1.Adapeter.hottAdapeter;
 import com.example.redemo1.Adapeter.lappAdapeter;
-import com.example.redemo1.Adapeter.newsAdapeter;
-import com.example.redemo1.Adapeter.newtAdapeter;
 import com.example.redemo1.type.Hot_theme;
 import com.example.redemo1.type.LittleApp;
 import com.example.redemo1.MainActivity;
 import com.example.redemo1.R;
-import com.example.redemo1.type.news;
-import com.example.redemo1.type.newsType;
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,20 +43,21 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     EditText seach_str;                         // 搜索框
     View [] news_poins;                         // 轮播图下方指示点
     ImageButton btn_seach,btn_left,btn_right;   // 按钮
-    List<View> viewList,newList;                // 轮播图页面的列表，新闻页面的列表
+    List<View> viewList,newsList;                // 轮播图页面的列表，新闻页面的列表
 
-    RecyclerView lapp_list,theme_list,news_type_list;
-    // 应用列表控件,热门主题列表控件,分类列表控件
+    TabLayout tabLayout;
+    RecyclerView lapp_list,theme_list;
+    // 应用列表控件,热门主题列表控件
     List <LittleApp> lappslist;                 // 应用列表
     List <Hot_theme> hott_list;                 // 热门主题列表
-    List <newsType> newt_list;                    // 新闻分类列表
-    List <news> news_list;                      // 新闻列表
+    List<Fragment> fragments;
+
+    String [] titles;                           // 新闻分类标题
 
     lappAdapeter lappadapeter;                  // 绑定应用列表的适配器
     hottAdapeter hottadapeter;                  // 绑定热门主题的适配器
-    newsAdapeter newsAdapeter;                  // 绑定一类新闻的适配器
 
-    private int vpIndex=0;          // 页面计数器
+    private int vpIndex=0;                      // 页面计数器
     Timer timer;                                // 计时器
 
     // TODO: Rename parameter arguments, choose names that match
@@ -122,7 +118,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private void init(View view){
         viewPager = view.findViewById(R.id.viewpager);
         news_lists = view.findViewById(R.id.news_lists);
-
         seach_str = view.findViewById(R.id.seach_str);
 
         seach_str.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -151,15 +146,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         lapp_list = view.findViewById(R.id.lapp_list);
         theme_list = view.findViewById(R.id.theme_list);
-        news_type_list =view.findViewById(R.id.news_type_list);
+        tabLayout = view.findViewById(R.id.news_type_list);
 
         viewList  = new ArrayList<>();
-        newList = new ArrayList<>();
+        newsList = new ArrayList<>();
+
         lappslist = new ArrayList<>();
         hott_list = new ArrayList<>();
-        newt_list = new ArrayList<>();
-        news_list = new ArrayList<>();
 
+        fragments = new ArrayList<>();
 
         btn_left.setOnClickListener(this::onClick);
         btn_seach.setOnClickListener(this::onClick);
@@ -170,10 +165,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         // 加判断，平板模式下spanCount要大于5（为4），未完成
         lapp_list.setLayoutManager(new GridLayoutManager(view.getContext(),5));
         theme_list.setLayoutManager(new GridLayoutManager(view.getContext(),2));
-
-        LinearLayoutManager manager = new LinearLayoutManager(view.getContext());
-        manager.setOrientation(RecyclerView.HORIZONTAL);
-        news_type_list.setLayoutManager(manager);
         // 列表绑定网格布局/线性布局
 
         // 添加列表数据
@@ -186,22 +177,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         // 热门主题
         for (int i = 0 ; i < 4 ; i++){
             hott_list.add(new Hot_theme("热门主题"+(i+1)));
-            news_list.add(new news(R.mipmap.newa_in,"新闻"+(i+1),"内容"+(i+1),""+(i+1)*10,(i+1)+"天前"));
         }
         // 新闻分类
-        for(int i = 0 ;i < 8 ; i++){
-            newt_list.add(new newsType("新闻分类"+(i+1)));
-        }
+        titles = view.getContext().getResources().getStringArray(R.array.newsType);
         // 添加多页新闻列表
-        newsAdapeter =new newsAdapeter(view.getContext(),news_list);
-        for (int i = 0;i<newt_list.size();i++){
-            newList.add(LayoutInflater.from(view.getContext()).inflate(R.layout.item_news,null));
-
-            ((RecyclerView)newList.get(i).findViewById(R.id.newone_list)).setLayoutManager(
-                    new LinearLayoutManager(view.getContext()));
-            ((RecyclerView)newList.get(i).findViewById(R.id.newone_list)).setAdapter(newsAdapeter);
-        }
-
 
         // 绑定适配器
         lappadapeter=new lappAdapeter(view.getContext(),lappslist);
@@ -214,28 +193,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         indexe indexe1=new indexe(8);
         theme_list.addItemDecoration(indexe1);
 
-        // 多新闻列表的适配器绑定
-        news_lists.setAdapter(new PagerAdapter() {
-            @Override
-            public int getCount() { return newt_list.size(); }
-            @Override
-            public boolean isViewFromObject(@NonNull View view, @NonNull Object object) { return view==object; }
-
-            @NonNull
-            @Override
-            public Object instantiateItem(@NonNull ViewGroup container, int position) {
-                View view1 = newList.get(position);
-                container.addView(view1);
-                return view1;
-            }
-            @Override
-            public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-                container.removeView(newList.get(position));
-            }
-        });
-
-        newtAdapeter newtadapeter = new newtAdapeter(view.getContext(),newt_list);
-        news_type_list.setAdapter(newtadapeter);
+        for (int i=0;i<titles.length;i++){
+            newsList.add(LayoutInflater.from(view.getContext()).inflate(R.layout.item_news,null));
+            tabLayout.addTab(tabLayout.newTab().setText(titles[i]));
+        }
+        tabLayout.setupWithViewPager(news_lists);
     }
 
     @Override

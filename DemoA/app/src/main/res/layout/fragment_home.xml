@@ -121,14 +121,16 @@
             app:layout_constraintTop_toBottomOf="@id/lapp_list"/>
         <!--  新闻列表，应该是左右滑动切换  -->
         <!--分类标题栏-->
-        <androidx.recyclerview.widget.RecyclerView
+        <com.google.android.material.tabs.TabLayout
             android:id="@+id/news_type_list"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:layout_margin="20dp"
+            android:background="#d7d7d7"
             app:layout_constraintTop_toBottomOf="@id/theme_list"
             app:layout_constraintLeft_toLeftOf="parent"
-            android:background="@drawable/shap1"/>
+            app:tabMode="scrollable"
+            app:tabSelectedTextColor="@color/red"
+            app:tabTextColor="@color/black"/>
         <!--具体内容列表-->
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/news_lists"
