@@ -1,7 +1,9 @@
 package com.example.redemo1.framents;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
@@ -165,9 +167,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         // 点击监听
     }
     private void insertData(View view){
-        // 加判断，平板模式下spanCount要大于5（为4），未完成
-        lapp_list.setLayoutManager(new GridLayoutManager(view.getContext(),5));
-        theme_list.setLayoutManager(new GridLayoutManager(view.getContext(),2));
+        // 加判断，平板模式下spanCount要大于5（为4）?没反应？？全™认为是平板？
+//        if (isPad(view.getContext())){
+//            lapp_list.setLayoutManager(new GridLayoutManager(view.getContext(),6));
+//            theme_list.setLayoutManager(new GridLayoutManager(view.getContext(),4));
+//        }else {
+            lapp_list.setLayoutManager(new GridLayoutManager(view.getContext(),5));
+            theme_list.setLayoutManager(new GridLayoutManager(view.getContext(),2));
+//        }
+
         // 列表绑定网格布局/线性布局
 
         // 添加列表数据
@@ -392,6 +400,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             outRect.right=space;
             outRect.top=space;
         }
+    }
+
+    private static boolean isPad(Context context){
+        return (context.getResources().getConfiguration().screenLayout
+        & Configuration.SCREENLAYOUT_LAYOUTDIR_MASK)>=Configuration.SCREENLAYOUT_SIZE_LARGE;
     }
 
 
