@@ -23,6 +23,7 @@ import android.widget.ImageView;
 
 import com.example.redemo1.type.limts;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +50,6 @@ public class jGuideActivity extends AppCompatActivity {
     // 计时器，在onDestroy()中注销
     SharedPreferences sp;
     SharedPreferences.Editor editor;
-    // 数据存储接口
     Bitmap bitmap;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -253,20 +253,18 @@ public class jGuideActivity extends AppCompatActivity {
 
     private void returnBitmap(String url){
         new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            URL imageurl = new URL(url);
-                            OkHttpClient client =new OkHttpClient();
-                            Request request = new Request.Builder().url(imageurl).build();
-                            Response response = client.newCall(request).execute();
-                            bitmap = BitmapFactory.decodeStream(response.body().byteStream());
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
-                    }
+            @Override
+            public void run() {
+                try {
+                    URL imageurl = new URL(url);
+                    OkHttpClient client =new OkHttpClient();
+                    Request request = new Request.Builder().url(imageurl).build();
+                    Response response = client.newCall(request).execute();
+                    bitmap = BitmapFactory.decodeStream(response.body().byteStream());
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-        ).start();
+            }
+        }).start();
     }
 }
