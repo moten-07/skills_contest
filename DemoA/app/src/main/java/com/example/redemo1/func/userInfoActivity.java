@@ -50,6 +50,7 @@ public class userInfoActivity extends AppCompatActivity {
         // 头像可修改-》相机权限，相册读取权限，文件上传
         // 所有数据上传后先储存在SQLite，然后再上传到服务器的数据库中
         // 获取网络资源（指头像）
+        // 还没做
     }
 
     private void init(){
@@ -178,7 +179,6 @@ public class userInfoActivity extends AppCompatActivity {
                 if (msg.what == 369){
                     Bitmap bitmap = (Bitmap)msg.obj;
                     user_info_icon.setImageBitmap(bitmap);
-                    Log.d("bitmap",bitmap+"");
                 }else{
                     return;
                 }
