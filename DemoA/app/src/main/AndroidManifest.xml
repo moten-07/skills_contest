@@ -13,7 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppDemoA.Home">
-        <activity android:name=".func.NewActivity"></activity>
+        <activity android:name=".func.NewActivity" />
         <activity android:name=".func.userOrderActivity" />
         <activity android:name=".func.userInfoActivity" />
         <activity android:name=".func.manySubway" />

@@ -10,7 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,18 +21,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.example.redemo1.aboutIntent.HttpHelp;
 import com.example.redemo1.type.limts;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 public class jGuideActivity extends AppCompatActivity {
     // 引导页主活动（Java版本）
@@ -186,24 +182,9 @@ public class jGuideActivity extends AppCompatActivity {
     private void initImage(){
         // 图片绑定
         for(int i = 0;i<viewList.size(); i++){
-            try {
-                // 有点小问题，没加载到
-                String url = "http://dasai.sdvcst.edu.cn:8080/profile/"+(i+1)+"-yingdao.jpg";
-                returnBitmap(url);
-                ((ImageView)viewList.get(i).findViewById(R.id.imageView)).setImageBitmap(bitmap);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            Uri uri = Uri.parse(new HttpHelp().getHearUri()+"/profile/"+(i+1)+"-yingdao.jpg");
+            Glide.with(jGuideActivity.this).load(uri).into((ImageView)viewList.get(i).findViewById(R.id.imageView));
         }
-//        ImageView im1=(ImageView) viewList.get(1).findViewById(R.id.imageView);
-//        im1.setImageResource(R.drawable.ic_baseline_accessibility_24);
-//        ImageView im2=(ImageView) viewList.get(2).findViewById(R.id.imageView);
-//        im2.setImageResource(R.drawable.ic_baseline_account_box_24);
-//        ImageView im3=(ImageView) viewList.get(3).findViewById(R.id.imageView);
-//        im3.setImageResource(R.drawable.ic_baseline_all_inclusive_24);
-//        ImageView im4=(ImageView) viewList.get(4).findViewById(R.id.imageView);
-//        im4.setImageResource(R.drawable.ic_baseline_accessibility_24);
-
         points=new View[]{findViewById(R.id.poin1),
                 findViewById(R.id.poin2),
                 findViewById(R.id.poin3),
@@ -249,22 +230,5 @@ public class jGuideActivity extends AppCompatActivity {
                 // 关闭弹窗
             }
         });
-    }
-
-    private void returnBitmap(String url){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    URL imageurl = new URL(url);
-                    OkHttpClient client =new OkHttpClient();
-                    Request request = new Request.Builder().url(imageurl).build();
-                    Response response = client.newCall(request).execute();
-                    bitmap = BitmapFactory.decodeStream(response.body().byteStream());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
     }
 }
