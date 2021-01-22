@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- 主布局 -->
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ActivityHome">
+    tools:context=".ActivityHome"
+    android:orientation="vertical">
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/newBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppDemoA.Home"
-        android:background="?attr/colorPrimary"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        android:background="?attr/colorPrimary"/>
     <FrameLayout
         android:id="@+id/frame"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         app:layout_constraintTop_toBottomOf="@id/newBar"/>
 
     <LinearLayout
@@ -26,7 +27,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:background="@color/white">
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_weight="1"
@@ -43,7 +44,7 @@
                 android:layout_gravity="center"/>
         </LinearLayout>
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_weight="1"
@@ -60,7 +61,7 @@
                 android:layout_gravity="center"/>
         </LinearLayout>
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_weight="1"
@@ -77,7 +78,7 @@
                 android:layout_gravity="center"/>
         </LinearLayout>
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_weight="1"
@@ -94,7 +95,7 @@
                 android:layout_gravity="center"/>
         </LinearLayout>
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_weight="1"
@@ -111,4 +112,4 @@
                 android:layout_gravity="center" />
         </LinearLayout>
     </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
