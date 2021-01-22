@@ -30,12 +30,17 @@ import android.widget.TextView;
 import com.example.redemo1.Adapeter.hottAdapeter;
 import com.example.redemo1.Adapeter.lappAdapeter;
 import com.example.redemo1.Adapeter.newsAdapeter;
+import com.example.redemo1.func.tojson;
 import com.example.redemo1.type.Hot_theme;
 import com.example.redemo1.type.LittleApp;
 import com.example.redemo1.MainActivity;
 import com.example.redemo1.R;
 import com.example.redemo1.type.news;
 import com.google.android.material.tabs.TabLayout;
+import com.youth.banner.Banner;
+import com.youth.banner.adapter.BannerAdapter;
+import com.youth.banner.adapter.BannerImageAdapter;
+import com.youth.banner.holder.BannerImageHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,9 +49,12 @@ import java.util.TimerTask;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
-    ViewPager viewPager,news_lists;             // 轮播图,新闻视图控件
+    Banner banner;                              // banner他来了，ohhhh
+    String []images = new String []{"url"};
+    String [] title_s = new String[]{"标题"};
+
+    ViewPager news_lists;                       // 新闻视图控件
     EditText seach_str;                         // 搜索框
-    View [] news_poins;                         // 轮播图下方指示点
     ImageButton btn_seach,btn_left,btn_right;   // 按钮
     List<View> viewList,newsList;                // 轮播图页面的列表，新闻页面的列表
 
@@ -121,7 +129,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     private void init(View view){
-        viewPager = view.findViewById(R.id.viewpager);
+        banner = view.findViewById(R.id.banner);
+
         news_lists = view.findViewById(R.id.news_lists);
         seach_str = view.findViewById(R.id.seach_str);
 
@@ -139,11 +148,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         // 在Edittext中重写软键盘的回车键,仅此处有效,在此之前要在edittext加上
         // android:singleLine="true"(单行文本输入)
         // android:imeOptions="actionSearch"(回车键样式，可不加)
-        news_poins = new View[]{
-          view.findViewById(R.id.news_poin1),
-          view.findViewById(R.id.news_poin2),
-          view.findViewById(R.id.news_poin3)
-        };
 
         btn_left = view.findViewById(R.id.btn_lastnew);
         btn_right = view.findViewById(R.id.btn_nextnew);
@@ -244,6 +248,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         for (int i = 0 ;i<titles.length;i++){
             tabLayout.getTabAt(i).setText(titles[i]);
         }
+
+//        banner.setAdapter();
+
     }
 
     @Override
@@ -256,7 +263,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 }else{
                     vpIndex--;
                 }
-                viewPager.setCurrentItem(vpIndex);
                 Log.v("this index",vpIndex+"");
                 break;
             case R.id.btn_nextnew:
@@ -266,7 +272,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 }else{
                     vpIndex++;
                 }
-                viewPager.setCurrentItem(vpIndex);
                 Log.v("this index",vpIndex+"");
                 break;
             case R.id.btn_seach:
@@ -274,83 +279,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 break;
         }
     }
-    private void theViewPager(){
-        viewPager.setAdapter(new PagerAdapter() {
-            @Override
-            public int getCount() { return viewList.size(); }
-            @Override
-            public boolean isViewFromObject(@NonNull View view, @NonNull Object object) { return view==object; }
 
-            @NonNull
-            @Override
-            public Object instantiateItem(@NonNull ViewGroup container, int position) {
-                View view=viewList.get(position);
-                container.addView(view);
-                viewList.get(position).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent2= new Intent(v.getContext(), MainActivity.class);
-                        intent2.putExtra("type","newsViewPager");
-                        intent2.putExtra("where",vpIndex+1+"");
-                        startActivity(intent2);
-                    }
-                });// 轮播图点击监听
-                return view;
-            }
-
-            @Override
-            public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-                container.removeView(viewList.get(position));
-            }
-        });
-
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
-            @Override
-            public void onPageSelected(int position) {
-                // 页面跳转后切换指示点状态
-                for (int i = 0;i<news_poins.length;i++){
-                    news_poins[i].setBackgroundResource((i==position) ? R.drawable.bg_point1 : R.drawable.bg_point2);
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {}
-        });
-    }
-    private void viewTimer(){
-        // 轮播图计时器设置
-        timer=new Timer();
-        TimerTask task=new TimerTask() {
-            @Override
-            public void run() {
-                if(!isDestroy(getActivity())) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (vpIndex == 2) {
-                                vpIndex = 0;
-                            } else {
-                                vpIndex++;
-                            }
-                            viewPager.setCurrentItem(vpIndex);
-                            // Log.v("index", vpIndex + "");
-                        }
-                    });
-                }
-            }
-        };
-        timer.schedule(task,5000,3000);
-    }
     private void initImage(View v){
         // 轮播页面设置
-        for(int i = 0;i<news_poins.length;i++){
-            viewList.add(LayoutInflater.from(v.getContext()).inflate(R.layout.item_vp,null));
-        }
-        ((ImageView)viewList.get(0).findViewById(R.id.imageView)).setImageResource(R.drawable.ic_baseline_account_box_24);
-        ((ImageView)viewList.get(1).findViewById(R.id.imageView)).setImageResource(R.drawable.ic_baseline_all_inclusive_24);
-        ((ImageView)viewList.get(2).findViewById(R.id.imageView)).setImageResource(R.drawable.ic_baseline_accessibility_24);
+
         // 添加多新闻列表
 
 
@@ -370,8 +302,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public void onStart() {
         super.onStart();
         Log.v("now","start");
-        viewTimer();
-        theViewPager();
     }
 
     @Override
