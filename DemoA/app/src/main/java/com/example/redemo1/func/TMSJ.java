@@ -42,12 +42,8 @@ public class TMSJ {
         public String sort;
         public String display;
 
-        public RowsBean(int id,
-                        String imgUrl,
-                        String type,
-                        String createTime,
-                        String sort,
-                        String display){
+        public RowsBean(int id,String imgUrl,String type,
+                        String createTime,String sort,String display){
             this.id = id;
             this.imgUrl = imgUrl;
             this.type = type;
