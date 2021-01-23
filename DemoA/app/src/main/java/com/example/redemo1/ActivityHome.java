@@ -132,7 +132,7 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
                 home.setBackgroundResource(R.mipmap.home_in);
                 t_home.setTextColor(getResources().getColor(R.color.btn_in));
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame,list.get(2)).commit();
-                setTitle(R.string.title);
+                setTitle("首页");
                 break;
             case 4:
                 party.setBackgroundResource(R.mipmap.party_in);
