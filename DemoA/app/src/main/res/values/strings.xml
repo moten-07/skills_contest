@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">DemoA</string>
-    <string name="title">智慧城市</string>
+    <string name="app_name">智慧城市</string>
+    <string name="title">首页</string>
     <!--  按钮及弹窗布局的文本  -->
     <string name="guide_page_title">网络设置</string>
     <string name="guide_page_option1">服务器IP地址:</string>
