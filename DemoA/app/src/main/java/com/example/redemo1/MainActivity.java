@@ -34,9 +34,8 @@ public class MainActivity extends AppCompatActivity {
             case "news":
                 textView.setText(intent.getStringExtra("where"));
             case "newsViewPager":
-                textView.setText("首页轮播图" + intent.getStringExtra("where"));
-
-                finish();
+                textView.setText("首页轮播图:\n" + intent.getStringExtra("where"));
+//                finish();
 //                Intent intentnew = new Intent(MainActivity.this, NewActivity.class);
 //                intentnew.putExtra("title", intent.getStringExtra("title"));
 //                // 这里的url应该由服务器获取，存储在某个地方，需要时调出来，因为我没有，所以连接上百度
