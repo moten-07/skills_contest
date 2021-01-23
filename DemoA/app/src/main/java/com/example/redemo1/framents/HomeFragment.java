@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -225,12 +226,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         });
         banner.setIndicator(new RoundLinesIndicator(view.getContext()));        // 设置指示器
         banner.setIndicatorSelectedWidth((int) BannerUtils.dp2px(15));          // 设置指示器选中的宽度
-        banner.setOnBannerListener(new OnBannerListener() {
+        banner.setOnBannerListener(new OnBannerListener() {                     // 点击事件
             @Override
             public void OnBannerClick(Object data, int position) {
+                data = imglist().get(position);
+                Log.d("onClick>",position+"");
                 Intent intent = new Intent(view.getContext(),MainActivity.class);
                 intent.putExtra("type","newsViewPager");
-                intent.putExtra("where",position+1+"");
+                intent.putExtra("where",((TMSJ.RowsBean)data).toString());
                 startActivity(intent);
             }
         });
