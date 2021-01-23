@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.redemo1">
+    package="com.moten.DemoA">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/city"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppDemoA.Home">
-        <activity android:name=".func.NewActivity" />
-        <activity android:name=".func.userOrderActivity" />
-        <activity android:name=".func.userInfoActivity" />
-        <activity android:name=".func.manySubway" />
-        <activity android:name=".func.Subway2Activity" />
-        <activity android:name=".func.SubwayActivity" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".ActivityHome" />
-        <activity android:name=".jGuideActivity">
+        <activity android:name="com.moten.DemoA.func.NewActivity" />
+        <activity android:name="com.moten.DemoA.func.userOrderActivity" />
+        <activity android:name="com.moten.DemoA.func.userInfoActivity" />
+        <activity android:name="com.moten.DemoA.func.manySubway" />
+        <activity android:name="com.moten.DemoA.func.Subway2Activity" />
+        <activity android:name="com.moten.DemoA.func.SubwayActivity" />
+        <activity android:name="com.moten.DemoA.MainActivity" />
+        <activity android:name="com.moten.DemoA.ActivityHome" />
+        <activity android:name="com.moten.DemoA.jGuideActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".GuideActivity" />
+        <activity android:name="com.moten.DemoA.GuideActivity" />
     </application>
 
 </manifest>
