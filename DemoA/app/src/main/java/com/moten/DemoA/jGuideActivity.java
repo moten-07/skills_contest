@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,7 +15,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +37,7 @@ public class jGuideActivity extends AppCompatActivity {
     // 引导页主活动（Java版本）
     public ViewPager viewPager;
     // viewPager:可滑动视图
-    private List<View> viewList=new ArrayList<View>();
+    List<View> viewList=new ArrayList<View>();
     // 视图列表
     private View[] points;
     // 小图标列表
@@ -183,11 +183,11 @@ public class jGuideActivity extends AppCompatActivity {
             viewList.add(LayoutInflater.from(this).inflate(R.layout.item_vp,null));
             // 往视图列表中添加视图
         }
-        JGMyHandler handler = new JGMyHandler(this);
+        MyHandler handler = new MyHandler(this);
         UserOkhttp userOkhttp = new UserOkhttp();
         userOkhttp.getGuideImg(handler);
-        Log.v("list",handler.getImgUrlList().toString());
-        // 靠！这个东西居然
+//        Log.v("list",handler.getImgUrlList().toString());
+        // 靠！这个东西居然不是解析完赋值的,别反注释，下面改了一下，反正没什么用的东西，就先丢在这里
 
 
         points=new View[]{findViewById(R.id.poin1),
@@ -237,35 +237,36 @@ public class jGuideActivity extends AppCompatActivity {
         });
     }
 
-    class JGMyHandler extends Handler {
+    class MyHandler extends Handler {
         // 配合OkHttp解析的，解析不能放在主线程，传值只能用这种，着实恶心
-        WeakReference<jGuideActivity> myActivity;
-        List<String>imgUrlList = new ArrayList<>();
-        public JGMyHandler(jGuideActivity activity){
+        WeakReference<Activity> myActivity;
+        public MyHandler(Activity activity){
             myActivity = new WeakReference<>(activity);
+            // 获取主线程
         }
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
-            jGuideActivity activity =myActivity.get();
+            Activity activity =myActivity.get();
             if (activity != null){
                 switch (msg.what){
                     case 001:
                         // 绑定引导页
-                        imgUrlList = ((List<String>)msg.obj);
+                        List<String>imgUrlList = ((List<String>)msg.obj);
                         for(int i = 0;i<viewList.size(); i++){
                             Uri uri = Uri.parse(new HttpHelp().getHearUri()+imgUrlList.get(i));
                             Glide.with(jGuideActivity.this)
                                     .load(uri)
+                                    .placeholder(R.drawable.ic_baseline_all_inclusive_24)
+                                    // 过渡页面的图片（当网络比较差的时候会加载半天）
                                     .into((ImageView)viewList.get(i).findViewById(R.id.imageView));
+                            // 就是这里，每个地方赋值都不一样,恶心心
                         }
                         break;
                 }
             }
         }
 
-        public List<String> getImgUrlList() {
-            return imgUrlList;
-        }
     }
+
 }
