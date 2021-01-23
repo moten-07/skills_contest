@@ -50,7 +50,6 @@ public class jGuideActivity extends AppCompatActivity {
     SharedPreferences sp;
     SharedPreferences.Editor editor;
 
-    List<String>GuideImgUrlList=new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -237,6 +236,7 @@ public class jGuideActivity extends AppCompatActivity {
         });
     }
 
+
     class MyHandler extends Handler {
         // 配合OkHttp解析的，解析不能放在主线程，传值只能用这种，着实恶心
         WeakReference<Activity> myActivity;
@@ -266,7 +266,7 @@ public class jGuideActivity extends AppCompatActivity {
                 }
             }
         }
-
     }
+
 
 }

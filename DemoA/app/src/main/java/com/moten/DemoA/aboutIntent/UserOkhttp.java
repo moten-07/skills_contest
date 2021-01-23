@@ -2,12 +2,9 @@ package com.moten.DemoA.aboutIntent;
 
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
-import com.moten.DemoA.func.TMSJ;
+import com.moten.DemoA.func.TGAMSJ;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,17 +23,17 @@ public class UserOkhttp {
                 try {
                     Request request = new Request
                             .Builder()
-                            .url(help.getHearUri()+help.getGuideImg(1,10))
+                            .url(help.getHearUri()+help.getGAMImg(1,10,45))
                             .get().build();
                     Response response = new OkHttpClient()
                             .newCall(request).execute();
                     String data = response.body().string();
-                    TMSJ t = new Gson().fromJson(data,TMSJ.class);
+                    TGAMSJ t = new Gson().fromJson(data, TGAMSJ.class);
                     Message message = new Message();
                     message.what = 001;
                     message.obj = new ArrayList<String>();
-                    for (int i = 0;i<t.rows.size();i++){
-                        ((List<String>)message.obj).add(t.rows.get(i).imgUrl);
+                    for (int i = 0;i<t.getRows().size();i++){
+                        ((List<String>)message.obj).add(t.getRows().get(i).getImgUrl());
                     }
                     handler.sendMessage(message);
                 } catch (Exception e) {
@@ -46,31 +43,26 @@ public class UserOkhttp {
         }).start();
     }
 
-    public void getMainImg(Handler handler){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Request request = new Request
-                            .Builder()
-                            .url(help.getHearUri()+help.getMainImg(1,10))
-                            .get().build();
-                    Response response = new OkHttpClient()
-                            .newCall(request).execute();
-                    String data = response.body().string();
-                    TMSJ t = new Gson().fromJson(data,TMSJ.class);
-                    Message message = new Message();
-                    message.what = 002;
-                    message.obj = new ArrayList<String>();
-                    for (int i = 0;i<t.rows.size();i++){
-                        ((List<String>)message.obj).add(t.rows.get(i).imgUrl);
-                    }
-                    handler.sendMessage(message);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
+    public List<TGAMSJ.RowsDTO> getGAMImg(int pageNum,int pageSize,int type){
+        List<TGAMSJ.RowsDTO>list = new ArrayList<>();
+        try {
+            Request request = new Request
+                    .Builder()
+                    .url(help.getHearUri()+help.getGAMImg(pageNum,pageSize,type))
+                    .get().build();
+            Response response = new OkHttpClient()
+                    .newCall(request).execute();
+            String data = response.body().string();
+            TGAMSJ t = new Gson().fromJson(data, TGAMSJ.class);
+            Message message = new Message();
+            message.what = 002;
+            message.obj = t;
+            list=t.getRows();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
     }
+
 
 }

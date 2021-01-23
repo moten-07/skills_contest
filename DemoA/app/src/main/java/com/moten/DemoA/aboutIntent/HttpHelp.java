@@ -32,22 +32,17 @@ public class HttpHelp {
 
     // 2.1 获取引导页图片(get)，需要获得当前页面的页数和每页多少条
     // 仅5条
-    public String getGuideImg(int pageNum,int pageSize) {
+    public String getGAMImg(int pageNum,int pageSize,int type) {
         return "/userinfo/rotation/lists?" +
                 "pageNum=" +(pageNum)+
                 "&pageSize="+(pageSize)+
-                "&type=47";
+                "&type="+type;
     }
 
     // 3.1 获取主页面轮播图片(get)，需要获得当前页面的页数和每页多少条
     // 仅4条
-    // 和上面的只有type有差别
-    public String getMainImg(int pageNum,int pageSize) {
-        return "/userinfo/rotation/list?" +
-                "pageNum=" +(pageNum)+
-                "&pageSize="+(pageSize)+
-                "&type=45";
-    }
+    // 和上面的只有type有差别,所以合并了
+
 
     // 3.2 查询推荐服务(get)，需要获得当前页面的页数和每页多少条
     // 共6条

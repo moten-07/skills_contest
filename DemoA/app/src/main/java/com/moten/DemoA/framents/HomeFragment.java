@@ -31,7 +31,8 @@ import com.bumptech.glide.Glide;
 import com.moten.DemoA.Adapeter.hottAdapeter;
 import com.moten.DemoA.Adapeter.lappAdapeter;
 import com.moten.DemoA.Adapeter.newsAdapeter;
-import com.moten.DemoA.func.TMSJ;
+import com.moten.DemoA.aboutIntent.UserOkhttp;
+import com.moten.DemoA.func.TGAMSJ;
 import com.moten.DemoA.type.Hot_theme;
 import com.moten.DemoA.type.LittleApp;
 import com.moten.DemoA.MainActivity;
@@ -48,7 +49,7 @@ import com.youth.banner.util.BannerUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.moten.DemoA.func.TMSJ.RowsBean.imglist;
+import static com.moten.DemoA.func.TGAMSJ.RowsDTO.imglist;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
@@ -198,12 +199,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     private void initImage(View view){
         // 轮播页面设置
-        banner.setAdapter(new BannerImageAdapter<TMSJ.RowsBean>(imglist()) {
+        banner.setAdapter(new BannerImageAdapter<TGAMSJ.RowsDTO>(imglist()) {
             // banner绑定默认适配器，传入参数为图片列表
             @Override
-            public void onBindView(BannerImageHolder holder, TMSJ.RowsBean data, int position, int size) {
+            public void onBindView(BannerImageHolder holder, TGAMSJ.RowsDTO data, int position, int size) {
                 Glide.with(view.getContext())           // 此处为父控件，
-                        .load(data.imgUrl)              // 此处为图片url
+                        .load(data.getImgUrl())         // 此处为图片url
                         .into(holder.imageView);        // 没什么好说的。
             }
         });
@@ -217,7 +218,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 data = imglist().get(position);
                 Intent intent = new Intent(view.getContext(),MainActivity.class);
                 intent.putExtra("type","newsViewPager");
-                intent.putExtra("where",((TMSJ.RowsBean)data).toString());
+                intent.putExtra("where",((TGAMSJ.RowsDTO)data).toString());
                 startActivity(intent);
             }
         });
@@ -307,6 +308,5 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             return false;
         }
     }
-
 
 }
