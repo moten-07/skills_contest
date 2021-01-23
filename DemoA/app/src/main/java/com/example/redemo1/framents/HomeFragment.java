@@ -24,14 +24,12 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.redemo1.Adapeter.hottAdapeter;
 import com.example.redemo1.Adapeter.lappAdapeter;
 import com.example.redemo1.Adapeter.newsAdapeter;
-import com.example.redemo1.aboutIntent.HttpHelp;
 import com.example.redemo1.func.tojson;
 import com.example.redemo1.type.Hot_theme;
 import com.example.redemo1.type.LittleApp;
@@ -40,7 +38,6 @@ import com.example.redemo1.R;
 import com.example.redemo1.type.news;
 import com.google.android.material.tabs.TabLayout;
 import com.youth.banner.Banner;
-import com.youth.banner.adapter.BannerAdapter;
 import com.youth.banner.adapter.BannerImageAdapter;
 import com.youth.banner.holder.BannerImageHolder;
 import com.youth.banner.indicator.RoundLinesIndicator;
@@ -48,8 +45,8 @@ import com.youth.banner.util.BannerUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+
+import static com.example.redemo1.func.tojson.RowsBean.imglist;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
@@ -246,31 +243,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         for (int i = 0 ;i<titles.length;i++){
             tabLayout.getTabAt(i).setText(titles[i]);
         }
-        HttpHelp help = new HttpHelp();
-        List<tojson.RowsBean>imglist = new ArrayList<>();
-        // 应该通过HttpHelp的getMainImg（1,10）获取，然后解析、绑定到imglist中
-        // 暂时先这样
-        imglist.add(new tojson.RowsBean(10,
-                help.getHearUri()+"/profile/home2.png",
-                "45",
-                "2020-10-12T22:55:17.000+0800",
-                "2","N"));
-        imglist.add(new tojson.RowsBean(11,
-                help.getHearUri()+"/profile/home3.png",
-                "45",
-                "2020-10-12T22:55:17.000+0800",
-                "3","N"));
-        imglist.add(new tojson.RowsBean(12,
-                help.getHearUri()+"/profile/home4.png",
-                "45",
-                "2020-10-12T22:55:17.000+0800",
-                "4","N"));
-        imglist.add(new tojson.RowsBean(13,
-                help.getHearUri()+"/profile/home1.png",
-                "45",
-                "2020-10-12T22:55:17.000+0800",
-                "1","N"));
-        banner.setAdapter(new BannerImageAdapter<tojson.RowsBean>(imglist) {
+
+        banner.setAdapter(new BannerImageAdapter<tojson.RowsBean>(imglist()) {
             @Override
             public void onBindView(BannerImageHolder holder, tojson.RowsBean data, int position, int size) {
                 Glide.with(view.getContext())

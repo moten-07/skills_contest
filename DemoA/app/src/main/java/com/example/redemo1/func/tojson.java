@@ -1,5 +1,7 @@
 package com.example.redemo1.func;
 
+import com.example.redemo1.aboutIntent.HttpHelp;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,15 +91,32 @@ public class tojson {
                     ", display='" + display + '\'' +
                     '}';
         }
-        public static List<RowsBean>getTestDate3(){
-            List <RowsBean>list = new ArrayList<>();
-            for (int i = 10;i<=13;i++){
-                list.add(new RowsBean(i,"/profile/home"+(i-9)+".png",
-                        "45","2020-10-12T22:55:17.000+0800",
-                        (i-9)+"","N"));
-            }
-
-            return list;
+        public static List<RowsBean>imglist(){
+            HttpHelp help = new HttpHelp();
+            List<tojson.RowsBean>imglist = new ArrayList<>();
+            // 应该通过HttpHelp的getMainImg（1,10）获取，然后解析、绑定到imglist中
+            // 暂时先这样
+            imglist.add(new tojson.RowsBean(10,
+                    help.getHearUri()+"/profile/home2.png",
+                    "45",
+                    "2020-10-12T22:55:17.000+0800",
+                    "2","N"));
+            imglist.add(new tojson.RowsBean(11,
+                    help.getHearUri()+"/profile/home3.png",
+                    "45",
+                    "2020-10-12T22:55:17.000+0800",
+                    "3","N"));
+            imglist.add(new tojson.RowsBean(12,
+                    help.getHearUri()+"/profile/home4.png",
+                    "45",
+                    "2020-10-12T22:55:17.000+0800",
+                    "4","N"));
+            imglist.add(new tojson.RowsBean(13,
+                    help.getHearUri()+"/profile/home1.png",
+                    "45",
+                    "2020-10-12T22:55:17.000+0800",
+                    "1","N"));
+            return imglist;
         }
     }
 
