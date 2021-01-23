@@ -83,28 +83,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private Object ActivityHome;
 
     public HomeFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment HomeFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static HomeFragment newInstance(String param1, String param2) {
-        HomeFragment fragment = new HomeFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
@@ -173,7 +153,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
     private void insertData(View view){
         // 加判断，平板模式下spanCount要大于5（为4）
-        // 简（单）（粗）爆处理，屏幕宽度比长度大就算平板
+        // 简（单）（粗）爆处理，屏幕宽度比长度大就算平板,横屏使用我也算你平板
         if (isPad(view.getContext())){
             lapp_list.setLayoutManager(new GridLayoutManager(view.getContext(),6));
             theme_list.setLayoutManager(new GridLayoutManager(view.getContext(),4));
@@ -235,7 +215,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             @Override
             public void OnBannerClick(Object data, int position) {
                 data = imglist().get(position);
-                Log.d("onClick>",position+"");
                 Intent intent = new Intent(view.getContext(),MainActivity.class);
                 intent.putExtra("type","newsViewPager");
                 intent.putExtra("where",((TMSJ.RowsBean)data).toString());

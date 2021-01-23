@@ -9,10 +9,11 @@ import androidx.viewpager.widget.ViewPager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,8 +24,10 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.moten.DemoA.aboutIntent.HttpHelp;
+import com.moten.DemoA.aboutIntent.UserOkhttp;
 import com.moten.DemoA.type.limts;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -46,7 +49,8 @@ public class jGuideActivity extends AppCompatActivity {
     // 计时器，在onDestroy()中注销
     SharedPreferences sp;
     SharedPreferences.Editor editor;
-    Bitmap bitmap;
+
+    List<String>GuideImgUrlList=new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,11 +71,6 @@ public class jGuideActivity extends AppCompatActivity {
         }
         // 如果first_time不存在或格式错误，返回false,继续执行下面的代码
         // 如果存在且，则返回其值：true》关闭页面，并跳转到主页；false》继续执行
-
-        for(int i=0;i<5;i++){
-            viewList.add(LayoutInflater.from(this).inflate(R.layout.item_vp,null));
-            // 往视图列表中添加视图
-        }
 
         initImage();
 
@@ -165,7 +164,6 @@ public class jGuideActivity extends AppCompatActivity {
                         }else{
                             viewPager.setCurrentItem(vpIndex+1);
                             // 绑定为下一个页面
-                            Log.d("viewIndex",vpIndex+"");
                             vpIndex++;
                             // 计数器自增
                         }
@@ -181,10 +179,17 @@ public class jGuideActivity extends AppCompatActivity {
 
     private void initImage(){
         // 图片绑定
-        for(int i = 0;i<viewList.size(); i++){
-            Uri uri = Uri.parse(new HttpHelp().getHearUri()+"/profile/"+(i+1)+"-yingdao.jpg");
-            Glide.with(jGuideActivity.this).load(uri).into((ImageView)viewList.get(i).findViewById(R.id.imageView));
+        for(int i=0;i<5;i++){
+            viewList.add(LayoutInflater.from(this).inflate(R.layout.item_vp,null));
+            // 往视图列表中添加视图
         }
+        JGMyHandler handler = new JGMyHandler(this);
+        UserOkhttp userOkhttp = new UserOkhttp();
+        userOkhttp.getGuideImg(handler);
+        Log.v("list",handler.getImgUrlList().toString());
+        // 靠！这个东西居然
+
+
         points=new View[]{findViewById(R.id.poin1),
                 findViewById(R.id.poin2),
                 findViewById(R.id.poin3),
@@ -230,5 +235,37 @@ public class jGuideActivity extends AppCompatActivity {
                 // 关闭弹窗
             }
         });
+    }
+
+    class JGMyHandler extends Handler {
+        // 配合OkHttp解析的，解析不能放在主线程，传值只能用这种，着实恶心
+        WeakReference<jGuideActivity> myActivity;
+        List<String>imgUrlList = new ArrayList<>();
+        public JGMyHandler(jGuideActivity activity){
+            myActivity = new WeakReference<>(activity);
+        }
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            jGuideActivity activity =myActivity.get();
+            if (activity != null){
+                switch (msg.what){
+                    case 001:
+                        // 绑定引导页
+                        imgUrlList = ((List<String>)msg.obj);
+                        for(int i = 0;i<viewList.size(); i++){
+                            Uri uri = Uri.parse(new HttpHelp().getHearUri()+imgUrlList.get(i));
+                            Glide.with(jGuideActivity.this)
+                                    .load(uri)
+                                    .into((ImageView)viewList.get(i).findViewById(R.id.imageView));
+                        }
+                        break;
+                }
+            }
+        }
+
+        public List<String> getImgUrlList() {
+            return imgUrlList;
+        }
     }
 }
