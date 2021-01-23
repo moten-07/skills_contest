@@ -37,11 +37,11 @@ public class MainActivity extends AppCompatActivity {
                 textView.setText("首页轮播图" + intent.getStringExtra("where"));
 
                 finish();
-                Intent intentnew = new Intent(MainActivity.this, NewActivity.class);
-                intentnew.putExtra("title", intent.getStringExtra("title"));
-                // 这里的url应该由服务器获取，存储在某个地方，需要时调出来，因为我没有，所以连接上百度
-                intentnew.putExtra("url","https://www.baidu.com/s?ie=UTF-8&wd="+intent.getStringExtra("where"));
-                startActivity(intentnew);
+//                Intent intentnew = new Intent(MainActivity.this, NewActivity.class);
+//                intentnew.putExtra("title", intent.getStringExtra("title"));
+//                // 这里的url应该由服务器获取，存储在某个地方，需要时调出来，因为我没有，所以连接上百度
+//                intentnew.putExtra("url","https://www.baidu.com/s?ie=UTF-8&wd="+intent.getStringExtra("where"));
+//                startActivity(intentnew);
                 break;
             case "subway":
                 textView.setText("跳转到：" + intent.getStringExtra("title"));

@@ -1,14 +1,13 @@
 package com.example.redemo1.framents;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Rect;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -16,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +28,7 @@ import com.bumptech.glide.Glide;
 import com.example.redemo1.Adapeter.hottAdapeter;
 import com.example.redemo1.Adapeter.lappAdapeter;
 import com.example.redemo1.Adapeter.newsAdapeter;
-import com.example.redemo1.func.tojson;
+import com.example.redemo1.func.TMSJ;
 import com.example.redemo1.type.Hot_theme;
 import com.example.redemo1.type.LittleApp;
 import com.example.redemo1.MainActivity;
@@ -41,12 +39,13 @@ import com.youth.banner.Banner;
 import com.youth.banner.adapter.BannerImageAdapter;
 import com.youth.banner.holder.BannerImageHolder;
 import com.youth.banner.indicator.RoundLinesIndicator;
+import com.youth.banner.listener.OnBannerListener;
 import com.youth.banner.util.BannerUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.redemo1.func.tojson.RowsBean.imglist;
+import static com.example.redemo1.func.TMSJ.RowsBean.imglist;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
@@ -118,14 +117,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        // 碎片绑定
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         init(view);
         // 初始化控件绑定
         insertData(view);
         // 数据处理
         initImage(view);
         // 图片添加
-        return view;
     }
 
     private void init(View view){
@@ -188,10 +191,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         for (int i = 0 ; i < 4 ; i++){
             hott_list.add(new Hot_theme("热门主题"+(i+1)));
         }
-        // 新闻分类
-        titles = view.getContext().getResources().getStringArray(R.array.newsType);
-        // 添加多页新闻列表
-
         // 绑定适配器
         lappadapeter=new lappAdapeter(view.getContext(),lappslist);
         lapp_list.setAdapter(lappadapeter);
@@ -202,22 +201,58 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         theme_list.setAdapter(hottadapeter);
         indexe indexe1=new indexe(8);
         theme_list.addItemDecoration(indexe1);
+    }
 
-        List<news>list =new ArrayList<>();
-        for (int i = 0; i<5;i++){
-            list.add(new news(R.mipmap.newa_in,
-                    "title"+(i+1),
-                    "content"+(i+1),
-                    ""+(i+1)*10,
-                    (i+1)+"天前"));
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.btn_seach:
+                seach(v);
+                break;
         }
-        newsAdapeter newsAdapeter =new newsAdapeter(view.getContext(),list);
+    }
+
+    private void initImage(View view){
+        // 轮播页面设置
+        banner.setAdapter(new BannerImageAdapter<TMSJ.RowsBean>(imglist()) {
+            // banner绑定默认适配器，传入参数为图片列表
+            @Override
+            public void onBindView(BannerImageHolder holder, TMSJ.RowsBean data, int position, int size) {
+                Glide.with(view.getContext())           // 此处为父控件，
+                        .load(data.imgUrl)              // 此处为图片url
+                        .into(holder.imageView);        // 没什么好说的。
+            }
+        });
+        banner.setIndicator(new RoundLinesIndicator(view.getContext()));        // 设置指示器
+        banner.setIndicatorSelectedWidth((int) BannerUtils.dp2px(15));          // 设置指示器选中的宽度
+        banner.setOnBannerListener(new OnBannerListener() {
+            @Override
+            public void OnBannerClick(Object data, int position) {
+                Intent intent = new Intent(view.getContext(),MainActivity.class);
+                intent.putExtra("type","newsViewPager");
+                intent.putExtra("where",position+1+"");
+                startActivity(intent);
+            }
+        });
+
+
+        // 添加多新闻列表
+        titles = view.getContext().getResources().getStringArray(R.array.newsType);// 获取新闻标题
         for (int i = 0;i<titles.length;i++){
             View view1 =LayoutInflater.from(view.getContext()).inflate(R.layout.item_news,null);
-            newsList.add(view1);
-            RecyclerView recyclerView =newsList.get(i).findViewById(R.id.newone_list);
-            recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-            recyclerView.setAdapter(newsAdapeter);
+            // 单个新闻视图绑定新闻布局
+            newsList.add(view1);        // 视图添加到视图列表（Viewpager）中
+            RecyclerView recyclerView =newsList.get(i).findViewById(R.id.newone_list);// 绑定recyclerview
+            recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));// 绑定其布局管理器（此处使用线性布局）
+            List<news>list =new ArrayList<>();
+            for (int j = 0; j<5;j++){
+                list.add(new news(R.mipmap.newa_in,
+                        titles[i]+(j+1),
+                        "content"+(j+1),
+                        ""+(j+1)*10,
+                        (j+1)+"天前"));
+            }
+            recyclerView.setAdapter(new newsAdapeter(view.getContext(),list));
         }
 
         news_lists.setAdapter(new PagerAdapter() {
@@ -244,34 +279,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             tabLayout.getTabAt(i).setText(titles[i]);
         }
 
-        banner.setAdapter(new BannerImageAdapter<tojson.RowsBean>(imglist()) {
-            @Override
-            public void onBindView(BannerImageHolder holder, tojson.RowsBean data, int position, int size) {
-                Glide.with(view.getContext())
-                        .load(data.imgUrl)
-                        .into(holder.imageView);
-            }
-        });
-        banner.setIndicator(new RoundLinesIndicator(view.getContext()));
-        banner.setIndicatorSelectedWidth((int) BannerUtils.dp2px(15));
-
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.btn_seach:
-                seach(v);
-                break;
-        }
-    }
-
-    private void initImage(View v){
-        // 轮播页面设置
-
-        // 添加多新闻列表
-
-
     }
     private void seach(View view){
         // 搜索功能（软键盘重写事件要用，从onClick()移到这里来）
@@ -283,23 +290,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         startActivity(intent);
         // 然后跳转到详情页
     }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.v("now","start");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.v("now","stop");
-    }
-    protected boolean isDestroy(Activity activity) {
-        return activity == null || activity.isFinishing() ||
-                (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && activity.isDestroyed());
-    }
-
 
     class indexe extends RecyclerView.ItemDecoration{
         // 设置图标的间隔
