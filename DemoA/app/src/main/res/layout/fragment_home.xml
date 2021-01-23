@@ -9,8 +9,6 @@
     android:layout_height="wrap_content">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout1"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <!-- 搜索框 -->
@@ -18,7 +16,7 @@
             android:id="@+id/search_bar"
             android:layout_width="wrap_content"
             android:layout_height="44dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="5dp"
             android:background="@drawable/shap1"
             android:orientation="horizontal"
             app:layout_constraintTop_toTopOf="parent"
@@ -60,23 +58,7 @@
                 android:id="@+id/banner"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:layout_constraintTop_totopOf="parent"/>
-            <ImageButton
-                android:id="@+id/btn_lastnew"
-                android:layout_width="30dp"
-                android:layout_height="70dp"
-                android:src="@drawable/btn_left"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"/>
-            <ImageButton
-                android:id="@+id/btn_nextnew"
-                android:layout_width="30dp"
-                android:layout_height="70dp"
-                android:src="@drawable/btn_right"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintRight_toRightOf="parent"/>
+                app:layout_constraintTop_toTopOf="@id/layout2"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
         <!--  应用列表  -->
         <androidx.recyclerview.widget.RecyclerView
@@ -113,6 +95,7 @@
             android:id="@+id/low"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/news_lists"
             app:layout_constraintBottom_toBottomOf="parent"
             android:text="@string/endstr"
             android:gravity="center"/>

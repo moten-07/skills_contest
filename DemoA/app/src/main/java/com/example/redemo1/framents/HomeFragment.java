@@ -27,9 +27,11 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.redemo1.Adapeter.hottAdapeter;
 import com.example.redemo1.Adapeter.lappAdapeter;
 import com.example.redemo1.Adapeter.newsAdapeter;
+import com.example.redemo1.aboutIntent.HttpHelp;
 import com.example.redemo1.func.tojson;
 import com.example.redemo1.type.Hot_theme;
 import com.example.redemo1.type.LittleApp;
@@ -41,6 +43,8 @@ import com.youth.banner.Banner;
 import com.youth.banner.adapter.BannerAdapter;
 import com.youth.banner.adapter.BannerImageAdapter;
 import com.youth.banner.holder.BannerImageHolder;
+import com.youth.banner.indicator.RoundLinesIndicator;
+import com.youth.banner.util.BannerUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +59,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     ViewPager news_lists;                       // 新闻视图控件
     EditText seach_str;                         // 搜索框
-    ImageButton btn_seach,btn_left,btn_right;   // 按钮
+    ImageButton btn_seach;   // 按钮
     List<View> viewList,newsList;                // 轮播图页面的列表，新闻页面的列表
 
     TabLayout tabLayout;
@@ -71,7 +75,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     hottAdapeter hottadapeter;                  // 绑定热门主题的适配器
 
     private int vpIndex=0;                      // 页面计数器
-    Timer timer;                                // 计时器
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -148,9 +151,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         // 在Edittext中重写软键盘的回车键,仅此处有效,在此之前要在edittext加上
         // android:singleLine="true"(单行文本输入)
         // android:imeOptions="actionSearch"(回车键样式，可不加)
-
-        btn_left = view.findViewById(R.id.btn_lastnew);
-        btn_right = view.findViewById(R.id.btn_nextnew);
         btn_seach = view.findViewById(R.id.btn_seach);
 
         lapp_list = view.findViewById(R.id.lapp_list);
@@ -165,9 +165,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         fragments = new ArrayList<>();
 
-        btn_left.setOnClickListener(this::onClick);
         btn_seach.setOnClickListener(this::onClick);
-        btn_right.setOnClickListener(this::onClick);
         // 点击监听
     }
     private void insertData(View view){
@@ -248,32 +246,46 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         for (int i = 0 ;i<titles.length;i++){
             tabLayout.getTabAt(i).setText(titles[i]);
         }
-
-//        banner.setAdapter();
+        HttpHelp help = new HttpHelp();
+        List<tojson.RowsBean>imglist = new ArrayList<>();
+        // 应该通过HttpHelp的getMainImg（1,10）获取，然后解析、绑定到imglist中
+        // 暂时先这样
+        imglist.add(new tojson.RowsBean(10,
+                help.getHearUri()+"/profile/home2.png",
+                "45",
+                "2020-10-12T22:55:17.000+0800",
+                "2","N"));
+        imglist.add(new tojson.RowsBean(11,
+                help.getHearUri()+"/profile/home3.png",
+                "45",
+                "2020-10-12T22:55:17.000+0800",
+                "3","N"));
+        imglist.add(new tojson.RowsBean(12,
+                help.getHearUri()+"/profile/home4.png",
+                "45",
+                "2020-10-12T22:55:17.000+0800",
+                "4","N"));
+        imglist.add(new tojson.RowsBean(13,
+                help.getHearUri()+"/profile/home1.png",
+                "45",
+                "2020-10-12T22:55:17.000+0800",
+                "1","N"));
+        banner.setAdapter(new BannerImageAdapter<tojson.RowsBean>(imglist) {
+            @Override
+            public void onBindView(BannerImageHolder holder, tojson.RowsBean data, int position, int size) {
+                Glide.with(view.getContext())
+                        .load(data.imgUrl)
+                        .into(holder.imageView);
+            }
+        });
+        banner.setIndicator(new RoundLinesIndicator(view.getContext()));
+        banner.setIndicatorSelectedWidth((int) BannerUtils.dp2px(15));
 
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.btn_lastnew:
-                // 跳转到上一轮播图，首页则跳转到尾页
-                if(vpIndex==0){
-                    vpIndex=2;
-                }else{
-                    vpIndex--;
-                }
-                Log.v("this index",vpIndex+"");
-                break;
-            case R.id.btn_nextnew:
-                // 跳转到下一轮播图，尾页则跳转至首页
-                if(vpIndex==2){
-                    vpIndex=0;
-                }else{
-                    vpIndex++;
-                }
-                Log.v("this index",vpIndex+"");
-                break;
             case R.id.btn_seach:
                 seach(v);
                 break;
@@ -307,8 +319,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onStop() {
         super.onStop();
-        Log.v("now","stop\t"+timer.toString());
-        timer.cancel();
+        Log.v("now","stop");
     }
     protected boolean isDestroy(Activity activity) {
         return activity == null || activity.isFinishing() ||
