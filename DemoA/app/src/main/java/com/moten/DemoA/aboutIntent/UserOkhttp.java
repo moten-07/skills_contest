@@ -37,7 +37,7 @@ public class UserOkhttp {
     }
 
     public List<TGAMSJ.RowsDTO>getTRList(){
-        // 返回数据组
+        // 返回引导页和首页的数据组
         return list;
     }
 
