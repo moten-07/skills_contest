@@ -1,5 +1,6 @@
 package com.moten.DemoA.framents;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
@@ -74,7 +75,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     lappAdapeter lappadapeter;                  // 绑定应用列表的适配器
     hottAdapeter hottadapeter;                  // 绑定热门主题的适配器
 
-    private int vpIndex=0;                      // 页面计数器
+    private Context context;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -95,6 +96,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        context = getActivity();
+        // 下面使用getActivity()的地方全部用(Activity)context代替，确保不会为空，避免闪退
+        // 闪退原因：见私人日志1.24
     }
 
     @Override
@@ -198,7 +202,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initImage(View view){
-        // 轮播页面设置
+        // 关于ViewPager
         theBanner(view);
 
         // 添加多新闻列表
@@ -293,7 +297,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             @Override
             public void run() {
                 userOkhttp.getGAMImg(1,10,45);
-                getActivity().runOnUiThread(new Runnable() {
+                ((Activity)context).runOnUiThread(new Runnable() {
                     // 为什么不能直接在子控件使用啊！！！！！
                     @Override
                     public void run() {
@@ -324,5 +328,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 });
             }
         }).start();
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
     }
 }

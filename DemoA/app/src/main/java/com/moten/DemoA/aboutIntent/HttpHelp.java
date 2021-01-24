@@ -12,11 +12,18 @@ public class HttpHelp {
     /* 传参示例：
      * "username": "admin",
      * "password": "admin123"
+     *
+     * Request request = new Request
+                    .Builder()
+                    .url(help.getHearUri()+help.getGAMImg(pageNum,pageSize,type))
+                    .post()
+                    .add("username","admin")
+                    .add("password","admin123")
+                    .build();
+     *
      */
     // 会返回 token
-    public String PostLogin(){
-        return "/login";
-    }
+    public String PostLogin(){ return "/login"; }
 
     // 1.2 注册，post
     /* 传参示例：

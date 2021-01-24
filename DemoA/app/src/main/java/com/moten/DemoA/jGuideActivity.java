@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.moten.DemoA.aboutIntent.HttpHelp;
@@ -132,12 +133,18 @@ public class jGuideActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // 单击后
-                editor.putBoolean("first_time",true);
-                editor.commit();
-                // 将first_time改为true,并提交
-                finish();
-                startActivity(new Intent(jGuideActivity.this,ActivityHome.class));
-                // 跳转到下一个页面
+                if (sp.getString("IP","").equals("")
+                        || sp.getString("web","").equals("")){
+                    Toast.makeText(jGuideActivity.this,"请先填写网络设置",Toast.LENGTH_SHORT).show();
+                }else{
+                    editor.putBoolean("first_time",true);
+                    editor.commit();
+                    // 将first_time改为true,并提交
+                    finish();
+                    startActivity(new Intent(jGuideActivity.this,ActivityHome.class));
+                    // 跳转到下一个页面
+                }
+
             }
         });
 
@@ -176,7 +183,6 @@ public class jGuideActivity extends AppCompatActivity {
 
         timer.schedule(timerTask,2000,3000);
         // 触发计时器，timerTask:触发事件，delay:延迟时间，period:持续时间
-
     }
 
     private void initImage(){
@@ -186,7 +192,7 @@ public class jGuideActivity extends AppCompatActivity {
             // 往视图列表中添加视图
         }
 
-        doUrlGet();
+        doImgUrlGet();
 
         points=new View[]{findViewById(R.id.poin1), findViewById(R.id.poin2),
                 findViewById(R.id.poin3),findViewById(R.id.poin4), findViewById(R.id.poin5)
@@ -232,8 +238,10 @@ public class jGuideActivity extends AppCompatActivity {
         });
     }
 
-    public void doUrlGet(){
-        UserOkhttp userOkhttp = new UserOkhttp();
+
+    UserOkhttp userOkhttp = new UserOkhttp();
+    public void doImgUrlGet(){
+        // 数据解析
         new Thread(new Runnable() {
             // 新建一个线程用来解析数据
             // 解析数据不能放在主线程中,TMD,烦死了[doge]
@@ -247,6 +255,7 @@ public class jGuideActivity extends AppCompatActivity {
     }
 
     public void showResult(List<TGAMSJ.RowsDTO> result){
+        // ui更新
         runOnUiThread(new Runnable() {
             // 返回主线程进行ui操作
             @Override
