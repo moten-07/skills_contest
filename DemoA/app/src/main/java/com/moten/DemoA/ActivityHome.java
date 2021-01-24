@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Build;
@@ -31,7 +33,10 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
     View person,news,home,party,all;
     TextView t_person,t_news,t_home,t_party,t_all;
     String [] title;
-    List<Fragment>list=new ArrayList<>();
+    private List<Fragment>list=new ArrayList<>();
+    private FragmentManager fragmentManager;
+    private Fragment current = new Fragment();
+    private int currentIndex = 0;
     // 帧布局列表，用于绑定碎片
     @Override
     protected void onCreate(Bundle savedInstanceState)  {
@@ -39,6 +44,14 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_home);
         // 更改标题栏
         init();
+
+        list.add(new PersonFragment());
+        list.add(new NewsFragment());
+        list.add(new HomeFragment());
+        list.add(new PartyFragment());
+        list.add(new AllFragment());
+        // 添加碎片
+
         start();
 
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
@@ -81,12 +94,6 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
         t_all.setText(title[4]);
         // 文本绑定
 
-        list.add(new PersonFragment());
-        list.add(new NewsFragment());
-        list.add(new HomeFragment());
-        list.add(new PartyFragment());
-        list.add(new AllFragment());
-        // 添加碎片
     }
 
     @Override
@@ -191,6 +198,6 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
         super.onUserLeaveHint();
     }
 
-    
+
 
 }
