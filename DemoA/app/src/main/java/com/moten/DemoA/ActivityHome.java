@@ -34,9 +34,6 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
     TextView t_person,t_news,t_home,t_party,t_all;
     String [] title;
     private List<Fragment>list=new ArrayList<>();
-    private FragmentManager fragmentManager;
-    private Fragment current = new Fragment();
-    private int currentIndex = 0;
     // 帧布局列表，用于绑定碎片
     @Override
     protected void onCreate(Bundle savedInstanceState)  {
@@ -124,35 +121,36 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
     }
     private void choose(int i){
         // 事件
+        if (i!=0){
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.frame,list.get(i-1))
+                    .commit();
+        }
         switch (i){
             case 1:
                 person.setBackgroundResource(R.mipmap.personage_in);
                 t_person.setTextColor(getResources().getColor(R.color.btn_in));
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame,list.get(0)).commit();
                 setTitle("个人中心");
                 break;
             case 2:
                 news.setBackgroundResource(R.mipmap.newa_in);
                 t_news.setTextColor(getResources().getColor(R.color.btn_in));
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame,list.get(1)).commit();
                 setTitle("新闻");
                 break;
             case 3:
                 home.setBackgroundResource(R.mipmap.home_in);
                 t_home.setTextColor(getResources().getColor(R.color.btn_in));
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame,list.get(2)).commit();
                 setTitle("首页");
                 break;
             case 4:
                 party.setBackgroundResource(R.mipmap.party_in);
                 t_party.setTextColor(getResources().getColor(R.color.btn_in));
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame,list.get(3)).commit();
                 setTitle("智慧党建");
                 break;
             case 5:
                 all.setBackgroundResource(R.mipmap.all_in);
                 t_all.setTextColor(getResources().getColor(R.color.btn_in));
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame,list.get(4)).commit();
                 setTitle("全部服务");
                 break;
             case 0:
@@ -197,7 +195,6 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
         // home键的监听
         super.onUserLeaveHint();
     }
-
 
 
 }

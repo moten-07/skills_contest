@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
         // 没有finish()的页面会在这里处理
         switch (textView.getText().toString()) {
-            case "地铁查询":
+            case "城市地铁":
                 finish();
                 startActivity(new Intent(MainActivity.this, SubwayActivity.class));
                 break;

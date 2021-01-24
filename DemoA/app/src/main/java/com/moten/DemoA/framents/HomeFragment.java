@@ -66,7 +66,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     TabLayout tabLayout;
     RecyclerView lapp_list,theme_list;
     // 应用列表控件,热门主题列表控件
-    List <LittleApp> lappslist;                 // 应用列表
     List <Hot_theme> hott_list;                 // 热门主题列表
     List<Fragment> fragments;
 
@@ -157,7 +156,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         viewList  = new ArrayList<>();
         newsList = new ArrayList<>();
 
-        lappslist = new ArrayList<>();
         hott_list = new ArrayList<>();
 
         fragments = new ArrayList<>();
@@ -166,7 +164,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         // 点击监听
     }
     private void insertData(View view){
-        // 加判断，平板模式下spanCount要大于5（为4）
+        // 绑定网格布局，加判断，平板模式下spanCount要大于5（为4）
         // 简（单）（粗）暴处理，屏幕宽度比长度大就算平板,横屏使用我也算你平板
         if (isPad(view.getContext())){
             lapp_list.setLayoutManager(new GridLayoutManager(view.getContext(),6));
@@ -188,13 +186,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             hott_list.add(new Hot_theme("热门主题"+(i+1)));
         }
         // 绑定适配器
-        indexe indexe=new indexe(10);
-        lapp_list.addItemDecoration(indexe);
+
 
         hottadapeter=new hottAdapeter(view.getContext(),hott_list);
         theme_list.setAdapter(hottadapeter);
-        indexe indexe1=new indexe(8);
-        theme_list.addItemDecoration(indexe1);
     }
 
     @Override
@@ -263,22 +258,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         intent.putExtra("where",seach);
         startActivity(intent);
         // 然后跳转到详情页
-    }
-
-    class indexe extends RecyclerView.ItemDecoration{
-        // 设置图标的间隔
-        int space;
-        public indexe(int space){
-            this.space=space;
-        }
-        @Override
-        public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-            super.getItemOffsets(outRect, view, parent, state);
-            outRect.bottom=space;
-            outRect.left=space;
-            outRect.right=space;
-            outRect.top=space;
-        }
     }
 
     private static boolean isPad(Context context){

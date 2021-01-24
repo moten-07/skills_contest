@@ -135,6 +135,8 @@ public class AllFragment extends Fragment {
     UserOkhttp userOkhttp = new UserOkhttp();
     private void addLapp(View view){
         // 添加一大堆东东
+        userOkhttp.getTRList2().clear();
+        //先清空，免得重复加载，越来越多
         new Thread(new Runnable() {
             @Override
             public void run() {

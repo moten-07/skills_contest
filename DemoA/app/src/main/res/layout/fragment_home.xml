@@ -43,29 +43,20 @@
                 android:imeOptions="actionSearch"/>
         </LinearLayout>
         <!-- 轮播图区域 -->
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout2"
+        <!--  轮播图  -->
+        <com.youth.banner.Banner
+            android:id="@+id/banner"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:background="@null"
-            android:orientation="vertical"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/search_bar"
-            android:layout_marginTop="10dp">
-            <!--  轮播图  -->
-            <com.youth.banner.Banner
-                android:id="@+id/banner"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_constraintTop_toTopOf="@id/layout2"/>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@id/search_bar"/>
         <!--  应用列表  -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/lapp_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/layout2"/>
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@id/banner"/>
         <!--  热门主题  -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/theme_list"
