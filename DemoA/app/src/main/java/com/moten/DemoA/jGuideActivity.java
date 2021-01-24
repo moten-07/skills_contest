@@ -14,7 +14,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +27,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.moten.DemoA.aboutIntent.HttpHelp;
 import com.moten.DemoA.aboutIntent.UserOkhttp;
+import com.moten.DemoA.func.TGAMSJ;
 import com.moten.DemoA.type.limts;
 
 import java.lang.ref.WeakReference;
@@ -182,18 +185,11 @@ public class jGuideActivity extends AppCompatActivity {
             viewList.add(LayoutInflater.from(this).inflate(R.layout.item_vp,null));
             // 往视图列表中添加视图
         }
-        MyHandler handler = new MyHandler(this);
-        UserOkhttp userOkhttp = new UserOkhttp();
-        userOkhttp.getGuideImg(handler);
-//        Log.v("list",handler.getImgUrlList().toString());
-        // 靠！这个东西居然不是解析完赋值的,别反注释，下面改了一下，反正没什么用的东西，就先丢在这里
 
+        doUrlGet();
 
-        points=new View[]{findViewById(R.id.poin1),
-                findViewById(R.id.poin2),
-                findViewById(R.id.poin3),
-                findViewById(R.id.poin4),
-                findViewById(R.id.poin5)
+        points=new View[]{findViewById(R.id.poin1), findViewById(R.id.poin2),
+                findViewById(R.id.poin3),findViewById(R.id.poin4), findViewById(R.id.poin5)
         };
         viewPager=(ViewPager) findViewById(R.id.vp);
         button=findViewById(R.id.btn_skip);
@@ -236,37 +232,36 @@ public class jGuideActivity extends AppCompatActivity {
         });
     }
 
-
-    class MyHandler extends Handler {
-        // 配合OkHttp解析的，解析不能放在主线程，传值只能用这种，着实恶心
-        WeakReference<Activity> myActivity;
-        public MyHandler(Activity activity){
-            myActivity = new WeakReference<>(activity);
-            // 获取主线程
-        }
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            super.handleMessage(msg);
-            Activity activity =myActivity.get();
-            if (activity != null){
-                switch (msg.what){
-                    case 001:
-                        // 绑定引导页
-                        List<String>imgUrlList = ((List<String>)msg.obj);
-                        for(int i = 0;i<viewList.size(); i++){
-                            Uri uri = Uri.parse(new HttpHelp().getHearUri()+imgUrlList.get(i));
-                            Glide.with(jGuideActivity.this)
-                                    .load(uri)
-                                    .placeholder(R.drawable.ic_baseline_all_inclusive_24)
-                                    // 过渡页面的图片（当网络比较差的时候会加载半天）
-                                    .into((ImageView)viewList.get(i).findViewById(R.id.imageView));
-                            // 就是这里，每个地方赋值都不一样,恶心心
-                        }
-                        break;
-                }
+    public void doUrlGet(){
+        UserOkhttp userOkhttp = new UserOkhttp();
+        new Thread(new Runnable() {
+            // 新建一个线程用来解析数据
+            // 解析数据不能放在主线程中,TMD,烦死了[doge]
+            // 但ui 操作必须在主线程中使用
+            @Override
+            public void run() {
+                userOkhttp.getGAMImg(1,10,47);
+                showResult(userOkhttp.getTRList());
             }
-        }
+        }).start();
     }
 
+    public void showResult(List<TGAMSJ.RowsDTO> result){
+        runOnUiThread(new Runnable() {
+            // 返回主线程进行ui操作
+            @Override
+            public void run() {
+                for(int i = 0;i<result.size(); i++){
+                    String url =new HttpHelp().getHearUri()+result.get(i).getImgUrl();
+                    // 只要数据集中的ImgUrl,别的净TM扯淡
+                    Glide.with(jGuideActivity.this)
+                            .load(url)
+//                            .placeholder(R.drawable.ic_baseline_all_inclusive_24)
+                            // 缓存图片，但还是不要了，报一堆蓝跟一堆红一样难受
+                            .into((ImageView)viewList.get(i).findViewById(R.id.imageView));
+                }
+            }
+        });
+    }
 
 }

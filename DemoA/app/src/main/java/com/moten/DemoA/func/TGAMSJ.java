@@ -1,9 +1,24 @@
 package com.moten.DemoA.func;
 
+import android.app.Activity;
+import android.content.Context;
+import android.net.Uri;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
+import android.widget.ImageView;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+
+import com.bumptech.glide.Glide;
 import com.google.gson.annotations.SerializedName;
+import com.moten.DemoA.R;
 import com.moten.DemoA.aboutIntent.HttpHelp;
 import com.moten.DemoA.aboutIntent.UserOkhttp;
+import com.moten.DemoA.jGuideActivity;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 public class TGAMSJ {
@@ -14,9 +29,12 @@ public class TGAMSJ {
 
     /**
      * total : 5
-     * rows : [{"id":5,"imgUrl":"/profile/1-yingdao.jpg","type":"47",
-     * "createTime":"2020-10-12T22:55:17.000+0800","sort":"1","display":"N"},
-     * {"id":6,"imgUrl":"/profile/2-yingdao.jpg","type":"47","createTime":"2020-10-12T22:55:17.000+0800","sort":"2","display":"N"},{"id":7,"imgUrl":"/profile/3-yingdao.jpg","type":"47","createTime":"2020-10-12T22:55:17.000+0800","sort":"3","display":"N"},{"id":8,"imgUrl":"/profile/4-yingdao.jpg","type":"47","createTime":"2020-10-12T22:55:17.000+0800","sort":"4","display":"N"},{"id":9,"imgUrl":"/profile/5-yingdao.jpg","type":"47","createTime":"2020-10-12T22:55:17.000+0800","sort":"5","display":"N"}]
+     * rows : [
+     * {"id":5,"imgUrl":"/profile/1-yingdao.jpg","type":"47","createTime":"2020-10-12T22:55:17.000+0800","sort":"1","display":"N"},
+     * {"id":6,"imgUrl":"/profile/2-yingdao.jpg","type":"47","createTime":"2020-10-12T22:55:17.000+0800","sort":"2","display":"N"},
+     * {"id":7,"imgUrl":"/profile/3-yingdao.jpg","type":"47","createTime":"2020-10-12T22:55:17.000+0800","sort":"3","display":"N"},
+     * {"id":8,"imgUrl":"/profile/4-yingdao.jpg","type":"47","createTime":"2020-10-12T22:55:17.000+0800","sort":"4","display":"N"},
+     * {"id":9,"imgUrl":"/profile/5-yingdao.jpg","type":"47","createTime":"2020-10-12T22:55:17.000+0800","sort":"5","display":"N"}]
      * code : 200
      * msg : 查询成功
      */
@@ -135,19 +153,26 @@ public class TGAMSJ {
         @SerializedName("display")
         private String display;
 
-        public RowsDTO(Integer id, String imgUrl, String type,
-                       String createTime, String sort, String display) {
-            this.id = id;
-            this.imgUrl = imgUrl;
-            this.type = type;
-            this.createTime = createTime;
-            this.sort = sort;
-            this.display = display;
+        @Override
+        public String toString() {
+            return "RowsDTO{" +
+                    "id=" + id +
+                    ", imgUrl='" + imgUrl + '\'' +
+                    ", type='" + type + '\'' +
+                    ", createTime='" + createTime + '\'' +
+                    ", sort='" + sort + '\'' +
+                    ", display='" + display + '\'' +
+                    '}';
         }
+    }
 
-        public static List<RowsDTO>imglist(){
-            List<TGAMSJ.RowsDTO>imglist = new UserOkhttp().getGAMImg(1,10,45);
-            return imglist;
-        }
+    @Override
+    public String toString() {
+        return "TGAMSJ{" +
+                "total=" + total +
+                ", code=" + code +
+                ", msg='" + msg + '\'' +
+                ", rows=" + rows +
+                '}';
     }
 }

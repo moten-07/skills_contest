@@ -31,6 +31,7 @@ import com.bumptech.glide.Glide;
 import com.moten.DemoA.Adapeter.hottAdapeter;
 import com.moten.DemoA.Adapeter.lappAdapeter;
 import com.moten.DemoA.Adapeter.newsAdapeter;
+import com.moten.DemoA.aboutIntent.HttpHelp;
 import com.moten.DemoA.aboutIntent.UserOkhttp;
 import com.moten.DemoA.func.TGAMSJ;
 import com.moten.DemoA.type.Hot_theme;
@@ -49,7 +50,6 @@ import com.youth.banner.util.BannerUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.moten.DemoA.func.TGAMSJ.RowsDTO.imglist;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
@@ -199,30 +199,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     private void initImage(View view){
         // 轮播页面设置
-        banner.setAdapter(new BannerImageAdapter<TGAMSJ.RowsDTO>(imglist()) {
-            // banner绑定默认适配器，传入参数为图片列表
-            @Override
-            public void onBindView(BannerImageHolder holder, TGAMSJ.RowsDTO data, int position, int size) {
-                Glide.with(view.getContext())           // 此处为父控件，
-                        .load(data.getImgUrl())         // 此处为图片url
-                        .into(holder.imageView);        // 没什么好说的。
-            }
-        });
-        banner.setLoopTime(2500);                                               // 轮播间隔，文档谬误
-        banner.setScrollTime(500);                                              // 动画时长
-        banner.setIndicator(new RoundLinesIndicator(view.getContext()));        // 设置指示器
-        banner.setIndicatorSelectedWidth((int) BannerUtils.dp2px(15));          // 设置指示器选中的宽度
-        banner.setOnBannerListener(new OnBannerListener() {                     // 点击事件
-            @Override
-            public void OnBannerClick(Object data, int position) {
-                data = imglist().get(position);
-                Intent intent = new Intent(view.getContext(),MainActivity.class);
-                intent.putExtra("type","newsViewPager");
-                intent.putExtra("where",((TGAMSJ.RowsDTO)data).toString());
-                startActivity(intent);
-            }
-        });
-
+        theBanner(view);
 
         // 添加多新闻列表
         titles = view.getContext().getResources().getStringArray(R.array.newsType);// 获取新闻标题
@@ -309,4 +286,43 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    private void theBanner(View view){
+        // banner相关
+        UserOkhttp userOkhttp = new UserOkhttp();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                userOkhttp.getGAMImg(1,10,45);
+                getActivity().runOnUiThread(new Runnable() {
+                    // 为什么不能直接在子控件使用啊！！！！！
+                    @Override
+                    public void run() {
+                        banner.setAdapter(new BannerImageAdapter<TGAMSJ.RowsDTO>(userOkhttp.getTRList()) {
+                            // banner绑定默认适配器，传入参数为图片列表
+                            @Override
+                            public void onBindView(BannerImageHolder holder, TGAMSJ.RowsDTO data, int position, int size) {
+                                Glide.with(view.getContext())           // 此处为父控件，
+                                        .load(new HttpHelp().getHearUri()+data.getImgUrl())         // 此处为图片url
+                                        .into(holder.imageView);        // 没什么好说的。
+                            }
+                        });
+                        banner.setLoopTime(2500);                                               // 轮播间隔，文档谬误
+                        banner.setScrollTime(500);                                              // 动画时长
+                        banner.setIndicator(new RoundLinesIndicator(view.getContext()));        // 设置指示器
+                        banner.setIndicatorSelectedWidth((int) BannerUtils.dp2px(15));          // 设置指示器选中的宽度
+                        banner.setOnBannerListener(new OnBannerListener() {                     // 点击事件
+                            @Override
+                            public void OnBannerClick(Object data, int position) {
+                                data = userOkhttp.getTRList().get(position);
+                                Intent intent = new Intent(view.getContext(),MainActivity.class);
+                                intent.putExtra("type","newsViewPager");
+                                intent.putExtra("where",((TGAMSJ.RowsDTO)data).toString());
+                                startActivity(intent);
+                            }
+                        });
+                    }
+                });
+            }
+        }).start();
+    }
 }
