@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -100,16 +101,25 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         // 闪退原因：见私人日志1.24
     }
 
+    private  View view = null;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        if (view == null) {
+            view = inflater.inflate(R.layout.fragment_home, null);
+        }
+        ViewGroup parent = (ViewGroup) view.getParent();
+        if (parent!=null){
+            parent.removeView(view);
+        }
+
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         init(view);
         // 初始化控件绑定
         insertData(view);
@@ -288,6 +298,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     UserOkhttp userOkhttp = new UserOkhttp();
     private void theBanner(View view){
         // banner相关
+        userOkhttp.getTRList().clear();
+        //先清空，免得重复加载，越来越多
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -327,6 +339,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     private void theLApp(View view){
         // 应用领域相关
+        userOkhttp.getTRList2().clear();
+        // 同理
         new Thread(new Runnable() {
             @Override
             public void run() {
