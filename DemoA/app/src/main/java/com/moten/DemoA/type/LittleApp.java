@@ -1,6 +1,8 @@
 package com.moten.DemoA.type;
 
-public class LittleApp {
+import com.moten.DemoA.func.TAFJ;
+
+public class LittleApp extends TAFJ.Rows {
     // 应用服务类
     public int image;       // 图标
     public String title;    // 标题

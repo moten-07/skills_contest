@@ -55,7 +55,10 @@ public class TAFJ {
         this.rows = rows;
     }
 
+
+
     public static class Rows {
+
         /**
          * searchValue : null
          * createBy : null

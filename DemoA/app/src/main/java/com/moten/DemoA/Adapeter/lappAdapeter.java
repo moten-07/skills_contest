@@ -12,7 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.moten.DemoA.type.LittleApp;
+import com.bumptech.glide.Glide;
+import com.moten.DemoA.aboutIntent.HttpHelp;
+import com.moten.DemoA.func.TAFJ;
 import com.moten.DemoA.MainActivity;
 import com.moten.DemoA.R;
 
@@ -20,10 +22,10 @@ import java.util.List;
 
 public class lappAdapeter extends RecyclerView.Adapter<lappAdapeter.ViewHolder> {
     // 应用服务的适配器
-    List <LittleApp>list;
+    List <TAFJ.Rows>list;
     Context context;
 
-    public lappAdapeter(Context context,List<LittleApp> list){
+    public lappAdapeter(Context context,List<TAFJ.Rows> list){
         this.context=context;
         this.list=list;
     }
@@ -40,10 +42,10 @@ public class lappAdapeter extends RecyclerView.Adapter<lappAdapeter.ViewHolder> 
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(context, MainActivity.class);
-                LittleApp app=list.get(holder.getAdapterPosition());
+                TAFJ.Rows app=list.get(holder.getAdapterPosition());
                 intent.putExtra("type","littleApp");
-                intent.putExtra("icon",app.getImage());
-                intent.putExtra("title",app.getTitle());
+                intent.putExtra("icon",app.getImgUrl());
+                intent.putExtra("title",app.getServiceName());
                 context.startActivity(intent);
             }
         });
@@ -52,9 +54,15 @@ public class lappAdapeter extends RecyclerView.Adapter<lappAdapeter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        LittleApp app=list.get(position);
-        holder.textView.setText(app.getTitle());
-        holder.imageView.setImageResource(app.getImage());
+        TAFJ.Rows app=list.get(position);
+        holder.textView.setText(app.getServiceName());
+        if(!app.getServiceName().equals("更多服务")){
+            Glide.with(context)
+                    .load(new HttpHelp().getHearUri()+app.getImgUrl())
+                    .into(holder.imageView);
+        }else{
+            holder.imageView.setImageResource(Integer.valueOf(app.getImgUrl()));
+        }
     }
 
     @Override

@@ -34,6 +34,7 @@ import com.moten.DemoA.Adapeter.lappAdapeter;
 import com.moten.DemoA.Adapeter.newsAdapeter;
 import com.moten.DemoA.aboutIntent.HttpHelp;
 import com.moten.DemoA.aboutIntent.UserOkhttp;
+import com.moten.DemoA.func.TAFJ;
 import com.moten.DemoA.func.TGAMSJ;
 import com.moten.DemoA.type.Hot_theme;
 import com.moten.DemoA.type.LittleApp;
@@ -55,8 +56,6 @@ import java.util.List;
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
     Banner banner;                              // banner他来了，ohhhh
-    String []images = new String []{"url"};
-    String [] title_s = new String[]{"标题"};
 
     ViewPager news_lists;                       // 新闻视图控件
     EditText seach_str;                         // 搜索框
@@ -158,7 +157,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
     private void insertData(View view){
         // 加判断，平板模式下spanCount要大于5（为4）
-        // 简（单）（粗）爆处理，屏幕宽度比长度大就算平板,横屏使用我也算你平板
+        // 简（单）（粗）暴处理，屏幕宽度比长度大就算平板,横屏使用我也算你平板
         if (isPad(view.getContext())){
             lapp_list.setLayoutManager(new GridLayoutManager(view.getContext(),6));
             theme_list.setLayoutManager(new GridLayoutManager(view.getContext(),4));
@@ -172,18 +171,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         // 添加列表数据
         // 数据应该是从服务器端传来的
         // 应用领域
-        String [] littie_app=view.getContext().getResources().getStringArray(R.array.littie_app);
-        for(String title:littie_app){
-            lappslist.add(new LittleApp(R.mipmap.subway,title));
-        }
+        theLApp(view);
+
         // 热门主题
         for (int i = 0 ; i < 4 ; i++){
             hott_list.add(new Hot_theme("热门主题"+(i+1)));
         }
         // 绑定适配器
-        lappadapeter=new lappAdapeter(view.getContext(),lappslist);
-        lapp_list.setAdapter(lappadapeter);
-        indexe indexe=new indexe(2);
+        indexe indexe=new indexe(10);
         lapp_list.addItemDecoration(indexe);
 
         hottadapeter=new hottAdapeter(view.getContext(),hott_list);
@@ -290,9 +285,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    UserOkhttp userOkhttp = new UserOkhttp();
     private void theBanner(View view){
         // banner相关
-        UserOkhttp userOkhttp = new UserOkhttp();
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -330,9 +325,30 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }).start();
     }
 
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-
+    private void theLApp(View view){
+        // 应用领域相关
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                userOkhttp.getRecommendedUrl(1,10);
+                ((Activity)context).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        List<TAFJ.Rows>list = userOkhttp.getTRList2();
+                        for (int i = 0 ;i<list.size();i++){
+                            Log.d("AF_title",list.get(i).getServiceName());
+                            Log.d("AF_icon",new HttpHelp().getHearUri()+list.get(i).getImgUrl());
+                        }
+                        TAFJ.Rows TR = new TAFJ.Rows();
+                        TR.setImgUrl(R.mipmap.more+"");
+                        TR.setServiceName("更多服务");
+                        list.add(TR);
+                        lappadapeter=new lappAdapeter(view.getContext(),list);
+                        lapp_list.setAdapter(lappadapeter);
+                    }
+                });
+            }
+        }).start();
     }
+
 }

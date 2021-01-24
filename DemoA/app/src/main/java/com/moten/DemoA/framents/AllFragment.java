@@ -1,6 +1,8 @@
 package com.moten.DemoA.framents;
 
+import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
@@ -8,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +20,9 @@ import android.widget.Toast;
 
 import com.moten.DemoA.Adapeter.lappAdapeter;
 import com.moten.DemoA.R;
+import com.moten.DemoA.aboutIntent.HttpHelp;
+import com.moten.DemoA.aboutIntent.UserOkhttp;
+import com.moten.DemoA.func.TAFJ;
 import com.moten.DemoA.type.LittleApp;
 
 import java.util.ArrayList;
@@ -36,6 +42,8 @@ public class AllFragment extends Fragment {
     private RecyclerView recyclerView;
     private List<LittleApp> list;
     private lappAdapeter adapeter;
+
+    Context context;
 
 //    private SQLiteDatabase db;
 //    private MyOpenHelp help;
@@ -79,6 +87,7 @@ public class AllFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        context = getActivity();
     }
 
     @Override
@@ -101,18 +110,13 @@ public class AllFragment extends Fragment {
 
 //        help = new MyOpenHelp(view.getContext(),"demoA.db",null,1);
 //        db = help.getWritableDatabase();
+        addLapp(view);
 
-        for(int i = 0;i < 50;i++){
-            // addLapp(help.getReadableDatabase(),"应用"+i,R.mipmap.subway_in);
-            list.add(new LittleApp(R.mipmap.subway,"应用"+i));
-        }
-        adapeter = new lappAdapeter(view.getContext(),list);
-        recyclerView.setAdapter(adapeter);
-
-        seach_str.setOnClickListener(new View.OnClickListener() {
+        seach_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                selectLapp(view);
+                String str = seach_str.getText().toString();
             }
         });
 
@@ -128,13 +132,28 @@ public class AllFragment extends Fragment {
             // 显示结果,弹窗
         }
     }
+    UserOkhttp userOkhttp = new UserOkhttp();
+    private void addLapp(View view){
+        // 添加一大堆东东
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                userOkhttp.getAllServe();
+                ((Activity)context).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        List<TAFJ.Rows>list = userOkhttp.getTRList2();
+                        for (int i = 0 ;i<list.size();i++){
+                            Log.d("AF_title",list.get(i).getServiceName());
+                            Log.d("AF_icon",new HttpHelp().getHearUri()+list.get(i).getImgUrl());
+                        }
+                        adapeter=new lappAdapeter(view.getContext(),list);
+                        recyclerView.setAdapter(adapeter);
+                    }
+                });
+            }
+        }).start();
 
-    private void addLapp(SQLiteDatabase db,String title,int icon){
-        // 添加
-        ContentValues values =  new ContentValues();
-        values.put("title",title);  // 保存标题
-        values.put("icon",icon);    // 保存图标
-        db.insert("Little_app",null,values);
     }
 
     @Override

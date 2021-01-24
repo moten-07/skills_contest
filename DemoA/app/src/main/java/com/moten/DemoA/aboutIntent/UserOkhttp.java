@@ -52,7 +52,23 @@ public class UserOkhttp {
                     .url(help.getHearUri()+help.getRecommendedUrl(pageNum,pageSize))
                     .get().build();
             Response response = new OkHttpClient().newCall(request).execute();
-            String data = response.body().toString();
+            String data = response.body().string();
+            TAFJ tafj = new Gson().fromJson(data,TAFJ.class);
+            for(TAFJ.Rows tr : tafj.getRows()){
+                TRlist2.add(tr);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    public void getAllServe(){
+        // 解析推荐服务
+        try{
+            Request request = new Request.Builder()
+                    .url(help.getHearUri()+help.getAllServe())
+                    .get().build();
+            Response response = new OkHttpClient().newCall(request).execute();
+            String data = response.body().string();
             TAFJ tafj = new Gson().fromJson(data,TAFJ.class);
             for(TAFJ.Rows tr : tafj.getRows()){
                 TRlist2.add(tr);
