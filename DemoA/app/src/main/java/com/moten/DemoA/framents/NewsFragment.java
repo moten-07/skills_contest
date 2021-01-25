@@ -75,7 +75,11 @@ public class NewsFragment extends Fragment {
         recyclerView = view.findViewById(R.id.news_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         for (int i = 1; i<=50 ; i++){
-            news_list.add(new news(R.mipmap.newa_in,"新闻"+i,"新闻"+i+"的内容","123","123"));
+            news_list.add(new news(R.mipmap.newa_in,
+                    "新闻"+i,
+                    "新闻"+i+"的内容",
+                    "123",
+                    "123"));
         }
         recyclerView.setAdapter(new newsAdapeter(view.getContext(),news_list));
         return  view;
