@@ -2,10 +2,12 @@ package com.moten.DemoA.aboutIntent;
 
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.moten.DemoA.func.TAFJ;
 import com.moten.DemoA.func.TGAMSJ;
+import com.moten.DemoA.func.TNTJ;
 import com.moten.DemoA.jGuideActivity;
 
 import java.util.ArrayList;
@@ -82,5 +84,23 @@ public class UserOkhttp {
         return TRlist2;
     }
 
-
+    List<String>NTList=new ArrayList<>();
+    public void getNewsType(){
+        try{
+            Request request = new Request.Builder()
+                    .url(help.getHearUri()+help.getNewsType())
+                    .get().build();
+            Response response = new OkHttpClient().newCall(request).execute();
+            String data = response.body().string();
+            TNTJ tntj = new Gson().fromJson(data,TNTJ.class);
+            for (int i = 0;i<tntj.getData().size(); i++){
+                NTList.add(tntj.getData().get(i).getDictLabel());
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    public List<String> getNTList(){
+        return NTList;
+    }
 }

@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.moten.DemoA.Adapeter.lappAdapeter;
 import com.moten.DemoA.R;
 import com.moten.DemoA.aboutIntent.HttpHelp;
+import com.moten.DemoA.aboutIntent.Indexe;
 import com.moten.DemoA.aboutIntent.UserOkhttp;
 import com.moten.DemoA.func.TAFJ;
 import com.moten.DemoA.type.LittleApp;
@@ -40,7 +41,6 @@ public class AllFragment extends Fragment {
     private EditText seach_str;
 
     private RecyclerView recyclerView;
-    private List<LittleApp> list;
     private lappAdapeter adapeter;
 
     Context context;
@@ -103,10 +103,11 @@ public class AllFragment extends Fragment {
         recyclerView = view.findViewById(R.id.lapps);
         seach_icon = view.findViewById(R.id.btn_seach);
         seach_str = view.findViewById(R.id.seach_str);
-
-        list = new ArrayList<>();
-        GridLayoutManager manager=new GridLayoutManager(view.getContext(),5);
-        recyclerView.setLayoutManager(manager);
+        if (HomeFragment.isPad(view.getContext())){
+            recyclerView.setLayoutManager(new GridLayoutManager(view.getContext(),6));
+        }else{
+            recyclerView.setLayoutManager(new GridLayoutManager(view.getContext(),5));
+        }
 
 //        help = new MyOpenHelp(view.getContext(),"demoA.db",null,1);
 //        db = help.getWritableDatabase();
@@ -116,7 +117,6 @@ public class AllFragment extends Fragment {
             @Override
             public void onClick(View v) {
 //                selectLapp(view);
-                String str = seach_str.getText().toString();
             }
         });
 
@@ -136,7 +136,6 @@ public class AllFragment extends Fragment {
     private void addLapp(View view){
         // 添加一大堆东东
         userOkhttp.getTRList2().clear();
-        //先清空，免得重复加载，越来越多
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -155,7 +154,9 @@ public class AllFragment extends Fragment {
                 });
             }
         }).start();
-
+        if (recyclerView.getItemDecorationCount()==0){
+            recyclerView.addItemDecoration(new Indexe(10));
+        }
     }
 
     @Override

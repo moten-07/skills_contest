@@ -1,5 +1,11 @@
 package com.moten.DemoA.aboutIntent;
 
+import android.graphics.Rect;
+import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 public class HttpHelp {
     // 稍微封装一下，用的时候直接调方法就好了
 
@@ -38,7 +44,7 @@ public class HttpHelp {
     }
 
     // 2.1 获取引导页图片(get)，需要获得当前页面的页数和每页多少条
-    // 仅5条
+    // 仅5条,4和5是同一张图片，不要恐慌
     public String getGAMImg(int pageNum,int pageSize,int type) {
         return "/userinfo/rotation/lists?" +
                 "pageNum=" +(pageNum)+

@@ -6,17 +6,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +25,6 @@ import com.moten.DemoA.aboutIntent.UserOkhttp;
 import com.moten.DemoA.func.TGAMSJ;
 import com.moten.DemoA.type.limts;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -53,6 +46,8 @@ public class jGuideActivity extends AppCompatActivity {
     // 计时器，在onDestroy()中注销
     SharedPreferences sp;
     SharedPreferences.Editor editor;
+
+    UserOkhttp userOkhttp = new UserOkhttp();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,8 +128,7 @@ public class jGuideActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // 单击后
-                if (sp.getString("IP","").equals("")
-                        || sp.getString("web","").equals("")){
+                if (sp.getString("IP","").equals("")){
                     Toast.makeText(jGuideActivity.this,"请先填写网络设置",Toast.LENGTH_SHORT).show();
                 }else{
                     editor.putBoolean("first_time",true);
@@ -169,7 +163,7 @@ public class jGuideActivity extends AppCompatActivity {
                             // 页面绑定为第一个
                             // vpIndex=0;
                             // 重置计数器
-                            // 轮播时设置，引导页不需要轮播
+                            // 轮播时设置，引导页不需要轮播,后面轮播改用banner了
                         }else{
                             viewPager.setCurrentItem(vpIndex+1);
                             // 绑定为下一个页面
@@ -216,30 +210,40 @@ public class jGuideActivity extends AppCompatActivity {
         AlertDialog.Builder builder=new AlertDialog.Builder(jGuideActivity.this);
         AlertDialog dialog=builder.create();
         // 创建弹窗
-        View view=LayoutInflater.from(jGuideActivity.this).inflate(R.layout.item_dialog,null);
+        View view=LayoutInflater.from(jGuideActivity.this).inflate(R.layout.dialog_guide,null);
         // 绑定弹窗视图
         dialog.setView(view);
         dialog.show();
 
         Button btn_save=view.findViewById(R.id.btn_Save);
-        EditText ipconfig,webconfig;
-        ipconfig=view.findViewById(R.id.Ipconfig);
+        EditText ip1,ip2,ip3,ip4,webconfig;
+        ip1 = view.findViewById(R.id.ip1);
+        ip2 = view.findViewById(R.id.ip2);
+        ip3 = view.findViewById(R.id.ip3);
+        ip4 = view.findViewById(R.id.ip4);
+
         webconfig=view.findViewById(R.id.webconfig);
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // 获取输入值
-                editor.putString("IP",ipconfig.getText().toString());
-                editor.putString("web",webconfig.getText().toString());
-                editor.commit();
-                dialog.dismiss();
-                // 关闭弹窗
+                Integer ip1str = Integer.valueOf(ip1.getText().toString());
+                Integer ip2str =  Integer.valueOf(ip2.getText().toString());
+                Integer ip3str =  Integer.valueOf(ip3.getText().toString());
+                Integer ip4str =  Integer.valueOf(ip4.getText().toString());
+                if (ip1str>255 || ip2str >255 || ip3str >255 || ip4str >255){
+                    Toast.makeText(jGuideActivity.this, "Error!", Toast.LENGTH_SHORT).show();
+                }else {
+                    String ipconfig=ip1str +"."+ip2str +"."+ip3str +"."+ip4str;
+                    editor.putString("IP",ipconfig+":"+webconfig.getText().toString());
+                    editor.commit();
+                    dialog.dismiss();
+                    // 关闭弹窗
+                }
             }
         });
     }
 
-
-    UserOkhttp userOkhttp = new UserOkhttp();
     public void doImgUrlGet(){
         // 数据解析
         new Thread(new Runnable() {
