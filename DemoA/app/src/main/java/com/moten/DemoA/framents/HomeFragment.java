@@ -222,12 +222,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             @Override
             public void run() {
                 userOkhttp.getGAMImg(1,10,45);
-                ((Activity)context).runOnUiThread(new Runnable() {
-                    // 为什么不能直接在子线程中使用啊！！！！！
-                    @Override
-                    public void run() {
-                        banner.getAdapter().notifyDataSetChanged();
-                    }
+                ((Activity)context).runOnUiThread(()->{
+                    banner.getAdapter().notifyDataSetChanged();
                 });
             }
         }).start();
@@ -260,9 +256,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         // 应用领域相关
         userOkhttp.getTRList2().clear();
         // 同理
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
+        new Thread(() ->{
                 userOkhttp.getRecommendedUrl(1,10);
                 ((Activity)context).runOnUiThread(new Runnable() {
                     @Override
@@ -276,7 +270,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                         lapp_list.setAdapter(lappadapeter);
                     }
                 });
-            }
         }).start();
         if (lapp_list.getItemDecorationCount()==0){
             lapp_list.addItemDecoration(new Indexe(10));
@@ -286,9 +279,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private void theNews(View view){
         // 新闻相关
         userOkhttp.getNTList().clear();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
+        new Thread(()->{
                 userOkhttp.getNewsType();
                 ((Activity)context).runOnUiThread(()-> {
                     for (int i = 0;i<userOkhttp.getNTList().size();i++){
@@ -310,8 +301,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                         tabLayout.getTabAt(i).setText(userOkhttp.getNTList().get(i));
                     }
                 });
-
-            }
         }).start();
 
         aboutViewPager();
