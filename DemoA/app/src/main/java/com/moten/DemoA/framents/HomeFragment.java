@@ -162,8 +162,31 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         theLApp(view);
         // banner轮播图
         theBanner(view);
+
         // 新闻列表
         theNews(view);
+        for (int i = 0;i<titles.size();i++){
+            View view1 =LayoutInflater.from(view.getContext()).inflate(R.layout.item_news,null);
+            // 单个新闻视图绑定新闻布局
+            newsList.add(view1);        // 视图添加到视图列表（Viewpager）中
+            RecyclerView recyclerView =newsList.get(i).findViewById(R.id.newone_list);// 绑定recyclerview
+            recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));// 绑定其布局管理器（此处使用线性布局）
+            List<news>list =new ArrayList<>();
+            for (int j = 0; j<5;j++){
+                list.add(new news(R.mipmap.newa_in,
+                        titles.get(i)+(j+1),
+                        "content"+(j+1),
+                        ""+(j+1)*10,
+                        (j+1)+"天前"));
+            }
+            recyclerView.setAdapter(new newsAdapeter(view.getContext(),list));
+        }
+        aboutViewPager();
+        // tabLayout绑定ViewPager
+        tabLayout.setupWithViewPager(news_lists);
+        for (int i = 0 ;i<titles.size();i++){
+            tabLayout.getTabAt(i).setText(titles.get(i));
+        }
 
         // 热门主题
         for (int i = 0 ; i < 4 ; i++){
@@ -266,10 +289,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     @Override
                     public void run() {
                         List<TAFJ.Rows>list = userOkhttp.getTRList2();
-                        for (int i = 0 ;i<list.size();i++){
-                            Log.d("AF_title",list.get(i).getServiceName());
-                            Log.d("AF_icon",new HttpHelp().getHearUri()+list.get(i).getImgUrl());
-                        }
                         TAFJ.Rows TR = new TAFJ.Rows();
                         TR.setImgUrl(R.mipmap.more+"");
                         TR.setServiceName("更多服务");
@@ -297,28 +316,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     @Override
                     public void run() {
                         titles = userOkhttp.getNTList();
-                        for (int i = 0;i<titles.size();i++){
-                            View view1 =LayoutInflater.from(view.getContext()).inflate(R.layout.item_news,null);
-                            // 单个新闻视图绑定新闻布局
-                            newsList.add(view1);        // 视图添加到视图列表（Viewpager）中
-                            RecyclerView recyclerView =newsList.get(i).findViewById(R.id.newone_list);// 绑定recyclerview
-                            recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));// 绑定其布局管理器（此处使用线性布局）
-                            List<news>list =new ArrayList<>();
-                            for (int j = 0; j<5;j++){
-                                list.add(new news(R.mipmap.newa_in,
-                                        titles.get(i)+(j+1),
-                                        "content"+(j+1),
-                                        ""+(j+1)*10,
-                                        (j+1)+"天前"));
-                            }
-                            recyclerView.setAdapter(new newsAdapeter(view.getContext(),list));
-                        }
-                        aboutViewPager();
-                        // tabLayout绑定ViewPager
-                        tabLayout.setupWithViewPager(news_lists);
-                        for (int i = 0 ;i<titles.size();i++){
-                            tabLayout.getTabAt(i).setText(titles.get(i));
-                        }
                     }
                 });
             }
