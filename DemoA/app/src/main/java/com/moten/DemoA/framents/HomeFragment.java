@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
@@ -49,6 +51,7 @@ import com.youth.banner.indicator.RoundLinesIndicator;
 import com.youth.banner.listener.OnBannerListener;
 import com.youth.banner.util.BannerUtils;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,7 +71,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     List<View> newsList;                // 轮播图页面的列表，新闻页面的列表
     List <Hot_theme> hott_list;                 // 热门主题列表
     List<Fragment> fragments;
-    List<String>titles;                           // 新闻分类标题
 
     lappAdapeter lappadapeter;                  // 绑定应用列表的适配器
     hottAdapeter hottadapeter;                  // 绑定热门主题的适配器
@@ -141,7 +143,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         newsList = new ArrayList<>();
         hott_list = new ArrayList<>();
         fragments = new ArrayList<>();
-        titles = new ArrayList<>();
 
 
         btn_seach.setOnClickListener(this::onClick);
@@ -165,8 +166,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         // 新闻列表
         theNews(view);
-
-
+        Log.d("title2",userOkhttp.getNTList()+"");
 
         // 热门主题
         for (int i = 0 ; i < 4 ; i++){
@@ -287,39 +287,36 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private void theNews(View view){
         // 新闻相关
         userOkhttp.getNTList().clear();
-        titles.clear();
         new Thread(new Runnable() {
             @Override
             public void run() {
                 userOkhttp.getNewsType();
+
                 ((Activity)context).runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        titles = userOkhttp.getNTList();
-                        for (String title:titles){
-                            Log.d("title",title);
-                        }
-                        for (int i = 0;i<titles.size();i++){
+                        for (int i = 0;i<userOkhttp.getNTList().size();i++){
                             newsList.add(LayoutInflater.from(view.getContext()).inflate(R.layout.item_news,null));
                             RecyclerView recyclerView =newsList.get(i).findViewById(R.id.newone_list);// 绑定recyclerview
                             recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));// 绑定其布局管理器（此处使用线性布局）
                             List<news>list =new ArrayList<>();
                             for (int j = 0; j<5;j++){
                                 list.add(new news(R.mipmap.newa_in,
-                                        titles.get(i)+(j+1),
+                                        userOkhttp.getNTList().get(i)+(j+1),
                                         "content"+(j+1),
-                                        (j+1)+""+Math.random()*10,
+                                        (j+1)+""+((int)Math.random()*100),
                                         (j+1)+"天前"));
                             }
                             recyclerView.setAdapter(new newsAdapeter(view.getContext(),list));
                         }
                         aboutViewPager();
                         tabLayout.setupWithViewPager(news_lists);
-                        for (int i = 0 ;i<titles.size();i++){
-                            tabLayout.getTabAt(i).setText(titles.get(i));
+                        for (int i = 0 ;i<userOkhttp.getNTList().size();i++){
+                            tabLayout.getTabAt(i).setText(userOkhttp.getNTList().get(i));
                         }
                     }
                 });
+
             }
         }).start();
     }
@@ -344,4 +341,22 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             }
         });
     }
+
+    class MyHandler extends Handler{
+        WeakReference<HomeFragment>myfragment;
+        public MyHandler(HomeFragment fragment){
+            myfragment = new WeakReference<>(fragment);
+        }
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            HomeFragment fragment = myfragment.get();
+            if (fragment!=null && msg.what == 369){
+
+            }else {
+                return;
+            }
+        }
+    }
+    MyHandler handler = new MyHandler(this);
 }
