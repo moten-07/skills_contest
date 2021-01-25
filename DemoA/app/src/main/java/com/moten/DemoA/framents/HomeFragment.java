@@ -65,7 +65,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     RecyclerView lapp_list,theme_list;
     // 应用列表控件,热门主题列表控件
 
-    List<View> viewList,newsList;                // 轮播图页面的列表，新闻页面的列表
+    List<View> newsList;                // 轮播图页面的列表，新闻页面的列表
     List <Hot_theme> hott_list;                 // 热门主题列表
     List<Fragment> fragments;
     List<String>titles;                           // 新闻分类标题
@@ -138,11 +138,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         theme_list = view.findViewById(R.id.theme_list);
         tabLayout = view.findViewById(R.id.news_type_list);
 
-        viewList  = new ArrayList<>();
         newsList = new ArrayList<>();
         hott_list = new ArrayList<>();
         fragments = new ArrayList<>();
         titles = new ArrayList<>();
+
 
         btn_seach.setOnClickListener(this::onClick);
         // 点击监听
@@ -165,28 +165,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         // 新闻列表
         theNews(view);
-        for (int i = 0;i<titles.size();i++){
-            View view1 =LayoutInflater.from(view.getContext()).inflate(R.layout.item_news,null);
-            // 单个新闻视图绑定新闻布局
-            newsList.add(view1);        // 视图添加到视图列表（Viewpager）中
-            RecyclerView recyclerView =newsList.get(i).findViewById(R.id.newone_list);// 绑定recyclerview
-            recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));// 绑定其布局管理器（此处使用线性布局）
-            List<news>list =new ArrayList<>();
-            for (int j = 0; j<5;j++){
-                list.add(new news(R.mipmap.newa_in,
-                        titles.get(i)+(j+1),
-                        "content"+(j+1),
-                        ""+(j+1)*10,
-                        (j+1)+"天前"));
-            }
-            recyclerView.setAdapter(new newsAdapeter(view.getContext(),list));
-        }
-        aboutViewPager();
-        // tabLayout绑定ViewPager
-        tabLayout.setupWithViewPager(news_lists);
-        for (int i = 0 ;i<titles.size();i++){
-            tabLayout.getTabAt(i).setText(titles.get(i));
-        }
+
+
 
         // 热门主题
         for (int i = 0 ; i < 4 ; i++){
@@ -316,6 +296,28 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     @Override
                     public void run() {
                         titles = userOkhttp.getNTList();
+                        for (String title:titles){
+                            Log.d("title",title);
+                        }
+                        for (int i = 0;i<titles.size();i++){
+                            newsList.add(LayoutInflater.from(view.getContext()).inflate(R.layout.item_news,null));
+                            RecyclerView recyclerView =newsList.get(i).findViewById(R.id.newone_list);// 绑定recyclerview
+                            recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));// 绑定其布局管理器（此处使用线性布局）
+                            List<news>list =new ArrayList<>();
+                            for (int j = 0; j<5;j++){
+                                list.add(new news(R.mipmap.newa_in,
+                                        titles.get(i)+(j+1),
+                                        "content"+(j+1),
+                                        (j+1)+""+Math.random()*10,
+                                        (j+1)+"天前"));
+                            }
+                            recyclerView.setAdapter(new newsAdapeter(view.getContext(),list));
+                        }
+                        aboutViewPager();
+                        tabLayout.setupWithViewPager(news_lists);
+                        for (int i = 0 ;i<titles.size();i++){
+                            tabLayout.getTabAt(i).setText(titles.get(i));
+                        }
                     }
                 });
             }
@@ -325,7 +327,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private void aboutViewPager(){
         news_lists.setAdapter(new PagerAdapter() {
             @Override
-            public int getCount(){return titles.size();}
+            public int getCount(){return newsList.size();}
             @Override
             public boolean isViewFromObject(@NonNull View view, @NonNull Object object) { return view == object; }
 
@@ -336,7 +338,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 container.addView(view1);
                 return view1;
             }
-
             @Override
             public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
                 container.removeView(newsList.get(position));
