@@ -225,36 +225,37 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             public void run() {
                 userOkhttp.getGAMImg(1,10,45);
                 ((Activity)context).runOnUiThread(new Runnable() {
-                    // 为什么不能直接在子控件使用啊！！！！！
+                    // 为什么不能直接在子线程中使用啊！！！！！
                     @Override
                     public void run() {
-                        banner.setAdapter(new BannerImageAdapter<TGAMSJ.RowsDTO>(userOkhttp.getTRList()) {
-                            // banner绑定默认适配器，传入参数为图片列表
-                            @Override
-                            public void onBindView(BannerImageHolder holder, TGAMSJ.RowsDTO data, int position, int size) {
-                                Glide.with(view.getContext())           // 此处为父控件，
-                                        .load(new HttpHelp().getHearUri()+data.getImgUrl())         // 此处为图片url
-                                        .into(holder.imageView);        // 没什么好说的。
-                            }
-                        });
-                        banner.setLoopTime(2500);                                               // 轮播间隔，文档谬误
-                        banner.setScrollTime(500);                                              // 动画时长
-                        banner.setIndicator(new RoundLinesIndicator(view.getContext()));        // 设置指示器
-                        banner.setIndicatorSelectedWidth((int) BannerUtils.dp2px(15));          // 设置指示器选中的宽度
-                        banner.setOnBannerListener(new OnBannerListener() {                     // 点击事件
-                            @Override
-                            public void OnBannerClick(Object data, int position) {
-                                data = userOkhttp.getTRList().get(position);
-                                Intent intent = new Intent(view.getContext(),MainActivity.class);
-                                intent.putExtra("type","newsViewPager");
-                                intent.putExtra("where",((TGAMSJ.RowsDTO)data).toString());
-                                startActivity(intent);
-                            }
-                        });
+                        banner.getAdapter().notifyDataSetChanged();
                     }
                 });
             }
         }).start();
+        banner.setAdapter(new BannerImageAdapter<TGAMSJ.RowsDTO>(userOkhttp.getTRList()) {
+            // banner绑定默认适配器，传入参数为图片列表
+            @Override
+            public void onBindView(BannerImageHolder holder, TGAMSJ.RowsDTO data, int position, int size) {
+                Glide.with(view.getContext())           // 此处为父控件，
+                        .load(new HttpHelp().getHearUri()+data.getImgUrl())         // 此处为图片url
+                        .into(holder.imageView);        // 没什么好说的。
+            }
+        });
+        banner.setLoopTime(2500);                                               // 轮播间隔，文档谬误
+        banner.setScrollTime(500);                                              // 动画时长
+        banner.setIndicator(new RoundLinesIndicator(view.getContext()));        // 设置指示器
+        banner.setIndicatorSelectedWidth((int) BannerUtils.dp2px(15));          // 设置指示器选中的宽度
+        banner.setOnBannerListener(new OnBannerListener() {                     // 点击事件
+            @Override
+            public void OnBannerClick(Object data, int position) {
+                data = userOkhttp.getTRList().get(position);
+                Intent intent = new Intent(view.getContext(),MainActivity.class);
+                intent.putExtra("type","newsViewPager");
+                intent.putExtra("where",((TGAMSJ.RowsDTO)data).toString());
+                startActivity(intent);
+            }
+        });
     }
 
     private void theLApp(View view){
@@ -291,34 +292,34 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             @Override
             public void run() {
                 userOkhttp.getNewsType();
-
                 ((Activity)context).runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        for (int i = 0;i<userOkhttp.getNTList().size();i++){
-                            newsList.add(LayoutInflater.from(view.getContext()).inflate(R.layout.item_news,null));
-                            RecyclerView recyclerView =newsList.get(i).findViewById(R.id.newone_list);// 绑定recyclerview
-                            recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));// 绑定其布局管理器（此处使用线性布局）
-                            List<news>list =new ArrayList<>();
-                            for (int j = 0; j<5;j++){
-                                list.add(new news(R.mipmap.newa_in,
-                                        userOkhttp.getNTList().get(i)+(j+1),
-                                        "content"+(j+1),
-                                        (j+1)+""+((int)Math.random()*100),
-                                        (j+1)+"天前"));
-                            }
-                            recyclerView.setAdapter(new newsAdapeter(view.getContext(),list));
-                        }
-                        aboutViewPager();
-                        tabLayout.setupWithViewPager(news_lists);
-                        for (int i = 0 ;i<userOkhttp.getNTList().size();i++){
-                            tabLayout.getTabAt(i).setText(userOkhttp.getNTList().get(i));
-                        }
+                        news_lists.getAdapter().notifyDataSetChanged();
                     }
                 });
 
             }
         }).start();
+        for (int i = 0;i<userOkhttp.getNTList().size();i++){
+            newsList.add(LayoutInflater.from(view.getContext()).inflate(R.layout.item_news,null));
+            RecyclerView recyclerView =newsList.get(i).findViewById(R.id.newone_list);// 绑定recyclerview
+            recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));// 绑定其布局管理器（此处使用线性布局）
+            List<news>list =new ArrayList<>();
+            for (int j = 0; j<5;j++){
+                list.add(new news(R.mipmap.newa_in,
+                        userOkhttp.getNTList().get(i)+(j+1),
+                        "content"+(j+1),
+                        (j+1)+""+((int)Math.random()*100),
+                        (j+1)+"天前"));
+            }
+            recyclerView.setAdapter(new newsAdapeter(view.getContext(),list));
+        }
+        aboutViewPager();
+        tabLayout.setupWithViewPager(news_lists);
+        for (int i = 0 ;i<userOkhttp.getNTList().size();i++){
+            tabLayout.getTabAt(i).setText(userOkhttp.getNTList().get(i));
+        }
     }
 
     private void aboutViewPager(){
@@ -341,22 +342,4 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             }
         });
     }
-
-    class MyHandler extends Handler{
-        WeakReference<HomeFragment>myfragment;
-        public MyHandler(HomeFragment fragment){
-            myfragment = new WeakReference<>(fragment);
-        }
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            super.handleMessage(msg);
-            HomeFragment fragment = myfragment.get();
-            if (fragment!=null && msg.what == 369){
-
-            }else {
-                return;
-            }
-        }
-    }
-    MyHandler handler = new MyHandler(this);
 }
