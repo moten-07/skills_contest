@@ -292,34 +292,32 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             @Override
             public void run() {
                 userOkhttp.getNewsType();
-                ((Activity)context).runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        news_lists.getAdapter().notifyDataSetChanged();
+                ((Activity)context).runOnUiThread(()-> {
+                    for (int i = 0;i<userOkhttp.getNTList().size();i++){
+                        newsList.add(LayoutInflater.from(view.getContext()).inflate(R.layout.item_news,null));
+                        RecyclerView recyclerView =newsList.get(i).findViewById(R.id.newone_list);// 绑定recyclerview
+                        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));// 绑定其布局管理器（此处使用线性布局）
+                        List<news>list =new ArrayList<>();
+                        for (int j = 0; j<5;j++){
+                            list.add(new news(R.mipmap.newa_in,
+                                    userOkhttp.getNTList().get(i)+(j+1),
+                                    "content"+(j+1),
+                                    (j+1)+""+((int)Math.random()*100),
+                                    (j+1)+"天前"));
+                        }
+                        recyclerView.setAdapter(new newsAdapeter(view.getContext(),list));
+                    }
+                    news_lists.getAdapter().notifyDataSetChanged();
+                    for (int i = 0 ;i<userOkhttp.getNTList().size();i++){
+                        tabLayout.getTabAt(i).setText(userOkhttp.getNTList().get(i));
                     }
                 });
 
             }
         }).start();
-        for (int i = 0;i<userOkhttp.getNTList().size();i++){
-            newsList.add(LayoutInflater.from(view.getContext()).inflate(R.layout.item_news,null));
-            RecyclerView recyclerView =newsList.get(i).findViewById(R.id.newone_list);// 绑定recyclerview
-            recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));// 绑定其布局管理器（此处使用线性布局）
-            List<news>list =new ArrayList<>();
-            for (int j = 0; j<5;j++){
-                list.add(new news(R.mipmap.newa_in,
-                        userOkhttp.getNTList().get(i)+(j+1),
-                        "content"+(j+1),
-                        (j+1)+""+((int)Math.random()*100),
-                        (j+1)+"天前"));
-            }
-            recyclerView.setAdapter(new newsAdapeter(view.getContext(),list));
-        }
+
         aboutViewPager();
         tabLayout.setupWithViewPager(news_lists);
-        for (int i = 0 ;i<userOkhttp.getNTList().size();i++){
-            tabLayout.getTabAt(i).setText(userOkhttp.getNTList().get(i));
-        }
     }
 
     private void aboutViewPager(){
