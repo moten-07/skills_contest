@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
-import android.graphics.Rect;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -34,11 +33,11 @@ import com.moten.DemoA.Adapeter.hottAdapeter;
 import com.moten.DemoA.Adapeter.lappAdapeter;
 import com.moten.DemoA.Adapeter.newsAdapeter;
 import com.moten.DemoA.aboutIntent.HttpHelp;
+import com.moten.DemoA.aboutIntent.Indexe;
 import com.moten.DemoA.aboutIntent.UserOkhttp;
 import com.moten.DemoA.func.TAFJ;
 import com.moten.DemoA.func.TGAMSJ;
 import com.moten.DemoA.type.Hot_theme;
-import com.moten.DemoA.type.LittleApp;
 import com.moten.DemoA.MainActivity;
 import com.moten.DemoA.R;
 import com.moten.DemoA.type.news;
@@ -61,29 +60,20 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     ViewPager news_lists;                       // 新闻视图控件
     EditText seach_str;                         // 搜索框
     ImageButton btn_seach;   // 按钮
-    List<View> viewList,newsList;                // 轮播图页面的列表，新闻页面的列表
 
     TabLayout tabLayout;
     RecyclerView lapp_list,theme_list;
     // 应用列表控件,热门主题列表控件
+
+    List<View> viewList,newsList;                // 轮播图页面的列表，新闻页面的列表
     List <Hot_theme> hott_list;                 // 热门主题列表
     List<Fragment> fragments;
-
-    String [] titles;                           // 新闻分类标题
+    List<String>titles;                           // 新闻分类标题
 
     lappAdapeter lappadapeter;                  // 绑定应用列表的适配器
     hottAdapeter hottadapeter;                  // 绑定热门主题的适配器
 
     private Context context;
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     public HomeFragment() {
     }
@@ -91,10 +81,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
         context = getActivity();
         // 下面使用getActivity()的地方全部用(Activity)context代替，确保不会为空，避免闪退
         // 闪退原因：见私人日志1.24
@@ -111,6 +97,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         if (parent!=null){
             parent.removeView(view);
         }
+        // 清空、重载，不过好像没什么用
 
         return view;
     }
@@ -123,8 +110,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         // 初始化控件绑定
         insertData(view);
         // 数据处理
-        initImage(view);
-        // 图片添加
     }
 
     private void init(View view){
@@ -155,10 +140,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         viewList  = new ArrayList<>();
         newsList = new ArrayList<>();
-
         hott_list = new ArrayList<>();
-
         fragments = new ArrayList<>();
+        titles = new ArrayList<>();
 
         btn_seach.setOnClickListener(this::onClick);
         // 点击监听
@@ -173,20 +157,22 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             lapp_list.setLayoutManager(new GridLayoutManager(view.getContext(),5));
             theme_list.setLayoutManager(new GridLayoutManager(view.getContext(),2));
         }
-
-        // 列表绑定网格布局/线性布局
-
         // 添加列表数据
-        // 数据应该是从服务器端传来的
         // 应用领域
         theLApp(view);
+        // banner轮播图
+        theBanner(view);
+        // 新闻列表
+        theNews(view);
 
         // 热门主题
         for (int i = 0 ; i < 4 ; i++){
             hott_list.add(new Hot_theme("热门主题"+(i+1)));
         }
+        if (theme_list.getItemDecorationCount()==0){
+            theme_list.addItemDecoration(new Indexe(8));
+        }
         // 绑定适配器
-
 
         hottadapeter=new hottAdapeter(view.getContext(),hott_list);
         theme_list.setAdapter(hottadapeter);
@@ -201,54 +187,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private void initImage(View view){
-        // 关于ViewPager
-        theBanner(view);
-
-        // 添加多新闻列表
-        titles = view.getContext().getResources().getStringArray(R.array.newsType);// 获取新闻标题
-        for (int i = 0;i<titles.length;i++){
-            View view1 =LayoutInflater.from(view.getContext()).inflate(R.layout.item_news,null);
-            // 单个新闻视图绑定新闻布局
-            newsList.add(view1);        // 视图添加到视图列表（Viewpager）中
-            RecyclerView recyclerView =newsList.get(i).findViewById(R.id.newone_list);// 绑定recyclerview
-            recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));// 绑定其布局管理器（此处使用线性布局）
-            List<news>list =new ArrayList<>();
-            for (int j = 0; j<5;j++){
-                list.add(new news(R.mipmap.newa_in,
-                        titles[i]+(j+1),
-                        "content"+(j+1),
-                        ""+(j+1)*10,
-                        (j+1)+"天前"));
-            }
-            recyclerView.setAdapter(new newsAdapeter(view.getContext(),list));
-        }
-
-        news_lists.setAdapter(new PagerAdapter() {
-            @Override
-            public int getCount(){return titles.length;}
-            @Override
-            public boolean isViewFromObject(@NonNull View view, @NonNull Object object) { return view == object; }
-
-            @NonNull
-            @Override
-            public Object instantiateItem(@NonNull ViewGroup container, int position) {
-                View view1 = newsList.get(position);
-                container.addView(view1);
-                return view1;
-            }
-
-            @Override
-            public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-                container.removeView(newsList.get(position));
-            }
-        });
-        tabLayout.setupWithViewPager(news_lists);
-        for (int i = 0 ;i<titles.length;i++){
-            tabLayout.getTabAt(i).setText(titles[i]);
-        }
-
-    }
     private void seach(View view){
         // 搜索功能（软键盘重写事件要用，从onClick()移到这里来）
         String seach = seach_str.getText().toString();
@@ -260,7 +198,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         // 然后跳转到详情页
     }
 
-    private static boolean isPad(Context context){
+    public static boolean isPad(Context context){
         WindowManager windowManager = (WindowManager)context.getSystemService(context.WINDOW_SERVICE);
         Display display = windowManager.getDefaultDisplay();
         Point size = new Point();
@@ -342,6 +280,70 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 });
             }
         }).start();
+        if (lapp_list.getItemDecorationCount()==0){
+            lapp_list.addItemDecoration(new Indexe(10));
+        }
     }
 
+    private void theNews(View view){
+        // 新闻相关
+        userOkhttp.getNTList().clear();
+        titles.clear();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                userOkhttp.getNewsType();
+                ((Activity)context).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        titles = userOkhttp.getNTList();
+                        for (int i = 0;i<titles.size();i++){
+                            View view1 =LayoutInflater.from(view.getContext()).inflate(R.layout.item_news,null);
+                            // 单个新闻视图绑定新闻布局
+                            newsList.add(view1);        // 视图添加到视图列表（Viewpager）中
+                            RecyclerView recyclerView =newsList.get(i).findViewById(R.id.newone_list);// 绑定recyclerview
+                            recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));// 绑定其布局管理器（此处使用线性布局）
+                            List<news>list =new ArrayList<>();
+                            for (int j = 0; j<5;j++){
+                                list.add(new news(R.mipmap.newa_in,
+                                        titles.get(i)+(j+1),
+                                        "content"+(j+1),
+                                        ""+(j+1)*10,
+                                        (j+1)+"天前"));
+                            }
+                            recyclerView.setAdapter(new newsAdapeter(view.getContext(),list));
+                        }
+                        aboutViewPager();
+                        // tabLayout绑定ViewPager
+                        tabLayout.setupWithViewPager(news_lists);
+                        for (int i = 0 ;i<titles.size();i++){
+                            tabLayout.getTabAt(i).setText(titles.get(i));
+                        }
+                    }
+                });
+            }
+        }).start();
+    }
+
+    private void aboutViewPager(){
+        news_lists.setAdapter(new PagerAdapter() {
+            @Override
+            public int getCount(){return titles.size();}
+            @Override
+            public boolean isViewFromObject(@NonNull View view, @NonNull Object object) { return view == object; }
+
+            @NonNull
+            @Override
+            public Object instantiateItem(@NonNull ViewGroup container, int position) {
+                View view1 = newsList.get(position);
+                container.addView(view1);
+                return view1;
+            }
+
+            @Override
+            public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+                container.removeView(newsList.get(position));
+            }
+        });
+    }
 }
