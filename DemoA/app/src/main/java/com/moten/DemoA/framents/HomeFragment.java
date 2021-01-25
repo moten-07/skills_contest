@@ -166,8 +166,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         // 新闻列表
         theNews(view);
-        Log.d("title2",userOkhttp.getNTList()+"");
-
         // 热门主题
         for (int i = 0 ; i < 4 ; i++){
             hott_list.add(new Hot_theme("热门主题"+(i+1)));
@@ -336,7 +334,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             }
             @Override
             public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-                container.removeView(newsList.get(position));
+                if (newsList.size()>0){
+                    container.removeView(newsList.get(position));
+                }
             }
         });
     }
