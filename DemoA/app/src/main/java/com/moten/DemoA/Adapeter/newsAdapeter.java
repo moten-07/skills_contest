@@ -11,17 +11,19 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.moten.DemoA.MainActivity;
 import com.moten.DemoA.R;
-import com.moten.DemoA.type.news;
+import com.moten.DemoA.aboutIntent.HttpHelp;
+import com.moten.DemoA.func.TNLJ;
 
 import java.util.List;
 
 public class newsAdapeter extends RecyclerView.Adapter<newsAdapeter.ViewHolder>{
     // 新闻适配器
-    List<news>list;
+    List<TNLJ.Rows>list;
     Context context;
-    public newsAdapeter(Context context,List<news>list){
+    public newsAdapeter(Context context,List<TNLJ.Rows>list){
         this.list=list;
         this.context=context;
     }
@@ -49,12 +51,18 @@ public class newsAdapeter extends RecyclerView.Adapter<newsAdapeter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        news news = list.get(position);
-        holder.news_icon.setImageResource(news.getNews_icon());
-        holder.news_title.setText(news.getNews_title());
-        holder.news_content.setText(news.getNews_content());
-        holder.news_number.setText(news.getNews_number());
-        holder.news_date.setText(news.news_date);
+        TNLJ.Rows news = list.get(position);
+        Glide.with(context)
+                .load(new HttpHelp().getHearUri()+news.getImgUrl())
+                .into( holder.news_icon);
+        StringBuilder builder = new StringBuilder(news.getTitle());
+        holder.news_title.setText((builder.length()>15) ? builder.replace(15,builder.length(),"......") : news.getTitle());
+        StringBuilder builder1 = new StringBuilder(news.getContent());
+        holder.news_content.setText(builder1.replace(20,builder1.length(),"......"));
+        holder.news_views_number.setText(news.getViewsNumber()+"");
+        holder.news_like_number.setText(news.getLikeNumber()+"");
+        holder.news_date.setText(news.getUpdateTime());
+        holder.news_date.setText(news.getUpdateTime());
     }
 
     @Override
@@ -64,14 +72,15 @@ public class newsAdapeter extends RecyclerView.Adapter<newsAdapeter.ViewHolder>{
 
     class ViewHolder extends RecyclerView.ViewHolder {
         ImageView news_icon;
-        TextView news_title,news_content,news_number,news_date;
+        TextView news_title,news_content,news_views_number,news_like_number,news_date,news_type;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             news_icon = itemView.findViewById(R.id.news_icon);
             news_title = itemView.findViewById(R.id.news_title);
             news_content = itemView.findViewById(R.id.news_content);
-            news_number = itemView.findViewById(R.id.news_number);
+            news_views_number = itemView.findViewById(R.id.news_views_number);
+            news_like_number = itemView.findViewById(R.id.news_like_number);
             news_date = itemView.findViewById(R.id.news_date);
         }
     }

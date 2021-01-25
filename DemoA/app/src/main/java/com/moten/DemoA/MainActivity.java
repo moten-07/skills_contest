@@ -31,14 +31,15 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case "news":
                 textView.setText(intent.getStringExtra("where"));
+                finish();
+                Intent intentnew = new Intent(MainActivity.this, NewActivity.class);
+                intentnew.putExtra("title", intent.getStringExtra("title"));
+                // 这里的url应该由服务器获取，存储在某个地方，需要时调出来，暂时先连接上百度吧
+                intentnew.putExtra("url","https://www.baidu.com/s?ie=UTF-8&wd="+intent.getStringExtra("where"));
+                startActivity(intentnew);
+                break;
             case "newsViewPager":
                 textView.setText("首页轮播图:\n" + intent.getStringExtra("where"));
-//                finish();
-//                Intent intentnew = new Intent(MainActivity.this, NewActivity.class);
-//                intentnew.putExtra("title", intent.getStringExtra("title"));
-//                // 这里的url应该由服务器获取，存储在某个地方，需要时调出来，暂时先连接上百度吧
-//                intentnew.putExtra("url","https://www.baidu.com/s?ie=UTF-8&wd="+intent.getStringExtra("where"));
-//                startActivity(intentnew);
                 break;
             case "subway":
                 textView.setText("跳转到：" + intent.getStringExtra("title"));

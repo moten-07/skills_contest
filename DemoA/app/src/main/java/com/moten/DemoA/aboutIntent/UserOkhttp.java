@@ -4,6 +4,7 @@ package com.moten.DemoA.aboutIntent;
 import com.google.gson.Gson;
 import com.moten.DemoA.func.TAFJ;
 import com.moten.DemoA.func.TGAMSJ;
+import com.moten.DemoA.func.TNLJ;
 import com.moten.DemoA.func.TNTJ;
 
 import java.util.ArrayList;
@@ -80,7 +81,7 @@ public class UserOkhttp {
         return TRlist2;
     }
 
-    List<String>NTList=new ArrayList<>();
+    List<TNTJ.Data>NTList=new ArrayList<>();
     public void getNewsType(){
         try{
             Request request = new Request.Builder()
@@ -90,13 +91,31 @@ public class UserOkhttp {
             String data = response.body().string();
             TNTJ tntj = new Gson().fromJson(data,TNTJ.class);
             for (int i = 0;i<tntj.getData().size(); i++){
-                NTList.add(tntj.getData().get(i).getDictLabel());
+                NTList.add(tntj.getData().get(i));
             }
         }catch (Exception e){
             e.printStackTrace();
         }
     }
-    public List<String> getNTList(){
+    public List<TNTJ.Data> getNTList(){
         return NTList;
+    }
+
+    List<TNLJ.Rows> NList = new ArrayList<>();
+    public List<TNLJ.Rows>getNList(){return NList;}
+    public void getNewsListUrl(int pageNum,int pageSize,int pressCategory){
+        try{
+            Request request = new Request.Builder()
+                    .url(help.getHearUri()+help.getNewsListUrl(pageNum,pageSize,pressCategory))
+                    .get().build();
+            Response response = new OkHttpClient().newCall(request).execute();
+            String data = response.body().string();
+            TNLJ tnlj = new Gson().fromJson(data,TNLJ.class);
+            for (int i = 0; i<tnlj.getRows().size();i++){
+                NList.add(tnlj.getRows().get(i));
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 
 import com.moten.DemoA.Adapeter.newsAdapeter;
 import com.moten.DemoA.R;
-import com.moten.DemoA.type.news;
+import com.moten.DemoA.func.TNLJ;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,7 @@ import java.util.List;
  */
 public class NewsFragment extends Fragment {
     RecyclerView recyclerView;
-    List<news> news_list;
+    List<TNLJ.Rows> news_list;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -74,13 +74,13 @@ public class NewsFragment extends Fragment {
         news_list = new ArrayList<>();
         recyclerView = view.findViewById(R.id.news_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        for (int i = 1; i<=50 ; i++){
-            news_list.add(new news(R.mipmap.newa_in,
-                    "新闻"+i,
-                    "新闻"+i+"的内容",
-                    "123",
-                    "123"));
-        }
+//        for (int i = 1; i<=50 ; i++){
+//            news_list.add(new news(R.mipmap.newa_in,
+//                    "新闻"+i,
+//                    "新闻"+i+"的内容",
+//                    "123",
+//                    "123"));
+//        }
         recyclerView.setAdapter(new newsAdapeter(view.getContext(),news_list));
         return  view;
     }

@@ -46,7 +46,6 @@ public class AllFragment extends Fragment {
     Context context;
 
 //    private SQLiteDatabase db;
-//    private MyOpenHelp help;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -120,6 +119,7 @@ public class AllFragment extends Fragment {
             }
         });
 
+
     }
 
     private void selectLapp(View view){
@@ -136,23 +136,13 @@ public class AllFragment extends Fragment {
     private void addLapp(View view){
         // 添加一大堆东东
         userOkhttp.getTRList2().clear();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
+        new Thread(()-> {
                 userOkhttp.getAllServe();
-                ((Activity)context).runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        List<TAFJ.Rows>list = userOkhttp.getTRList2();
-                        for (int i = 0 ;i<list.size();i++){
-                            Log.d("AF_title",list.get(i).getServiceName());
-                            Log.d("AF_icon",new HttpHelp().getHearUri()+list.get(i).getImgUrl());
-                        }
-                        adapeter=new lappAdapeter(view.getContext(),list);
-                        recyclerView.setAdapter(adapeter);
-                    }
+                requireActivity().runOnUiThread(()->{
+                    List<TAFJ.Rows>list = userOkhttp.getTRList2();
+                    adapeter=new lappAdapeter(view.getContext(),list);
+                    recyclerView.setAdapter(adapeter);
                 });
-            }
         }).start();
         if (recyclerView.getItemDecorationCount()==0){
             recyclerView.addItemDecoration(new Indexe(10));

@@ -36,10 +36,10 @@ import com.moten.DemoA.aboutIntent.Indexe;
 import com.moten.DemoA.aboutIntent.UserOkhttp;
 import com.moten.DemoA.func.TAFJ;
 import com.moten.DemoA.func.TGAMSJ;
+import com.moten.DemoA.func.TNLJ;
 import com.moten.DemoA.type.Hot_theme;
 import com.moten.DemoA.MainActivity;
 import com.moten.DemoA.R;
-import com.moten.DemoA.type.news;
 import com.google.android.material.tabs.TabLayout;
 import com.youth.banner.Banner;
 import com.youth.banner.adapter.BannerImageAdapter;
@@ -146,7 +146,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
     private void insertData(View view){
         // 绑定网格布局，加判断，平板模式下spanCount要大于5（为4）
-        // 简（单）（粗）暴处理，屏幕宽度比长度大就算平板,横屏使用我也算你平板
+        // 简（单）（粗）暴处理，屏幕宽度比长度大就算平板,横屏使用我也算你平板(还方便检查功能)
         if (isPad(view.getContext())){
             lapp_list.setLayoutManager(new GridLayoutManager(view.getContext(),6));
             theme_list.setLayoutManager(new GridLayoutManager(view.getContext(),4));
@@ -276,27 +276,28 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         // 新闻相关
         userOkhttp.getNTList().clear();
         new Thread(()->{
-                userOkhttp.getNewsType();
-                ((Activity)context).runOnUiThread(()-> {
-                    for (int i = 0;i<userOkhttp.getNTList().size();i++){
-                        newsList.add(LayoutInflater.from(view.getContext()).inflate(R.layout.item_news,null));
-                        RecyclerView recyclerView =newsList.get(i).findViewById(R.id.newone_list);// 绑定recyclerview
-                        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));// 绑定其布局管理器（此处使用线性布局）
-                        List<news>list =new ArrayList<>();
-                        for (int j = 0; j<5;j++){
-                            list.add(new news(R.mipmap.newa_in,
-                                    userOkhttp.getNTList().get(i)+(j+1),
-                                    "content"+(j+1),
-                                    (j+1)+""+((int)Math.random()*100),
-                                    (j+1)+"天前"));
-                        }
-                        recyclerView.setAdapter(new newsAdapeter(view.getContext(),list));
-                    }
+            userOkhttp.getNewsType();
+            for (int i = 0;i<userOkhttp.getNTList().size();i++){
+                userOkhttp.getNewsListUrl(1,100,userOkhttp.getNTList().get(i).getDictCode());
+                List<TNLJ.Rows>list = new ArrayList<>();
+                list.addAll(userOkhttp.getNList());
+                int i1=i;
+                ((Activity)context).runOnUiThread(()->{
+                    newsList.add(LayoutInflater.from(view.getContext()).inflate(R.layout.item_news,null));
                     news_lists.getAdapter().notifyDataSetChanged();
-                    for (int i = 0 ;i<userOkhttp.getNTList().size();i++){
-                        tabLayout.getTabAt(i).setText(userOkhttp.getNTList().get(i));
-                    }
+                    RecyclerView recyclerView =newsList.get(i1).findViewById(R.id.newone_list);// 绑定recyclerview
+                    recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));// 绑定其布局管理器（此处使用线性布局）
+                    recyclerView.setAdapter(new newsAdapeter(view.getContext(),list));
+
                 });
+//                Log.d("newsList",list.toString());
+                userOkhttp.getNList().clear();
+            }
+            ((Activity)context).runOnUiThread(()-> {
+                for (int i = 0 ;i<userOkhttp.getNTList().size();i++){
+                    tabLayout.getTabAt(i).setText(userOkhttp.getNTList().get(i).getDictLabel());
+                }
+        });
         }).start();
 
         aboutViewPager();

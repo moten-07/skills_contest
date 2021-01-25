@@ -68,7 +68,7 @@ public class HttpHelp {
 
     // 3.3 查询专题新闻列表(get)，需要获得当前页面的页数和每页多少条
     // 3.5 查询所属分类下的新闻列表
-    // 疑似文档写重复了（自信点，把疑似去了）
+    // 疑似文档写重复了（自信点，把疑似去了）,重点是还有写错的
     // pressCategory:35-41
     public String getNewsListUrl(int pageNum,int pageSize,int pressCategory) {
         return "/press/press/list?" +
