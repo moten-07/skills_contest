@@ -1,14 +1,10 @@
 package com.moten.DemoA.aboutIntent;
 
-import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.moten.DemoA.func.TAFJ;
 import com.moten.DemoA.func.TGAMSJ;
 import com.moten.DemoA.func.TNTJ;
-import com.moten.DemoA.jGuideActivity;
 
 import java.util.ArrayList;
 import java.util.List;
