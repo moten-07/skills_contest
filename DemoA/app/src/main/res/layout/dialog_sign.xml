@@ -2,19 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".func.signActivity"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:gravity="center">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="注册你的账户"
-        android:textColor="@color/black"
-        android:textSize="30dp"/>
+    android:layout_gravity="center"
+    android:padding="10dp">
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
             android:layout_width="wrap_content"
@@ -25,15 +19,16 @@
 
         <EditText
             android:id="@+id/userName"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:ems="10"
             android:gravity="center"
-            android:hint="不要随便注册" />
+            android:hint="账号不是昵称，哟" />
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
             android:layout_width="wrap_content"
@@ -44,8 +39,9 @@
 
         <EditText
             android:id="@+id/nickName"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:ems="10"
             android:gravity="center"
             android:hint="不要随便注册" />
@@ -62,15 +58,17 @@
 
         <EditText
             android:id="@+id/phonenumber"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:ems="12"
+            android:layout_weight="1"
+            android:ems="14"
             android:gravity="center"
-            android:hint="一个号码只能注册一个账号"
-            android:inputType="number"/>
+            android:hint="一个号码只能有一个账号"
+            android:inputType="number"
+            android:maxLength="11"/>
     </LinearLayout>
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
             android:layout_width="wrap_content"
@@ -80,9 +78,11 @@
             android:textSize="20dp" />
     <RadioGroup
         android:id="@+id/sex"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:gravity="center">
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -94,7 +94,7 @@
     </RadioGroup>
     </LinearLayout>
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
             android:layout_width="wrap_content"
@@ -105,23 +105,29 @@
 
         <EditText
             android:id="@+id/password"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:ems="10"
             android:gravity="center"
             android:hint="不要随便注册"
             android:inputType="textPassword"/>
     </LinearLayout>
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
         <Button
+            android:id="@+id/siup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="注册"/>
+            android:text="注册"
+            android:layout_marginRight="40dp"/>
         <Button
+            android:id="@+id/noSiup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="取消"/>
+            android:text="取消"
+            android:layout_marginLeft="40dp"/>
     </LinearLayout>
 </LinearLayout>

@@ -145,7 +145,7 @@
         android:layout_height="2dp"
         android:background="@drawable/shap4"
         app:layout_constraintTop_toBottomOf="@id/feed" />
-    <!--点击退出按钮-->
+    <!--退出按钮和登录按钮-->
     <Button
         android:id="@+id/user_out"
         android:layout_width="wrap_content"
@@ -156,6 +156,16 @@
         android:textSize="20sp"
         app:layout_constraintLeft_toLeftOf="@id/feed"
         app:layout_constraintRight_toRightOf="@id/feed"
-        app:layout_constraintTop_toBottomOf="@id/feed" />
+        app:layout_constraintTop_toBottomOf="@id/feed"/>
+    <Button
+        android:id="@+id/user_siup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="账号登录"
+        android:textColor="@color/blue"
+        android:textSize="20sp"
+        app:layout_constraintLeft_toLeftOf="@id/user_out"
+        app:layout_constraintRight_toRightOf="@id/user_out"
+        app:layout_constraintTop_toTopOf="@id/user_out"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

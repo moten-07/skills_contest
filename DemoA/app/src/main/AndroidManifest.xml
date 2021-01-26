@@ -13,12 +13,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppDemoA.Home">
-        <activity android:name=".func.signActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <activity android:name=".func.NewActivity" />
         <activity android:name=".func.userOrderActivity" />
         <activity android:name=".func.userInfoActivity" />
@@ -28,11 +22,13 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".ActivityHome" />
         <activity android:name=".jGuideActivity">
-
             <!-- 默认从引导页启动 -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".GuideActivity">
-
             <!-- kt -->
         </activity>
     </application>
