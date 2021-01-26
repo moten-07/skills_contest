@@ -257,7 +257,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 ((Activity)context).runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        List<TAFJ.Rows>list = userOkhttp.getTRList2();
+                        List<TAFJ.Rows>list = userOkhttp.getTRList2().subList(0,4);
                         TAFJ.Rows TR = new TAFJ.Rows();
                         TR.setImgUrl(R.mipmap.more+"");
                         TR.setServiceName("更多服务");

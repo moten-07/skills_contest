@@ -6,6 +6,8 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import okhttp3.OkHttpClient;
+
 public class HttpHelp {
     // 稍微封装一下，用的时候直接调方法就好了
 
@@ -101,7 +103,7 @@ public class HttpHelp {
     }
 
     // 5.2 查询评论列表
-    // 共300条（2021.01.22 12：20），有人在上传（12：14），数量一直在增加
+    // 共314条（2021.01.22 12：20），有人在上传（12：14），数量一直在增加,不加参数就可以看见全部
     public String getCommentsList(int pageNum,int pageSize,int pressId){
         return "/press/comments/list?" +
                 "pageNum=" +(pageNum)+
@@ -140,5 +142,4 @@ public class HttpHelp {
         return "/system/user/"+id;
     }
 
-    // 7.2
 }

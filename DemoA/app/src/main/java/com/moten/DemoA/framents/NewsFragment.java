@@ -2,14 +2,18 @@ package com.moten.DemoA.framents;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.tabs.TabLayout;
 import com.moten.DemoA.Adapeter.newsAdapeter;
 import com.moten.DemoA.R;
 import com.moten.DemoA.func.TNLJ;
@@ -23,7 +27,8 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public class NewsFragment extends Fragment {
-    RecyclerView recyclerView;
+    TabLayout news_type_list;
+    ViewPager news_viewpager;
     List<TNLJ.Rows> news_list;
 
     // TODO: Rename parameter arguments, choose names that match
@@ -71,17 +76,14 @@ public class NewsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_news, container, false);
-        news_list = new ArrayList<>();
-        recyclerView = view.findViewById(R.id.news_recycler);
-        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-//        for (int i = 1; i<=50 ; i++){
-//            news_list.add(new news(R.mipmap.newa_in,
-//                    "新闻"+i,
-//                    "新闻"+i+"的内容",
-//                    "123",
-//                    "123"));
-//        }
-        recyclerView.setAdapter(new newsAdapeter(view.getContext(),news_list));
         return  view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        news_type_list = view.findViewById(R.id.news_type_list);
+        news_viewpager = view.findViewById(R.id.news_viewpager);
+        news_list = new ArrayList<>();
     }
 }
