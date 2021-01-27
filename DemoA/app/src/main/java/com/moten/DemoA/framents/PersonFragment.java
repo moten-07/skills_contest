@@ -10,19 +10,22 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
-import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.moten.DemoA.ActivityHome;
 import com.moten.DemoA.MainActivity;
 import com.moten.DemoA.R;
+import com.moten.DemoA.func.TALJ;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -48,6 +51,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
    LinearLayout user_info_list,user_order_list,update_pass,feed;
    Boolean siup = false;                // 判断是否登录
    SharedPreferences sp;
+    SharedPreferences.Editor editor;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -121,10 +125,14 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
         user_out.setOnClickListener(this::onClick);
         user_siup.setOnClickListener(this::onClick);
 
+
         sp = view.getContext().getSharedPreferences("location", Context.MODE_PRIVATE);
+        editor = sp.edit();
+
         siup = (sp.getString("token",null)!=null);
         Log.d("siup",siup+"");
         if(siup){
+            // 获取个人信息
             user_siup.setVisibility(View.GONE);
         }else{
             user_icon.setImageResource(R.drawable.ic_baseline_account_box_24);
@@ -139,6 +147,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
         Intent intent;
         switch (v.getId()){
             case R.id.user_info_list:
+                // 个人信息
                 if (siup){
                     intent = new Intent(v.getContext(), MainActivity.class);
                     intent.putExtra("type","user_info");
@@ -148,6 +157,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
                 }
                 break;
             case R.id.user_order_list:
+                // 订单列表
                 if (siup){
                     intent = new Intent(v.getContext(), MainActivity.class);
                     intent.putExtra("type","user_order");
@@ -157,6 +167,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
                 }
                 break;
             case R.id.update_pass:
+                // 修改密码
                 if (siup){
                     intent = new Intent(v.getContext(), MainActivity.class);
                     intent.putExtra("type","user_update_pass");
@@ -166,6 +177,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
                 }
                 break;
             case R.id.feed:
+                // 意见反馈
                 if (siup){
                     intent = new Intent(v.getContext(), MainActivity.class);
                     intent.putExtra("type","user_feed");
@@ -175,9 +187,11 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
                 }
                 break;
             case R.id.user_out:
-                sp.edit().putString("token",null);
+                editor.putString("token",null);
+                editor.commit();
                 Toast.makeText(v.getContext(),"已清空本地信息并退出登录",Toast.LENGTH_LONG).show();
                 onResume();
+                ((ActivityHome)getActivity()).refreshFragment();
                 break;
             case R.id.user_siup:
                 // 弹出登录信息框
@@ -208,14 +222,8 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
         view1.findViewById(R.id.login).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 登录
-                //{
-                //    "msg": "操作成功",
-                //    "code": 200,
-                //    "token": "eyJhbGciOiJIUzUxMiJ9.eyJsb2dpbl91c2VyX2tleSI6IjgyZTk1MzBhLTEzYWQtNDNmNC04MzMyLTU3YmI2MjllOTRhZCJ9.77F4YRkPUaTT7N-Ks63FHSzwAwdaUJEu3xwHwV2llM8GB0Bf_YUW6pAS08g_EPtQiYNqXe_Uav8AVby3naFxpg"
-                //}
-                Toast.makeText(getActivity(),"登录成功",Toast.LENGTH_SHORT).show();
-                dialog1.dismiss();
+                dialogLogin(view1,dialog1);
+
             }
         });
         view1.findViewById(R.id.noLogin).setOnClickListener(new View.OnClickListener() {
@@ -228,12 +236,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
         view2.findViewById(R.id.siup).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(dialog2Run()){
-                    dialog2.dismiss();
-                    dialog1.dismiss();
-                }else {
-                    Toast.makeText(getActivity(),"注册失败,换个账号或手机号码试试？",Toast.LENGTH_SHORT).show();
-                }
+                dialog2Run(view2,dialog2);
             }
         });
         view2.findViewById(R.id.noSiup).setOnClickListener(new View.OnClickListener() {
@@ -247,12 +250,9 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
 
     }
 
-    private Boolean dialog2Run(){
+    private void dialog2Run(View view,AlertDialog dialog) {
         // 注册一个搞事情的
-        final Boolean[] a = {false};
-        final String[] result = {""};
-        String json = "";
-        json = "{\"userName\":\"nameIsPi\"," +
+        String json = "{\"userName\":\"nameIsPi\"," +
                 "\"nickName\":\"pi\"," +
                 "\"phonenumber\":\"31415926535\"," +
                 "\"sex\":\"1\"," +
@@ -270,15 +270,53 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
             public void onFailure(@NotNull Call call, @NotNull IOException e) { e.printStackTrace(); }
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                result[0] = response.body().string();
-                Log.d("msg", result[0]);
-                // {"msg": "操作成功","code": 200,"token": "……"}
-                // {"msg":"新增用户'nameIsPi'失败，登录账号已存在","code":500}
-                if (result[0].split(",")[0].split(":")[1].equals("\"操作成功\"")){
-                    a[0] = true;
+                String result2 = response.body().string();
+                TALJ talj = new Gson().fromJson(result2, TALJ.class);
+                Log.d("msg", talj.getMsg());
+                Log.d("code", talj.getCode() + "");
+                if (talj.getToken() != null) {
+                    Log.d("token", talj.getToken());
                 }
+                requireActivity().runOnUiThread(() -> {
+                    if (talj.getCode()==200){
+                        dialog.dismiss();
+                    }
+                    Toast.makeText(getContext(), talj.getMsg(), Toast.LENGTH_SHORT).show();
+                });
             }
         });
-        return a[0];
+    }
+
+    private void dialogLogin(View view,AlertDialog dialog){
+        // 登录
+        String loginJson = "{\"username\":\""+((EditText)view.findViewById(R.id.username)).getText().toString()+"\"," +
+                "\"password\":\""+((EditText)view.findViewById(R.id.password)).getText().toString()+"\"\n}";
+        RequestBody body = RequestBody.create(loginJson, MediaType.parse("application/json"));
+        Request request = new Request.Builder()
+                .url("http://dasai.sdvcst.edu.cn:8080/login")
+                .post(body)
+                .build();
+        Call call = new OkHttpClient().newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) { e.printStackTrace(); }
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                String result = response.body().string();
+                TALJ talj = new Gson().fromJson(result,TALJ.class);
+                Log.d("msg", talj.getMsg());
+                Log.d("code",talj.getCode()+"");
+                Log.d("token",talj.getToken());
+                requireActivity().runOnUiThread(()->{
+                    if (talj.getCode() == 200){
+                        editor.putString("token",talj.getToken());
+                        editor.commit();
+                        Toast.makeText(getActivity(),talj.getMsg(),Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                        ((ActivityHome)getActivity()).refreshFragment();
+                    }
+                });
+            }
+        });
     }
 }

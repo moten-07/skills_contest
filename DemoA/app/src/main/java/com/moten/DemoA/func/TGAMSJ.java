@@ -23,7 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 public class TGAMSJ {
 
-    // 全称为：to Guide And Main Slideshow Json,即引导页和主页轮播图Json
+    // 全称为：to Guide And Main Slideshow Json
+    // 即引导页和主页轮播图Json
     // 正常人谁会起全称啊，缩写已经是最大的尊重了
     // 这俩除了值都一样
 

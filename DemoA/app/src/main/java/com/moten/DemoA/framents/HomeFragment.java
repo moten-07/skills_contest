@@ -289,7 +289,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     news_lists.getAdapter().notifyDataSetChanged();
                     RecyclerView recyclerView =newsList.get(i1).findViewById(R.id.newone_list);// 绑定recyclerview
                     recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));// 绑定其布局管理器（此处使用线性布局）
-                    recyclerView.setAdapter(new newsAdapeter(view.getContext(),list));
+                    recyclerView.setAdapter(new newsAdapeter(view.getContext(),(list.size()>3) ? list.subList(0,4) : list));// 加载前四条就行了
 
                 });
 //                Log.d("newsList",list.toString());

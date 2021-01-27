@@ -8,6 +8,7 @@ import java.util.List;
 
 public class TNTJ {
     // to News Type json
+    // 新闻类型
     /**
      * msg : 操作成功
      * code : 200

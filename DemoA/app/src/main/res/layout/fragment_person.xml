@@ -161,11 +161,12 @@
         android:id="@+id/user_siup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:text="账号登录"
         android:textColor="@color/blue"
         android:textSize="20sp"
-        app:layout_constraintLeft_toLeftOf="@id/user_out"
-        app:layout_constraintRight_toRightOf="@id/user_out"
-        app:layout_constraintTop_toTopOf="@id/user_out"/>
+        app:layout_constraintLeft_toLeftOf="@id/feed"
+        app:layout_constraintRight_toRightOf="@id/feed"
+        app:layout_constraintTop_toBottomOf="@id/feed"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

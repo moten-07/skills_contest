@@ -56,9 +56,9 @@ public class newsAdapeter extends RecyclerView.Adapter<newsAdapeter.ViewHolder>{
                 .load(new HttpHelp().getHearUri()+news.getImgUrl())
                 .into( holder.news_icon);
         StringBuilder builder = new StringBuilder(news.getTitle());
-        holder.news_title.setText((builder.length()>15) ? builder.replace(15,builder.length(),"......") : news.getTitle());
+        holder.news_title.setText(/*(builder.length()>15) ? builder.replace(15,builder.length(),"......") :*/ news.getTitle());
         StringBuilder builder1 = new StringBuilder(news.getContent());
-        holder.news_content.setText(builder1.replace(20,builder1.length(),"......"));
+        holder.news_content.setText(builder1/*.replace(20,builder1.length(),"......")*/);
         holder.news_views_number.setText(news.getViewsNumber()+"");
         holder.news_like_number.setText(news.getLikeNumber()+"");
         holder.news_date.setText(news.getUpdateTime());

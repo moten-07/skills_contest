@@ -5,7 +5,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class TAFJ {
-    // to Application Field Json：应用领域数据类
+    // to Application Field Json
+    // 应用领域数据
 
     /**
      * total : 6

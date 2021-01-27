@@ -35,6 +35,12 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
     String [] title;
     private List<Fragment>list=new ArrayList<>();
     // 帧布局列表，用于绑定碎片
+    PersonFragment personFragment;
+    NewsFragment newsFragment;
+    HomeFragment homeFragment;
+    PartyFragment partyFragment;
+    AllFragment allFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
@@ -42,11 +48,17 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
         // 更改标题栏
         init();
 
-        list.add(new PersonFragment());
-        list.add(new NewsFragment());
-        list.add(new HomeFragment());
-        list.add(new PartyFragment());
-        list.add(new AllFragment());
+        personFragment = new PersonFragment();
+        newsFragment = new NewsFragment();
+        homeFragment = new HomeFragment();
+        partyFragment = new PartyFragment();
+        allFragment = new AllFragment();
+
+        list.add(personFragment);
+        list.add(newsFragment);
+        list.add(homeFragment);
+        list.add(partyFragment);
+        list.add(allFragment);
         // 添加碎片
 
         start();
@@ -196,5 +208,17 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
         super.onUserLeaveHint();
     }
 
+    public void refreshFragment(){
+        // 刷新页面用的
+        if (list.contains(personFragment)){
+            list.remove(personFragment);
+            // 先从列表移除
+        }
+        getSupportFragmentManager().beginTransaction().remove(personFragment);
+        //
+        personFragment = new PersonFragment();
+        list.add(0,personFragment);
+        choose(1);
+    }
 
 }
