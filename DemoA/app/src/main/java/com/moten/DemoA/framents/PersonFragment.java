@@ -265,51 +265,14 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
 
     }
 
+    UserOkhttp userOkhttp = new UserOkhttp();
     private void dialog2Run(View view,AlertDialog dialog) {
         // 注册,一个搞事情的
-        String userName = ((EditText)view.findViewById(R.id.userName)).getText().toString();
-        String nickName = ((EditText)view.findViewById(R.id.nickName)).getText().toString();
-        String phonenumber = ((EditText)view.findViewById(R.id.phonenumber)).getText().toString();
-        String sex = (((RadioButton)view.findViewById(R.id.sex_man)).isChecked()) ? "1" : "0";
-        String password = ((EditText)view.findViewById(R.id.password)).getText().toString();
-        String json = "{\"userName\":\""+userName+"\"," +
-                "\"nickName\":\""+nickName+"\"," +
-                "\"phonenumber\":\""+phonenumber+"\"," +
-                "\"sex\":\""+sex+"\"," +
-                "\"password\":\""+password+"\"}";
-        RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));
-        Request request = new Request.Builder()
-                .url("http://dasai.sdvcst.edu.cn:8080/system/user/register")
-                .post(body)
-                .build();
-        call = client
-                // 暂时没打算用单例模式
-                .newCall(request);
-        call.enqueue(new Callback() {
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) { e.printStackTrace(); }
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                String result2 = response.body().string();
-                TALJ talj = new Gson().fromJson(result2, TALJ.class);
-//                Log.d("msg", talj.getMsg());
-//                Log.d("code", talj.getCode() + "");
-//                if (talj.getToken() != null) {
-//                    Log.d("token", talj.getToken());
-//                }
-                requireActivity().runOnUiThread(() -> {
-                    if (talj.getCode()==200){
-                        dialog.dismiss();
-                    }
-                    Toast.makeText(requireActivity(), talj.getMsg(), Toast.LENGTH_SHORT).show();
-                });
-            }
-        });
+        userOkhttp.dialog2Run(view,dialog,requireActivity());
     }
 
     private void dialogLogin(View view,AlertDialog dialog){
         // 登录
-        UserOkhttp userOkhttp = new UserOkhttp();
         userOkhttp.dialogLogin(view,requireActivity(),dialog);
 
     }
