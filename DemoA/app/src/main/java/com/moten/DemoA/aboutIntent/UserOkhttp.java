@@ -1,33 +1,58 @@
 package com.moten.DemoA.aboutIntent;
 
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+
 import com.google.gson.Gson;
+import com.moten.DemoA.ActivityHome;
+import com.moten.DemoA.R;
 import com.moten.DemoA.func.TAFJ;
+import com.moten.DemoA.func.TALJ;
 import com.moten.DemoA.func.TGAMSJ;
 import com.moten.DemoA.func.TNLJ;
 import com.moten.DemoA.func.TNTJ;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class UserOkhttp {
     // 数据解析类
-    HttpHelp help = new HttpHelp();
+    private HttpHelp help = new HttpHelp();
+    private OkHttpClient client =new OkHttpClient();
+    private Request request;
+    private Call call;
+    private SharedPreferences sp;
+    private SharedPreferences.Editor editor;
 
-    List<TGAMSJ.RowsDTO>TRlist = new ArrayList<>();
+    private List<TGAMSJ.RowsDTO>TRlist = new ArrayList<>();
+    public List<TGAMSJ.RowsDTO>getTRList(){return TRlist; }// 返回引导页和首页的数据组
     public void getGAMImg(int pageNum,int pageSize,int type){
         // 解析引导页和首页的数据
         try {
-            Request request = new Request
+            request = new Request
                     .Builder()
                     .url(help.getHearUri()+help.getGAMImg(pageNum,pageSize,type))
                     .get().build();
-            Response response = new OkHttpClient()
-                    .newCall(request).execute();
+            Response response = client.newCall(request).execute();
             String data = response.body().string();
             TGAMSJ tgamsj = new Gson().fromJson(data, TGAMSJ.class);
             for (int i = 0;i< tgamsj.getRows().size();i++){
@@ -38,19 +63,16 @@ public class UserOkhttp {
         }
     }
 
-    public List<TGAMSJ.RowsDTO>getTRList(){
-        // 返回引导页和首页的数据组
-        return TRlist;
-    }
 
-    List<TAFJ.Rows> TRlist2 = new ArrayList<>();
+    private List<TAFJ.Rows> TRlist2 = new ArrayList<>();
+    public List<TAFJ.Rows>getTRList2(){ return TRlist2; } // 返回引导页和首页的数据组
     public void getRecommendedUrl(int pageNum,int pageSize){
         // 解析推荐服务
         try{
-            Request request = new Request.Builder()
+            request = new Request.Builder()
                     .url(help.getHearUri()+help.getRecommendedUrl(pageNum,pageSize))
                     .get().build();
-            Response response = new OkHttpClient().newCall(request).execute();
+            Response response = client.newCall(request).execute();
             String data = response.body().string();
             TAFJ tafj = new Gson().fromJson(data,TAFJ.class);
             for(TAFJ.Rows tr : tafj.getRows()){
@@ -61,12 +83,11 @@ public class UserOkhttp {
         }
     }
     public void getAllServe(){
-        // 解析推荐服务
         try{
-            Request request = new Request.Builder()
+            request = new Request.Builder()
                     .url(help.getHearUri()+help.getAllServe())
                     .get().build();
-            Response response = new OkHttpClient().newCall(request).execute();
+            Response response = client.newCall(request).execute();
             String data = response.body().string();
             TAFJ tafj = new Gson().fromJson(data,TAFJ.class);
             for(TAFJ.Rows tr : tafj.getRows()){
@@ -76,18 +97,15 @@ public class UserOkhttp {
             e.printStackTrace();
         }
     }
-    public List<TAFJ.Rows>getTRList2(){
-        // 返回引导页和首页的数据组
-        return TRlist2;
-    }
 
-    List<TNTJ.Data>NTList=new ArrayList<>();
+    private List<TNTJ.Data>NTList=new ArrayList<>();
+    public List<TNTJ.Data> getNTList(){ return NTList; }// 返回新闻类别的数据组
     public void getNewsType(){
         try{
-            Request request = new Request.Builder()
+            request = new Request.Builder()
                     .url(help.getHearUri()+help.getNewsType())
                     .get().build();
-            Response response = new OkHttpClient().newCall(request).execute();
+            Response response = client.newCall(request).execute();
             String data = response.body().string();
             TNTJ tntj = new Gson().fromJson(data,TNTJ.class);
             for (int i = 0;i<tntj.getData().size(); i++){
@@ -97,18 +115,15 @@ public class UserOkhttp {
             e.printStackTrace();
         }
     }
-    public List<TNTJ.Data> getNTList(){
-        return NTList;
-    }
 
-    List<TNLJ.Rows> NList = new ArrayList<>();
+    private List<TNLJ.Rows> NList = new ArrayList<>();
     public List<TNLJ.Rows>getNList(){return NList;}
     public void getNewsListUrl(int pageNum,int pageSize,int pressCategory){
         try{
-            Request request = new Request.Builder()
+            request = new Request.Builder()
                     .url(help.getHearUri()+help.getNewsListUrl(pageNum,pageSize,pressCategory))
                     .get().build();
-            Response response = new OkHttpClient().newCall(request).execute();
+            Response response = client.newCall(request).execute();
             String data = response.body().string();
             TNLJ tnlj = new Gson().fromJson(data,TNLJ.class);
             for (int i = 0; i<tnlj.getRows().size();i++){
@@ -117,5 +132,47 @@ public class UserOkhttp {
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    private TALJ talj= new TALJ();
+    public void dialogLogin(View view, Activity activity,AlertDialog dialog){
+        // 登录
+        sp = activity.getSharedPreferences("location", Context.MODE_PRIVATE);
+        editor = sp.edit();
+        String username = ((EditText)view.findViewById(R.id.username)).getText().toString();
+        String password = ((EditText)view.findViewById(R.id.password)).getText().toString();
+
+        String loginJson = "{\"username\":\""+username+"\",\"password\":\""+password+"\"\n}";
+        RequestBody body = RequestBody.create(loginJson, MediaType.parse("application/json"));
+        request = new Request.Builder()
+                .url(help.getHearUri()+help.PostLogin())
+                .post(body)
+                .build();
+        call = client.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) { e.printStackTrace(); }
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                String result = response.body().string();
+                    TALJ talj = new Gson().fromJson(result,TALJ.class);
+                    if (talj.getToken()!=null){
+                        activity.runOnUiThread(()->{
+                            if (talj.getCode() == 200){
+                                editor.putString("token",talj.getToken());
+                                editor.commit();
+                                Toast.makeText(activity,talj.getMsg(),Toast.LENGTH_SHORT).show();
+                                // 乱七八糟的异常，应该是Toast位置的原因，报的是蓝色
+                                // 先不管他，能正常跑，后面再来搞掉它
+                                dialog.dismiss();
+                                ((ActivityHome)activity).refreshFragment();
+                            }
+                        });
+                    }else{
+                        activity.runOnUiThread(()->{ Toast.makeText(activity,talj.getMsg(),Toast.LENGTH_SHORT).show(); });
+                    }
+            }
+        });
+
     }
 }

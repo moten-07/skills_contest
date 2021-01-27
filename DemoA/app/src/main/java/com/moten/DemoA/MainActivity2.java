@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -74,6 +75,9 @@ public class MainActivity2 extends AppCompatActivity {
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 String result = response.body().string();
                 Log.d("result",result);
+                MainActivity2.this.runOnUiThread(()->{
+                    ((TextView)findViewById(R.id.textView3)).setText(result);
+                });
             }
         });
     }

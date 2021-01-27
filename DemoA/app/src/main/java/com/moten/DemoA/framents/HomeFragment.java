@@ -167,6 +167,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             hott_list.add(new Hot_theme("热门主题"+(i+1)));
         }
         if (theme_list.getItemDecorationCount()==0){
+            // 避免重复加载，间隔变大
             theme_list.addItemDecoration(new Indexe(8));
         }
         // 绑定适配器
@@ -242,7 +243,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 data = userOkhttp.getTRList().get(position);
                 Intent intent = new Intent(view.getContext(),MainActivity.class);
                 intent.putExtra("type","newsViewPager");
-                intent.putExtra("where",((TGAMSJ.RowsDTO)data).toString());
+                intent.putExtra("where",data.toString());
                 startActivity(intent);
             }
         });
@@ -270,6 +271,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 });
         }).start();
         if (lapp_list.getItemDecorationCount()==0){
+            // 避免重复加载间隔
             lapp_list.addItemDecoration(new Indexe(10));
         }
     }

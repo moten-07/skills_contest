@@ -40,4 +40,13 @@ public class TALJ {
     public void setToken(String token) {
         this.token = token;
     }
+
+    @Override
+    public String toString() {
+        return "TALJ{" +
+                "msg='" + msg + '\'' +
+                ", code=" + code +
+                ", token='" + token + '\'' +
+                '}';
+    }
 }

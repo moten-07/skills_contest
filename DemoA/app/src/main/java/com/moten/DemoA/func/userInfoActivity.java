@@ -47,8 +47,6 @@ public class userInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_info);
         init();
-        // 头像可修改-》相机权限，相册读取权限，文件上传
-        // 所有数据上传后先储存在SQLite，然后再上传到服务器的数据库中
         // 获取网络资源（指头像）
         // 还没做
     }
@@ -76,8 +74,9 @@ public class userInfoActivity extends AppCompatActivity {
         user_info_newicon = findViewById(R.id.user_info_newicon);
         user_info_save = findViewById(R.id.user_info_save);
 
-        user_info_icon.setImageResource(R.drawable.ic_baseline_account_box_24);
 
+        ((TextView)findViewById(R.id.user_icon_id)).setText("账号："+sp.getString("user_id","..."));
+        user_info_icon.setImageResource(R.drawable.ic_baseline_account_box_24);
         user_info_newname.setText(sp.getString("user_info_name","默认昵称"));
         user_info_newsex.setText(sp.getString("user_info_sex","默认性别"));
         user_info_newphone.setText(sp.getString("user_info_phone","1234567890"));
@@ -99,6 +98,7 @@ public class userInfoActivity extends AppCompatActivity {
                 editor.putString("user_info_sex",user_info_newsex.getText().toString());
                 editor.putString("user_info_phone",user_info_newphone.getText().toString());
                 editor.commit();
+                // 服务器端的修改
                 Toast.makeText(userInfoActivity.this,"修改成功",Toast.LENGTH_SHORT).show();
             }
         });
@@ -106,7 +106,7 @@ public class userInfoActivity extends AppCompatActivity {
 
     private String toId(){
         String Id = sp.getString("user_paper","123456789012345678");
-        // 别问我上传证件的功能在哪，没这需求，要有也容易,无非就是sp.edit().putString("user_paper",[imageid])，但不想做
+        // 别问我上传证件的功能在哪，没这需求，要有也容易,但不想做
         StringBuilder sb = new StringBuilder(Id);
         sb.replace(2,14,"**************");
         return sb.toString();
