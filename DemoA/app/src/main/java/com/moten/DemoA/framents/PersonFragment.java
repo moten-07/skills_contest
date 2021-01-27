@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -204,47 +205,49 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
         //登录及注册弹窗
         View view1 = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_login,null);
         View view2 = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_sign,null);
-        AlertDialog dialog2 = new AlertDialog.Builder(getActivity())
-                .setView(view2)
-                .setTitle("注册你的账户")
-                .create();
+        // 登录的弹窗
         AlertDialog dialog1 = new AlertDialog.Builder(getActivity())
                 .setView(view1)
                 .setTitle("登录你的账户")
                 .create();
+        // 注册的弹窗
+        AlertDialog dialog2 = new AlertDialog.Builder(getActivity())
+                .setView(view2)
+                .setTitle("注册你的账户")
+                .create();
         dialog1.show();
+
         view1.findViewById(R.id.goToSign).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                dialog2.show();
-            }
+            public void onClick(View v) { dialog2.show(); }         // 跳到注册
         });
         view1.findViewById(R.id.login).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialogLogin(view1,dialog1);
-
+                String username = ((EditText)view1.findViewById(R.id.username)).getText().toString();
+                String password = ((EditText)view1.findViewById(R.id.password)).getText().toString();
+                if (username.isEmpty() || username.equals("") || password.isEmpty() || password.equals("")){
+                    Toast.makeText(requireActivity(),"你TM怎么写的！",Toast.LENGTH_SHORT).show();
+                }else{
+                    dialogLogin(view1,dialog1);
+                }
             }
         });
         view1.findViewById(R.id.noLogin).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                dialog1.dismiss();
-            }
+            public void onClick(View v) { dialog1.dismiss(); }      // 登录取消
         });
 
         view2.findViewById(R.id.siup).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                dialog2Run(view2,dialog2);
-            }
+            public void onClick(View v) { dialog2Run(view2,dialog2); }  // 注册按钮
         });
         view2.findViewById(R.id.noSiup).setOnClickListener(new View.OnClickListener() {
             // 注册取消
             @Override
             public void onClick(View v) {
                 dialog2.dismiss();
-                dialog1.show();
+//                dialog1.show();
             }
         });
 
@@ -252,11 +255,16 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
 
     private void dialog2Run(View view,AlertDialog dialog) {
         // 注册一个搞事情的
-        String json = "{\"userName\":\"nameIsPi\"," +
-                "\"nickName\":\"pi\"," +
-                "\"phonenumber\":\"31415926535\"," +
-                "\"sex\":\"1\"," +
-                "\"password\":\"897946\"}";
+        String userName = ((EditText)view.findViewById(R.id.userName)).getText().toString();
+        String nickName = ((EditText)view.findViewById(R.id.nickName)).getText().toString();
+        String phonenumber = ((EditText)view.findViewById(R.id.phonenumber)).getText().toString();
+        String sex = (((RadioButton)view.findViewById(R.id.sex_man)).isChecked()) ? "1" : "0";
+        String password = ((EditText)view.findViewById(R.id.password)).getText().toString();
+        String json = "{\"userName\":\""+userName+"\"," +
+                "\"nickName\":\""+nickName+"\"," +
+                "\"phonenumber\":\""+phonenumber+"\"," +
+                "\"sex\":\""+sex+"\"," +
+                "\"password\":\""+password+"\"}";
         RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));
         Request request = new Request.Builder()
                 .url("http://dasai.sdvcst.edu.cn:8080/system/user/register")
@@ -281,7 +289,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
                     if (talj.getCode()==200){
                         dialog.dismiss();
                     }
-                    Toast.makeText(getContext(), talj.getMsg(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireActivity(), talj.getMsg(), Toast.LENGTH_SHORT).show();
                 });
             }
         });
@@ -289,8 +297,11 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
 
     private void dialogLogin(View view,AlertDialog dialog){
         // 登录
-        String loginJson = "{\"username\":\""+((EditText)view.findViewById(R.id.username)).getText().toString()+"\"," +
-                "\"password\":\""+((EditText)view.findViewById(R.id.password)).getText().toString()+"\"\n}";
+        String username = ((EditText)view.findViewById(R.id.username)).getText().toString();
+        String password = ((EditText)view.findViewById(R.id.password)).getText().toString();
+
+        String loginJson = "{\"username\":\""+username+"\"," +
+                "\"password\":\""+password+"\"\n}";
         RequestBody body = RequestBody.create(loginJson, MediaType.parse("application/json"));
         Request request = new Request.Builder()
                 .url("http://dasai.sdvcst.edu.cn:8080/login")
@@ -306,16 +317,22 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
                 TALJ talj = new Gson().fromJson(result,TALJ.class);
                 Log.d("msg", talj.getMsg());
                 Log.d("code",talj.getCode()+"");
-                Log.d("token",talj.getToken());
-                requireActivity().runOnUiThread(()->{
-                    if (talj.getCode() == 200){
-                        editor.putString("token",talj.getToken());
-                        editor.commit();
-                        Toast.makeText(getActivity(),talj.getMsg(),Toast.LENGTH_SHORT).show();
-                        dialog.dismiss();
-                        ((ActivityHome)getActivity()).refreshFragment();
-                    }
-                });
+                if (talj.getToken() != null) {
+                    Log.d("token", talj.getToken());
+                    requireActivity().runOnUiThread(()->{
+                        if (talj.getCode() == 200){
+                            editor.putString("token",talj.getToken());
+                            editor.commit();
+                            Toast.makeText(requireActivity(),talj.getMsg(),Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
+                            ((ActivityHome)requireActivity()).refreshFragment();
+                        }
+                    });
+                }else{
+                    requireActivity().runOnUiThread(()->{
+                        Toast.makeText(requireActivity(),talj.getMsg(),Toast.LENGTH_SHORT).show();
+                    });
+                }
             }
         });
     }

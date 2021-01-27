@@ -14,25 +14,27 @@
         android:supportsRtl="true"
         android:theme="@style/AppDemoA.Home">
         <activity android:name=".MainActivity2">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <!--工具人二号，各种乱七八糟的操作，用完就删（也不一定）--></activity>
         <activity android:name=".func.NewActivity" />
         <activity android:name=".func.userOrderActivity" />
         <activity android:name=".func.userInfoActivity" />
         <activity android:name=".func.manySubway" />
         <activity android:name=".func.Subway2Activity" />
         <activity android:name=".func.SubwayActivity" />
-        <activity android:name=".MainActivity" />
+        <activity android:name=".MainActivity" >
+        <!--工具人一号，中转页面，用完就删（不一定）-->
+        </activity>
         <activity android:name=".ActivityHome" />
         <activity android:name=".jGuideActivity">
             <!-- 默认从引导页启动 -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
         </activity>
         <activity android:name=".GuideActivity">
-
             <!-- kt -->
         </activity>
     </application>

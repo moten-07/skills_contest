@@ -84,6 +84,7 @@
         android:orientation="horizontal"
         android:gravity="center">
         <RadioButton
+            android:id="@+id/sex_man"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="男"/>
