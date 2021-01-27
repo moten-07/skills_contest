@@ -247,7 +247,6 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
             @Override
             public void onClick(View v) {
                 dialog2.dismiss();
-//                dialog1.show();
             }
         });
 
@@ -280,11 +279,11 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 String result2 = response.body().string();
                 TALJ talj = new Gson().fromJson(result2, TALJ.class);
-                Log.d("msg", talj.getMsg());
-                Log.d("code", talj.getCode() + "");
-                if (talj.getToken() != null) {
-                    Log.d("token", talj.getToken());
-                }
+//                Log.d("msg", talj.getMsg());
+//                Log.d("code", talj.getCode() + "");
+//                if (talj.getToken() != null) {
+//                    Log.d("token", talj.getToken());
+//                }
                 requireActivity().runOnUiThread(() -> {
                     if (talj.getCode()==200){
                         dialog.dismiss();
@@ -315,8 +314,8 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 String result = response.body().string();
                 TALJ talj = new Gson().fromJson(result,TALJ.class);
-                Log.d("msg", talj.getMsg());
-                Log.d("code",talj.getCode()+"");
+//                Log.d("msg", talj.getMsg());
+//                Log.d("code",talj.getCode()+"");
                 if (talj.getToken() != null) {
                     Log.d("token", talj.getToken());
                     requireActivity().runOnUiThread(()->{
