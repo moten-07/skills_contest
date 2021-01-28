@@ -1,5 +1,7 @@
 package com.moten.DemoA.framents;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -7,8 +9,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +21,7 @@ import android.view.ViewGroup;
 import com.google.android.material.tabs.TabLayout;
 import com.moten.DemoA.Adapeter.newsAdapeter;
 import com.moten.DemoA.R;
+import com.moten.DemoA.aboutIntent.UserOkhttp;
 import com.moten.DemoA.func.TNLJ;
 
 import java.util.ArrayList;
@@ -29,7 +35,7 @@ import java.util.List;
 public class NewsFragment extends Fragment {
     TabLayout news_type_list;
     ViewPager news_viewpager;
-    List<TNLJ.Rows> news_list;
+    List<View> news_List;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -84,6 +90,62 @@ public class NewsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         news_type_list = view.findViewById(R.id.news_type_list);
         news_viewpager = view.findViewById(R.id.news_viewpager);
-        news_list = new ArrayList<>();
+        news_List = new ArrayList<>();
+        theNews(view);
+    }
+
+    private void theNews(View view){
+        // 新闻相关
+        UserOkhttp userOkhttp = new UserOkhttp();
+        userOkhttp.getNTList().clear();
+        new Thread(()->{
+            userOkhttp.getNewsType();
+            for (int i = 0;i<userOkhttp.getNTList().size();i++){
+                userOkhttp.getNewsListUrl(1,100,userOkhttp.getNTList().get(i).getDictCode());
+                List<TNLJ.Rows>list = new ArrayList<>();
+                list.addAll(userOkhttp.getNList());
+                int i1=i;
+                requireActivity().runOnUiThread(()->{
+                    news_List.add(LayoutInflater.from(view.getContext()).inflate(R.layout.item_news,null));
+                    news_viewpager.getAdapter().notifyDataSetChanged();
+                    RecyclerView recyclerView =news_List.get(i1).findViewById(R.id.newone_list);// 绑定recyclerview
+                    recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));// 绑定其布局管理器（此处使用线性布局）
+                    recyclerView.setAdapter(new newsAdapeter(view.getContext(),list));// 隔壁复制的
+
+                });
+                userOkhttp.getNList().clear();
+            }
+            requireActivity().runOnUiThread(()-> {
+                for (int i = 0 ;i<userOkhttp.getNTList().size();i++){
+                    news_type_list.getTabAt(i).setText(userOkhttp.getNTList().get(i).getDictLabel());
+                }
+            });
+        }).start();
+
+        aboutViewPager();
+        news_type_list.setupWithViewPager(news_viewpager);
+    }
+
+    private void aboutViewPager(){
+        news_viewpager.setAdapter(new PagerAdapter() {
+            @Override
+            public int getCount(){return news_List.size();}
+            @Override
+            public boolean isViewFromObject(@NonNull View view, @NonNull Object object) { return view == object; }
+
+            @NonNull
+            @Override
+            public Object instantiateItem(@NonNull ViewGroup container, int position) {
+                View view1 = news_List.get(position);
+                container.addView(view1);
+                return view1;
+            }
+            @Override
+            public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+                if (news_List.size()>0){
+                    container.removeView(news_List.get(position));
+                }
+            }
+        });
     }
 }

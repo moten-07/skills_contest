@@ -1,41 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--新闻页碎片-->
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".framents.NewsFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".framents.NewsFragment">
-    <androidx.constraintlayout.widget.ConstraintLayout
+    android:orientation="vertical">
+
+    <!--分类标题栏-->
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/news_type_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#d7d7d7"
+        app:tabMode="scrollable"
+        app:tabSelectedTextColor="@color/red"
+        app:tabTextColor="@color/black" />
+    <!--具体内容列表-->
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/news_viewpager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".framents.NewsFragment">
+        android:layout_height="match_parent"/>
 
-        <!--分类标题栏-->
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/news_type_list"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="#d7d7d7"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:tabMode="scrollable"
-            app:tabSelectedTextColor="@color/red"
-            app:tabTextColor="@color/black"/>
-        <!--具体内容列表-->
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/news_viewpager"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/news_type_list"/>
-
-<!--        <TextView-->
-<!--            android:id="@+id/low"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            app:layout_constraintTop_toBottomOf="@id/news_viewpager"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            android:text="@string/endstr"-->
-<!--            android:gravity="center"/>-->
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+</LinearLayout>

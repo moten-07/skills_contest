@@ -46,7 +46,7 @@ public class HttpHelp {
     }
 
     // 2.1 获取引导页图片(get)，需要获得当前页面的页数和每页多少条
-    // 仅5条,4和5是同一张图片，不要恐慌
+    // 仅5条,4和5是同一张图片，不要恐慌,0号图不在返回的数据里
     public String getGAMImg(int pageNum,int pageSize,int type) {
         return "/userinfo/rotation/lists?" +
                 "pageNum=" +(pageNum)+
@@ -78,6 +78,11 @@ public class HttpHelp {
                 "&pageSize="+(pageSize)+
                 "&pressCategory="+pressCategory;
     }
+    public String getNewsLists(int pageNum,int pageSize) {
+        return "/press/press/list?" +
+                "pageNum=" +(pageNum)+
+                "&pageSize="+(pageSize);
+    }
 
     // 3.4 查询新闻分类
     // 共6种
@@ -103,7 +108,7 @@ public class HttpHelp {
     }
 
     // 5.2 查询评论列表
-    // 共314条（2021.01.22 12：20），有人在上传（12：14），数量一直在增加,不加参数就可以看见全部
+    // 共314条（2021.01.22 12：20），有人在上传（12：14），数量一直在增加,不加最后一个参数就可以看见全部
     public String getCommentsList(int pageNum,int pageSize,int pressId){
         return "/press/comments/list?" +
                 "pageNum=" +(pageNum)+
@@ -117,7 +122,7 @@ public class HttpHelp {
      * "pressId": "1",
      * "content": "这个新闻是我读过最好的新闻"
      */
-    // 此处需要携带 token 见1.1,……测试不了，带token的都不知道怎么搞，待解决
+    // 此处需要携带 token
     public String postAddComments(){
         return "/press/pressComment";
     }

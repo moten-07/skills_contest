@@ -62,6 +62,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
     OkHttpClient client;
     Call call;
     HttpHelp help;
+    UserOkhttp userOkhttp = new UserOkhttp();
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -145,7 +146,13 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
         siup = (sp.getString("token",null)!=null);
         if(siup){
             // 获取个人信息
-            getUserInfo(view);
+            userOkhttp.getUserInfo(requireActivity());
+            user_id.setText("账号："+sp.getString("user_id","null"));
+            user_name.setText("昵称："+sp.getString("user_info_name","null"));
+            String imgUrl = sp.getString("user_icon",null);
+            Glide.with(view.getContext())
+                    .load( (imgUrl.equals("") || imgUrl.isEmpty() ) ? R.mipmap.kls : imgUrl)
+                    .into(user_icon);
             user_siup.setVisibility(View.GONE);
         }else{
             user_icon.setImageResource(R.drawable.ic_baseline_account_box_24);
@@ -242,7 +249,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
                     // 判空免崩
                     Toast.makeText(requireActivity(),"你TM怎么写的！",Toast.LENGTH_SHORT).show();
                 }else{
-                    dialogLogin(view1,dialog1);
+                    userOkhttp.dialogLogin(view1,requireActivity(),dialog1);
                 }
             }
         });
@@ -253,7 +260,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
 
         view2.findViewById(R.id.siup).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) { dialog2Run(view2,dialog2); }  // 注册按钮
+            public void onClick(View v) { userOkhttp.dialog2Run(view2,dialog2,requireActivity()); }  // 注册按钮
         });
         view2.findViewById(R.id.noSiup).setOnClickListener(new View.OnClickListener() {
             // 注册取消
@@ -263,53 +270,5 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
             }
         });
 
-    }
-
-    UserOkhttp userOkhttp = new UserOkhttp();
-    private void dialog2Run(View view,AlertDialog dialog) {
-        // 注册,一个搞事情的
-        userOkhttp.dialog2Run(view,dialog,requireActivity());
-    }
-
-    private void dialogLogin(View view,AlertDialog dialog){
-        // 登录
-        userOkhttp.dialogLogin(view,requireActivity(),dialog);
-
-    }
-
-    private void getUserInfo(View view){
-
-        Request request = new Request.Builder()
-                .url(help.getHearUri()+help.getUserInfo())
-                .get()
-                .addHeader("authorization",sp.getString("token","null"))
-                .build();
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) { e.printStackTrace(); }
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                String result  = response.body().string();
-                TPIJFT tpijft = new Gson().fromJson(result,TPIJFT.class);
-                // 失策了，当时没做大致先解析数据来着，名字没统一
-                requireActivity().runOnUiThread(()->{
-                    user_id.setText("账号："+tpijft.user.userName);
-                    user_name.setText("昵称："+tpijft.user.nickName);
-                    Glide.with(view.getContext())
-                            .load((tpijft.user.avatar==null || tpijft.user.avatar.equals(""))
-                                    ? R.mipmap.kls
-                                    : help.getHearUri()+tpijft.user.avatar)
-                            .into(user_icon);
-
-                    editor.putString("user_info_name",tpijft.user.nickName);
-                    editor.putString("user_info_sex",(tpijft.user.sex.equals("1"))?"男":"女");
-                    editor.putString("user_id",tpijft.user.userName);
-                    editor.putString("user_info_phone",tpijft.user.phonenumber);
-                    editor.putString("user_paper",(tpijft.user.idCard==null || tpijft.user.idCard.equals(""))?
-                            "123456789876543210":tpijft.user.idCard);
-                    editor.commit();
-                });
-            }
-        });
     }
 }
