@@ -79,7 +79,7 @@ public class NewActivity extends AppCompatActivity implements View.OnClickListen
         list.add(LayoutInflater.from(this).inflate(R.layout.item_news,null));
 
         newsID=intent.getIntExtra("newsId",0);
-        Log.d("newsId",newsID+"");
+//        Log.d("newsId",newsID+"");
 
         init();
         initDate();
@@ -213,7 +213,7 @@ public class NewActivity extends AppCompatActivity implements View.OnClickListen
                 // 发送评论
                 if (userId!=0){
                     pressComment();
-                    Toast.makeText(this,"发送成功",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(NewActivity.this,"发送成功",Toast.LENGTH_SHORT).show();
                     cal.setVisibility(View.VISIBLE);
                     write_comm.setVisibility(View.GONE);
                 }else {
@@ -249,7 +249,7 @@ public class NewActivity extends AppCompatActivity implements View.OnClickListen
         intent2.putExtra("news_views_number",intent.getStringExtra("news_views_number"));
         intent2.putExtra("news_imgUrl",intent.getStringExtra("news_imgUrl"));
         intent2.putExtra("news_like_number",intent.getStringExtra("news_like_number"));
-        Log.d("newsId",newsID+"");
+//        Log.d("newsId",newsID+"");
         startActivity(intent2);
     }
 
