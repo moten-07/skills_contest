@@ -68,6 +68,7 @@ public class newsAdapeter extends RecyclerView.Adapter<newsAdapeter.ViewHolder>{
         TNLJ.Rows news = list.get(position);
         Glide.with(context)
                 .load(new HttpHelp().getHearUri()+news.getImgUrl())
+                .placeholder(R.mipmap.kls)
                 .into( holder.news_icon);
         holder.news_title.setText( news.getTitle());
         holder.news_content.setText(news.getContent());

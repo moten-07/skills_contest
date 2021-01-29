@@ -111,7 +111,6 @@ public class NewsFragment extends Fragment {
                     RecyclerView recyclerView =news_List.get(i1).findViewById(R.id.newone_list);// 绑定recyclerview
                     recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));// 绑定其布局管理器（此处使用线性布局）
                     recyclerView.setAdapter(new newsAdapeter(view.getContext(),list));// 隔壁复制的
-
                 });
                 userOkhttp.getNList().clear();
             }

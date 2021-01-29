@@ -4,6 +4,7 @@ package com.moten.DemoA.aboutIntent;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -14,6 +15,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.moten.DemoA.ActivityHome;
 import com.moten.DemoA.Adapeter.commAdapeter;
 import com.moten.DemoA.R;
@@ -24,10 +26,12 @@ import com.moten.DemoA.func.TCJ;
 import com.moten.DemoA.func.TGAMSJ;
 import com.moten.DemoA.func.TNLJ;
 import com.moten.DemoA.func.TNTJ;
+import com.moten.DemoA.func.TPIJFID;
 import com.moten.DemoA.func.TPIJFT;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +39,7 @@ import java.util.List;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -255,15 +260,46 @@ public class UserOkhttp {
                 String result  = response.body().string();
                 TPIJFT tpijft = new Gson().fromJson(result,TPIJFT.class);
                 // 失策了，当时没做大致先解析数据来着，名字没统一
-                editor.putString("user_info_name",tpijft.user.nickName);
-                editor.putString("user_info_sex",(tpijft.user.sex.equals("1"))?"男":"女");
-                editor.putString("user_id",tpijft.user.userName);
-                editor.putString("user_info_phone",tpijft.user.phonenumber);
-                editor.putString("user_paper",(tpijft.user.idCard==null || tpijft.user.idCard.equals(""))?
-                        "123456789876543210":tpijft.user.idCard);
-                editor.putString("user_icon",tpijft.user.avatar);
-                editor.putInt("UserId",tpijft.user.userId);
-                editor.commit();
+//                editor.putInt("UserId",tpijft.user.userId);
+//                editor.putString("user_info_name",tpijft.user.nickName);
+//                editor.putString("user_info_sex",(tpijft.user.sex.equals("1"))?"男":"女");
+//                editor.putString("user_id",tpijft.user.userName);
+//                editor.putString("user_info_phone",tpijft.user.phonenumber);
+//                editor.putString("user_paper",(tpijft.user.idCard==null || tpijft.user.idCard.equals(""))?
+//                        "123456789876543210":tpijft.user.idCard);
+//                editor.putString("user_icon",tpijft.user.avatar);
+//                editor.commit();
+                getUserInfo2(tpijft.user.userId,token,editor);
+            }
+        });
+    }
+    public void getUserInfo2(int id,String token,SharedPreferences.Editor editor){
+        // 总不能不用他给的接口吧，这就安排下,当然，用原来的也行...吧
+        String url = help.getHearUri()+help.getUser(id);
+        Request request = new Request.Builder()
+                .url(url)
+                .get()
+                .addHeader("authorization",token)
+                .build();
+        call = client.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) { e.printStackTrace(); }
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                String result = response.body().string();
+                TPIJFID tpijfid = new Gson().fromJson(result,TPIJFID.class);
+                if (editor!=null){
+                    editor.putInt("UserId",tpijfid.data.userId);
+                    editor.putString("user_info_name",tpijfid.data.nickName);
+                    editor.putString("user_info_sex",(tpijfid.data.sex.equals("1"))?"男":"女");
+                    editor.putString("user_id",tpijfid.data.userName);
+                    editor.putString("user_info_phone",tpijfid.data.phonenumber);
+                    editor.putString("user_paper",(tpijfid.data.idCard==null || tpijfid.data.idCard.equals(""))?
+                            "123456789876543210":tpijfid.data.idCard);
+                    editor.putString("user_icon",tpijfid.data.avatar);
+                    editor.commit();
+                }
             }
         });
     }
@@ -316,6 +352,44 @@ public class UserOkhttp {
                             ((NewActivity)activity).refresh();
                         }
                     });
+            }
+        });
+    }
+
+    public void updata(File file,
+                       Activity activity){
+        sp = activity.getSharedPreferences("location", Context.MODE_PRIVATE);
+        String token = sp.getString("token",null);
+        String url = "";
+        if (!file.exists()){
+            return;
+        }
+        MultipartBody.Builder builder = new MultipartBody.Builder();
+        RequestBody fileBody = RequestBody.create(file,MediaType.parse("application/octet-steam"));
+        builder.addFormDataPart("file",file.getName(),fileBody);
+        RequestBody body = builder
+                .addFormDataPart("userId","userId")
+                .addFormDataPart("idCard","idCard")
+                .addFormDataPart("userName","userName")
+                .addFormDataPart("nickName","nickName")
+                .addFormDataPart("email","email")
+                .addFormDataPart("phonenumber","phonenumber")
+                .addFormDataPart("sex","sex")
+                .addFormDataPart("remark","remark")
+                .build();
+        Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .addHeader("authorization",token)
+                .build();
+        call= client.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) { e.printStackTrace(); }
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                String result = response.body().string();
+                Toast.makeText(activity,result,Toast.LENGTH_SHORT).show();
             }
         });
     }

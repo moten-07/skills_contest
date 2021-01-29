@@ -26,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.moten.DemoA.R;
 
 import java.lang.ref.WeakReference;
@@ -41,7 +42,6 @@ public class userInfoActivity extends AppCompatActivity {
     Button user_info_newicon,user_info_save;
     SharedPreferences sp;
     ImageView user_info_icon;
-    String imgurl;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,17 +94,21 @@ public class userInfoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // 保存修改
+                // 本地数据修改
                 editor.putString("user_info_name",user_info_newname.getText().toString());
                 editor.putString("user_info_sex",user_info_newsex.getText().toString());
                 editor.putString("user_info_phone",user_info_newphone.getText().toString());
                 editor.commit();
                 // 服务器端的修改
+
+                // 修改完成后
                 Toast.makeText(userInfoActivity.this,"修改成功",Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private String toId(){
+        // 打码
         String Id = sp.getString("user_paper","123456789012345678");
         // 别问我上传证件的功能在哪，没这需求，要有也容易,但不想做
         StringBuilder sb = new StringBuilder(Id);
@@ -127,63 +131,18 @@ public class userInfoActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         // 读取相册图片文件
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1){
-            if (resultCode == RESULT_OK){
+        if (requestCode == 1 && resultCode == RESULT_OK){
+            try {
                 Uri uri = data.getData();
-                Log.e("URI",uri.toString());
-                ContentResolver cr = this.getContentResolver();
-                try {
-                    Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
-                    user_info_icon.setImageBitmap(bitmap);
-                }catch (Exception e){
-                    Log.e("error",e.toString());
-                }
+                Log.d("URI",uri.toString());
+                Glide.with(this)
+                        .load(uri)
+                        .placeholder(R.mipmap.kls)
+                        .into(user_info_icon);
+            }catch (Exception e){
+                Log.e("error",e.toString());
             }
         }
     }
 
-
-    private void sendOkHttp(final String imgurl){
-        // okhttp读取网络图片文件
-        this.imgurl=imgurl;
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    OkHttpClient client =new OkHttpClient();
-                    Request request = new Request.Builder().url(imgurl).build();
-                    Response response = client.newCall(request).execute();
-                    Bitmap bitmap = BitmapFactory.decodeStream(response.body().byteStream());
-                    Message message = new Message();
-                    message.what = 369;
-                    message.obj = bitmap;
-                    handler.sendMessage(message);
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-    }
-
-    class MyHandler extends Handler{
-        WeakReference<userInfoActivity> myactivity;
-        public MyHandler(userInfoActivity activity){
-            myactivity = new WeakReference<>(activity);
-        }
-
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            super.handleMessage(msg);
-            userInfoActivity activity = myactivity.get();
-            if (activity != null){
-                if (msg.what == 369){
-                    Bitmap bitmap = (Bitmap)msg.obj;
-                    user_info_icon.setImageBitmap(bitmap);
-                }else{
-                    return;
-                }
-            }
-        }
-    }
-    MyHandler handler = new MyHandler(this);
 }

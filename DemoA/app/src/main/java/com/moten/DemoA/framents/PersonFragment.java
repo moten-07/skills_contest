@@ -150,14 +150,11 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
             userOkhttp.getUserInfo(requireActivity());
             user_id.setText("账号："+sp.getString("user_id","null"));
             user_name.setText("昵称："+sp.getString("user_info_name","null"));
-            String imgUrl = sp.getString("user_icon","null");
-            if (imgUrl.equals("null")){
-
-            }else{
-                Glide.with(view.getContext())
-                        .load(imgUrl)
-                        .into(user_icon);
-            }
+            String imgUrl = help.getHearUri()+sp.getString("user_icon","/profile/0-yingdao.jpg");
+            Glide.with(view.getContext())
+                    .load(imgUrl)
+                    .placeholder(R.mipmap.kls)
+                    .into(user_icon);
             user_siup.setVisibility(View.GONE);
         }else{
             user_icon.setImageResource(R.drawable.ic_baseline_account_box_24);
