@@ -2,6 +2,7 @@ package com.moten.DemoA.func;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -9,8 +10,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,6 +31,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.moten.DemoA.Adapeter.newsAdapeter;
 import com.moten.DemoA.R;
 import com.moten.DemoA.aboutIntent.UserOkhttp;
+import com.moten.DemoA.framents.PersonFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +51,10 @@ public class NewActivity extends AppCompatActivity implements View.OnClickListen
     LinearLayout cal,write_comm,go_to_comment,like_this_new;
     RecyclerView recyclerView,recyclerView1;
     EditText comm;
+
+
+    SharedPreferences sp ;
+    int userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,11 +78,12 @@ public class NewActivity extends AppCompatActivity implements View.OnClickListen
         list.add(LayoutInflater.from(this).inflate(R.layout.item_news,null));
         list.add(LayoutInflater.from(this).inflate(R.layout.item_news,null));
 
+        newsID=intent.getIntExtra("newsId",0);
+        Log.d("newsId",newsID+"");
+
         init();
         initDate();
         aboutViewPager();
-
-        newsID=intent.getIntExtra("newsId",0);
         getNewsList();//推荐新闻
         new UserOkhttp().getCommentsList(1,100,newsID,recyclerView1);     // 本条新闻的评论
 
@@ -125,52 +135,20 @@ public class NewActivity extends AppCompatActivity implements View.OnClickListen
         });
     }
 
-    Boolean like = false;
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.like_this_new:
-                // 这个点赞假的哟，没接口，只有效果
-                if (!like){
-                    like_this_new_icon.setImageResource(R.drawable.ic_baseline_favorite_24);
-                    like = true;
-                    Toast.makeText(NewActivity.this,"没给接口，点了没有用的，就只有效果",Toast.LENGTH_SHORT).show();
-                    like_number.setText(Integer.valueOf(like_number.getText().toString())+1+"");
-                }else {
-                    like_this_new_icon.setImageResource(R.drawable.ic_baseline_favorite_border_24);
-                    like = false;
-                    like_number.setText(Integer.valueOf(like_number.getText().toString())-1+"");
-                }
-                break;
-            case R.id.go_to_comment:
-                // 写评论
-                cal.setVisibility(View.GONE);
-                write_comm.setVisibility(View.VISIBLE);
-                break;
-            case R.id.get_comm:
-                // 发送评论
-                cal.setVisibility(View.VISIBLE);
-                write_comm.setVisibility(View.GONE);
-                Toast.makeText(this,"发送成功",Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.no_comm:
-                cal.setVisibility(View.VISIBLE);
-                write_comm.setVisibility(View.GONE);
-                break;
-        }
-    }
-
     public void init(){
         new_title = findViewById(R.id.new_title);
         new_details = findViewById(R.id.new_details);
         new_date = findViewById(R.id.new_date);
         new_viewNumber = findViewById(R.id.new_viewNumber);
+
+        cal = findViewById(R.id.cal);
+
         like_number = findViewById(R.id.like_number);
         like_this_new_icon =findViewById(R.id.like_this_new_icon);
-        cal = findViewById(R.id.cal);
+        like_this_new = findViewById(R.id.like_this_new);
+
         write_comm = findViewById(R.id.write_comm);
         go_to_comment = findViewById(R.id.go_to_comment);
-        like_this_new = findViewById(R.id.like_this_new);
         comm = findViewById(R.id.comm);
 
         recyclerView = list.get(0).findViewById(R.id.newone_list);
@@ -204,8 +182,51 @@ public class NewActivity extends AppCompatActivity implements View.OnClickListen
                 }
             }
         });
+
+        sp = this.getSharedPreferences("location", Context.MODE_PRIVATE);
+        userId  = sp.getInt("UserId",0);
     }
 
+    Boolean like = false;
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.like_this_new:
+                // 这个点赞假的哟，没接口，只有效果
+                if (!like){
+                    like_this_new_icon.setImageResource(R.drawable.ic_baseline_favorite_24);
+                    like = true;
+                    Toast.makeText(NewActivity.this,"没给接口，点了没有用的，就只有效果",Toast.LENGTH_SHORT).show();
+                    like_number.setText(Integer.valueOf(like_number.getText().toString())+1+"");
+                }else {
+                    like_this_new_icon.setImageResource(R.drawable.ic_baseline_favorite_border_24);
+                    like = false;
+                    like_number.setText(Integer.valueOf(like_number.getText().toString())-1+"");
+                }
+                break;
+            case R.id.go_to_comment:
+                // 写评论
+                cal.setVisibility(View.GONE);
+                write_comm.setVisibility(View.VISIBLE);
+                break;
+            case R.id.get_comm:
+                // 发送评论
+                if (userId!=0){
+                    pressComment();
+                    Toast.makeText(this,"发送成功",Toast.LENGTH_SHORT).show();
+                    cal.setVisibility(View.VISIBLE);
+                    write_comm.setVisibility(View.GONE);
+                }else {
+                    Toast.makeText(this,"请先登录",Toast.LENGTH_SHORT).show();
+                    new PersonFragment().siupDialog(this);
+                }
+                break;
+            case R.id.no_comm:
+                cal.setVisibility(View.VISIBLE);
+                write_comm.setVisibility(View.GONE);
+                break;
+        }
+    }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -216,5 +237,32 @@ public class NewActivity extends AppCompatActivity implements View.OnClickListen
                 break;
         }
         return false;
+    }
+
+    public void refresh() {
+        finish();
+        Intent intent2 = new Intent(NewActivity.this,NewActivity.class);
+        intent2.putExtra("newsId",newsID);
+        intent2.putExtra("title",intent.getStringExtra("title"));
+        intent2.putExtra("news_content",intent.getStringExtra("news_content"));
+        intent2.putExtra("news_date",intent.getStringExtra("news_date"));
+        intent2.putExtra("news_views_number",intent.getStringExtra("news_views_number"));
+        intent2.putExtra("news_imgUrl",intent.getStringExtra("news_imgUrl"));
+        intent2.putExtra("news_like_number",intent.getStringExtra("news_like_number"));
+        Log.d("newsId",newsID+"");
+        startActivity(intent2);
+    }
+
+    public void pressComment(){
+        // 评论功能
+        SharedPreferences sp = this.getSharedPreferences("location", Context.MODE_PRIVATE);
+        int userId  = sp.getInt("UserId",1);
+        String newComment = comm.getText().toString();
+        if (newComment == null || newComment.equals("")){
+            Toast.makeText(this,"不能为空",Toast.LENGTH_SHORT).show();
+        }else {
+            userOkhttp.pressComment(userId,newsID,newComment,this);
+        }
+
     }
 }

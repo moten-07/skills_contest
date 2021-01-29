@@ -1,5 +1,6 @@
 package com.moten.DemoA.framents;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -149,10 +150,14 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
             userOkhttp.getUserInfo(requireActivity());
             user_id.setText("账号："+sp.getString("user_id","null"));
             user_name.setText("昵称："+sp.getString("user_info_name","null"));
-            String imgUrl = sp.getString("user_icon",null);
-            Glide.with(view.getContext())
-                    .load( (imgUrl.equals("") || imgUrl.isEmpty() ) ? R.mipmap.kls : imgUrl)
-                    .into(user_icon);
+            String imgUrl = sp.getString("user_icon","null");
+            if (imgUrl.equals("null")){
+
+            }else{
+                Glide.with(view.getContext())
+                        .load(imgUrl)
+                        .into(user_icon);
+            }
             user_siup.setVisibility(View.GONE);
         }else{
             user_icon.setImageResource(R.drawable.ic_baseline_account_box_24);
@@ -207,7 +212,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
                 }
                 break;
             case R.id.user_out:
-                editor.putString("token",null);
+                editor.clear();
                 editor.commit();
                 Toast.makeText(v.getContext(),"已清空本地信息并退出登录",Toast.LENGTH_LONG).show();
                 ((ActivityHome)getActivity()).refreshFragment();
@@ -215,22 +220,22 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
                 break;
             case R.id.user_siup:
                 // 弹出登录信息框
-                siupDialog();
+                siupDialog(requireActivity());
                 break;
         }
     }
 
-    private void siupDialog(){
+    public void siupDialog(Activity activity){
         //登录及注册弹窗
-        View view1 = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_login,null);
-        View view2 = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_sign,null);
+        View view1 = LayoutInflater.from(activity).inflate(R.layout.dialog_login,null);
+        View view2 = LayoutInflater.from(activity).inflate(R.layout.dialog_sign,null);
         // 登录的弹窗
-        AlertDialog dialog1 = new AlertDialog.Builder(getActivity())
+        AlertDialog dialog1 = new AlertDialog.Builder(activity)
                 .setView(view1)
                 .setTitle("登录你的账户")
                 .create();
         // 注册的弹窗
-        AlertDialog dialog2 = new AlertDialog.Builder(getActivity())
+        AlertDialog dialog2 = new AlertDialog.Builder(activity)
                 .setView(view2)
                 .setTitle("注册你的账户")
                 .create();
@@ -247,9 +252,9 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
                 String password = ((EditText)view1.findViewById(R.id.password)).getText().toString();
                 if (username.isEmpty() || username.equals("") || password.isEmpty() || password.equals("")){
                     // 判空免崩
-                    Toast.makeText(requireActivity(),"你TM怎么写的！",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity,"你TM怎么写的！",Toast.LENGTH_SHORT).show();
                 }else{
-                    userOkhttp.dialogLogin(view1,requireActivity(),dialog1);
+                    userOkhttp.dialogLogin(view1,activity,dialog1);
                 }
             }
         });
@@ -260,7 +265,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
 
         view2.findViewById(R.id.siup).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) { userOkhttp.dialog2Run(view2,dialog2,requireActivity()); }  // 注册按钮
+            public void onClick(View v) { userOkhttp.dialog2Run(view2,dialog2,activity); }  // 注册按钮
         });
         view2.findViewById(R.id.noSiup).setOnClickListener(new View.OnClickListener() {
             // 注册取消

@@ -92,7 +92,7 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="@color/white"
-        android:visibility="gone">
+        android:visibility="visible">
         <!--评论按钮-->
         <LinearLayout
             android:id="@+id/go_to_comment"
@@ -140,12 +140,13 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_marginRight="15dp"
-        android:visibility="visible">
+        android:visibility="gone">
         <View
             android:id="@+id/no_comm"
             android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/ic_baseline_keyboard_backspace_24"/>
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:background="@drawable/ic___return"/>
         <EditText
             android:id="@+id/comm"
             android:layout_width="wrap_content"

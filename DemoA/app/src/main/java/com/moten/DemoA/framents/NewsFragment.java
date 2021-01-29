@@ -105,7 +105,7 @@ public class NewsFragment extends Fragment {
                 List<TNLJ.Rows>list = new ArrayList<>();
                 list.addAll(userOkhttp.getNList());
                 int i1=i;
-                requireActivity().runOnUiThread(()->{
+                ((Activity)view.getContext()).runOnUiThread(()->{
                     news_List.add(LayoutInflater.from(view.getContext()).inflate(R.layout.item_news,null));
                     news_viewpager.getAdapter().notifyDataSetChanged();
                     RecyclerView recyclerView =news_List.get(i1).findViewById(R.id.newone_list);// 绑定recyclerview
@@ -115,7 +115,7 @@ public class NewsFragment extends Fragment {
                 });
                 userOkhttp.getNList().clear();
             }
-            requireActivity().runOnUiThread(()-> {
+            ((Activity)view.getContext()).runOnUiThread(()-> {
                 for (int i = 0 ;i<userOkhttp.getNTList().size();i++){
                     news_type_list.getTabAt(i).setText(userOkhttp.getNTList().get(i).getDictLabel());
                 }

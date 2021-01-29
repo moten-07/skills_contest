@@ -17,6 +17,7 @@ import com.google.gson.Gson;
 import com.moten.DemoA.ActivityHome;
 import com.moten.DemoA.Adapeter.commAdapeter;
 import com.moten.DemoA.R;
+import com.moten.DemoA.func.NewActivity;
 import com.moten.DemoA.func.TAFJ;
 import com.moten.DemoA.func.TALJ;
 import com.moten.DemoA.func.TCJ;
@@ -67,7 +68,6 @@ public class UserOkhttp {
             e.printStackTrace();
         }
     }
-
 
     private List<TAFJ.Rows> TRlist2 = new ArrayList<>();
     public List<TAFJ.Rows>getTRList2(){ return TRlist2; } // 返回引导页和首页的数据组
@@ -184,11 +184,17 @@ public class UserOkhttp {
                         editor.commit();
                         if (talj.getCode() == 200){
                             activity.runOnUiThread(()->{
+                                getUserInfo(activity);
+                                // 加载下数据
                                 Toast.makeText(activity,talj.getMsg(),Toast.LENGTH_SHORT).show();
                                 // 乱七八糟的异常，应该是Toast位置的原因，报的是蓝色
                                 // 先不管他，能正常跑，后面再来搞掉它
                                 dialog.dismiss();
-                                ((ActivityHome)activity).refreshFragment();
+                                if(activity.getClass() == new ActivityHome().getClass()){
+                                    ((ActivityHome)activity).refreshFragment();
+                                }else if(activity.getClass() == new NewActivity().getClass()){
+                                    ((NewActivity)activity).refresh();
+                                }
                             });
                         }
                     }else{
@@ -256,6 +262,7 @@ public class UserOkhttp {
                 editor.putString("user_paper",(tpijft.user.idCard==null || tpijft.user.idCard.equals(""))?
                         "123456789876543210":tpijft.user.idCard);
                 editor.putString("user_icon",tpijft.user.avatar);
+                editor.putInt("UserId",tpijft.user.userId);
                 editor.commit();
             }
         });
@@ -279,6 +286,36 @@ public class UserOkhttp {
                 ((Activity)recyclerView.getContext()).runOnUiThread(()->{
                     recyclerView.setAdapter(/*评论区的适配器*/new commAdapeter(recyclerView.getContext(),tr/*评论列表*/));
                 });
+            }
+        });
+    }
+
+    public void pressComment(int userId,int pressId,String content,Activity activity){
+        // 新增评论
+        String url = help.getHearUri()+help.postAddComments();
+        sp = activity.getSharedPreferences("location", Context.MODE_PRIVATE);
+        String token = sp.getString("token",null);
+        String CommJson = "{\"userId\": \""+userId+"\",\n" +
+                "\"pressId\": \""+pressId+"\",\n" +
+                "\"content\": \""+content+"\"}";
+        RequestBody body = RequestBody.create(CommJson, MediaType.parse("application/json"));
+        Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .addHeader("authorization",token)
+                .build();
+        call=client.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) { e.printStackTrace(); }
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+//                    String result = response.body().string();
+                    activity.runOnUiThread(()->{
+                        if(activity.getClass() == new NewActivity().getClass()){
+                            ((NewActivity)activity).refresh();
+                        }
+                    });
             }
         });
     }

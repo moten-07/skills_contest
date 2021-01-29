@@ -54,7 +54,9 @@ public class newsAdapeter extends RecyclerView.Adapter<newsAdapeter.ViewHolder>{
                 intent.putExtra("news_imgUrl",holder.imgUrl);
                 intent.putExtra("news_like_number",holder.news_like_number.getText().toString());
                 ((Activity)context).finish();
-                v.getContext().startActivity(new Intent(v.getContext(), ActivityHome.class));
+                Intent intent1 = new Intent(v.getContext(), ActivityHome.class);
+                intent1.putExtra("choose",2);
+                v.getContext().startActivity(intent1);
                 v.getContext().startActivity(intent);
             }
         });
