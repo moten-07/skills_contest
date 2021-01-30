@@ -30,6 +30,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.moten.DemoA.R;
+import com.moten.DemoA.aboutIntent.HttpHelp;
 import com.moten.DemoA.aboutIntent.UserOkhttp;
 import com.moten.DemoA.type.limts;
 
@@ -37,9 +38,11 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
 import java.lang.ref.WeakReference;
@@ -50,7 +53,7 @@ import okhttp3.Response;
 
 public class userInfoActivity extends AppCompatActivity {
     Toolbar toolbar;
-    EditText user_info_newname,user_info_newsex,user_info_newphone;
+    EditText user_info_newname,user_info_newsex,user_info_newphone,remark;
     TextView user_info_paper;
     Button user_info_newicon,user_info_save;
     SharedPreferences sp;
@@ -80,21 +83,23 @@ public class userInfoActivity extends AppCompatActivity {
         user_info_newname = findViewById(R.id.user_info_newname);
         user_info_newsex = findViewById(R.id.user_info_newsex);
         user_info_newphone = findViewById(R.id.user_info_newphone);
-
         user_info_paper = findViewById(R.id.user_info_paper);
-
         user_info_icon= findViewById(R.id.user_info_icon);
-
         user_info_newicon = findViewById(R.id.user_info_newicon);
         user_info_save = findViewById(R.id.user_info_save);
+        remark = findViewById(R.id.remark);
 
-
+        Glide.with(this)
+                .load(new HttpHelp().getHearUri()+sp.getString("user_icon",null))
+                .placeholder(R.mipmap.kls)
+                .into(user_info_icon);
         ((TextView)findViewById(R.id.user_icon_id)).setText("账号："+sp.getString("user_id","..."));
         user_info_icon.setImageResource(R.drawable.ic_baseline_account_box_24);
         user_info_newname.setText(sp.getString("user_info_name","默认昵称"));
         user_info_newsex.setText(sp.getString("user_info_sex","默认性别"));
         user_info_newphone.setText(sp.getString("user_info_phone","1234567890"));
         user_info_paper.setText("证件号码："+toId());// +存储的号码，但要打码
+        remark.setText(sp.getString("remark",null));
 
         user_info_newicon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,19 +115,18 @@ public class userInfoActivity extends AppCompatActivity {
                 // 保存修改
                 // 本地数据修改
 
-                editor.putString("user_paper","123456789987654321");
-                editor.putString("email","123@45.com");
-                editor.putString("remark","hhhh");
-
                 editor.putString("user_info_name",user_info_newname.getText().toString());
                 editor.putString("user_info_sex",user_info_newsex.getText().toString());
                 editor.putString("user_info_phone",user_info_newphone.getText().toString());
+                editor.putString("email",((EditText)findViewById(R.id.email)).getText().toString());
+                editor.putString("remark",remark.getText().toString());
                 editor.commit();
                 // 服务器端的修改，同步下本地数据就行了，懒得传值
                 Log.d("uri",file.getPath());
 
                 UserOkhttp userOkhttp = new UserOkhttp();
                 userOkhttp.updata(file,userInfoActivity.this);
+                finish();
             }
         });
     }
@@ -157,32 +161,25 @@ public class userInfoActivity extends AppCompatActivity {
         if (requestCode == 1 && resultCode == RESULT_OK){
             try {
                 Uri uri = data.getData();
-                InputStream stream = this.getContentResolver().openInputStream(uri);
-                Log.d("size",stream.available()+"");
-                // 获取图片文件大小
                 String filePath = uri.getPath();
                 Log.d("URI",filePath);
                 // 图片文件地址
                 file = new File(
                         this.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath(),
                         "pic.jpg");
-//                file.createNewFile();
+                file.createNewFile();
                 Log.d("filePath",file.getPath());
                 // 创建一个文件
                 // 输出，写入
-                FileReader reader = new FileReader(filePath);
-                BufferedReader reader1 = new BufferedReader(reader);
-                FileWriter writer = new FileWriter(file.getPath());
-                BufferedWriter writer1 = new BufferedWriter(writer);
-                char [] cr = new char[8192];
+                InputStream reader = this.getContentResolver().openInputStream(uri);
+                OutputStream writer = new FileOutputStream(file.getPath());
+                byte [] cr = new byte[8192];
                 int i = 0;
                 while (i!=-1){
-                    writer1.write(cr);
-                    i = reader1.read();
+                    i = reader.read(cr);
+                    writer.write(cr);
                 }
-                writer1.close();
                 writer.close();
-                reader1.close();
                 reader.close();
 
                 Glide.with(this)
@@ -192,6 +189,9 @@ public class userInfoActivity extends AppCompatActivity {
             }catch (Exception e){
                 Log.e("error",e.toString());
             }
+        }else{
+            // 没选择照片时的情况
+//            file = new File();
         }
     }
 

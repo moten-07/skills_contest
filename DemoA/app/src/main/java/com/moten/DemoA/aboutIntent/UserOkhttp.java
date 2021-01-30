@@ -19,6 +19,7 @@ import com.google.gson.JsonArray;
 import com.moten.DemoA.ActivityHome;
 import com.moten.DemoA.Adapeter.commAdapeter;
 import com.moten.DemoA.R;
+import com.moten.DemoA.framents.PersonFragment;
 import com.moten.DemoA.func.NewActivity;
 import com.moten.DemoA.func.TAFJ;
 import com.moten.DemoA.func.TALJ;
@@ -197,7 +198,6 @@ public class UserOkhttp {
                                 // 先不管他，能正常跑，后面再来搞掉它
                                 dialog.dismiss();
                                 if(activity.getClass() == new ActivityHome().getClass()){
-                                    ((ActivityHome)activity).refreshFragment();
                                 }else if(activity.getClass() == new NewActivity().getClass()){
                                     ((NewActivity)activity).refresh();
                                 }
@@ -373,7 +373,7 @@ public class UserOkhttp {
         String sex = sp.getString("user_info_sex",null);
         String remark = sp.getString("remark",null);
 
-        // 文件问题，没复制到
+        // 文件问题，没复制到,搞定了
         MultipartBody.Builder builder = new MultipartBody.Builder();
         RequestBody fileBody = RequestBody.create(file,MediaType.parse("application/octet-steam"));
         builder.addFormDataPart("file",file.getName(),fileBody);
@@ -401,6 +401,7 @@ public class UserOkhttp {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 String result = response.body().string();
+                file.delete();
                 activity.runOnUiThread(()->{ Toast.makeText(activity,result,Toast.LENGTH_SHORT).show(); });
             }
         });

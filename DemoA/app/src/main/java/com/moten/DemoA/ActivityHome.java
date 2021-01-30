@@ -208,17 +208,23 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
         super.onUserLeaveHint();
     }
 
-    public void refreshFragment(){
+    public void refreshFragment(Fragment fragment){
         // 刷新页面用的
-        if (list.contains(personFragment)){
-            list.remove(personFragment);
+        if (list.contains(fragment)){
+            list.remove(fragment);
             // 先从列表移除
         }
-        getSupportFragmentManager().beginTransaction().remove(personFragment);
+        getSupportFragmentManager().beginTransaction().remove(fragment);
         //
-        personFragment = new PersonFragment();
-        list.add(0,personFragment);
-        choose(1);
+        if (fragment.equals(personFragment)){
+            personFragment = new PersonFragment();
+            list.add(0,personFragment);
+
+            finish();
+            Intent intent = new Intent(this,ActivityHome.class);
+            intent.putExtra("choose",1);
+            startActivity(intent);
+        }
     }
 
 }

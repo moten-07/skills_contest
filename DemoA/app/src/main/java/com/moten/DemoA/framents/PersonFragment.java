@@ -212,8 +212,8 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
                 editor.clear();
                 editor.commit();
                 Toast.makeText(v.getContext(),"已清空本地信息并退出登录",Toast.LENGTH_LONG).show();
-                ((ActivityHome)getActivity()).refreshFragment();
-                // 页面刷新的方法,自定义的，雷电模拟器上倒是可以用（相对还算流畅）
+                ((ActivityHome)getActivity()).refreshFragment(this);
+                // 页面刷新的方法,自定义的，雷电模拟器上倒是可以用（相对于登录时的刷新还算流畅）
                 break;
             case R.id.user_siup:
                 // 弹出登录信息框
@@ -252,6 +252,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
                     Toast.makeText(activity,"你TM怎么写的！",Toast.LENGTH_SHORT).show();
                 }else{
                     userOkhttp.dialogLogin(view1,activity,dialog1);
+                    ((ActivityHome)requireActivity()).refreshFragment(PersonFragment.this);
                 }
             }
         });
