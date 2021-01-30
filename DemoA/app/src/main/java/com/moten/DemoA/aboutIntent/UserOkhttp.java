@@ -28,6 +28,7 @@ import com.moten.DemoA.func.TNLJ;
 import com.moten.DemoA.func.TNTJ;
 import com.moten.DemoA.func.TPIJFID;
 import com.moten.DemoA.func.TPIJFT;
+import com.moten.DemoA.type.limts;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -356,26 +357,37 @@ public class UserOkhttp {
         });
     }
 
-    public void updata(File file,
-                       Activity activity){
+    public void updata(File file, Activity activity){
         sp = activity.getSharedPreferences("location", Context.MODE_PRIVATE);
         String token = sp.getString("token",null);
-        String url = "";
+        String url = help.getHearUri()+help.update();
         if (!file.exists()){
             return;
         }
+        int UserId = sp.getInt("UserId",-1);
+        String idCard = sp.getString("user_paper",null);
+        String user_id = sp.getString("user_id",null);
+        String userName = sp.getString("user_info_name",null);
+        String email = sp.getString("email",null);
+        String phonenumber = sp.getString("user_info_phone",null);
+        String sex = sp.getString("user_info_sex",null);
+        String remark = sp.getString("remark",null);
+
+        // 文件问题，没复制到
         MultipartBody.Builder builder = new MultipartBody.Builder();
         RequestBody fileBody = RequestBody.create(file,MediaType.parse("application/octet-steam"));
         builder.addFormDataPart("file",file.getName(),fileBody);
+        Log.d("file",file.getPath());
+//        System.exit(0);
         RequestBody body = builder
-                .addFormDataPart("userId","userId")
-                .addFormDataPart("idCard","idCard")
-                .addFormDataPart("userName","userName")
-                .addFormDataPart("nickName","nickName")
-                .addFormDataPart("email","email")
-                .addFormDataPart("phonenumber","phonenumber")
-                .addFormDataPart("sex","sex")
-                .addFormDataPart("remark","remark")
+                .addFormDataPart("userId",UserId+"")
+                .addFormDataPart("idCard",idCard)
+                .addFormDataPart("userName",user_id)
+                .addFormDataPart("nickName",userName)
+                .addFormDataPart("email",email)
+                .addFormDataPart("phonenumber",phonenumber)
+                .addFormDataPart("sex",(sex.equals("男"))? "1":"0")
+                .addFormDataPart("remark",remark)
                 .build();
         Request request = new Request.Builder()
                 .url(url)
@@ -389,7 +401,7 @@ public class UserOkhttp {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 String result = response.body().string();
-                Toast.makeText(activity,result,Toast.LENGTH_SHORT).show();
+                activity.runOnUiThread(()->{ Toast.makeText(activity,result,Toast.LENGTH_SHORT).show(); });
             }
         });
     }

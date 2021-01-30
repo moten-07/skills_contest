@@ -149,4 +149,6 @@ public class HttpHelp {
 
     // 例外，只要token就可以获取，里面就有上面要的userId，从我师兄那里找到的，文档没有写（也许...大概...应该...吧...）
     public String getUserInfo(){return "/getInfo";}
+
+    public String update(){return "/system/user/updata";}
 }

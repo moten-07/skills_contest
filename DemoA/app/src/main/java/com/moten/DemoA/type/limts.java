@@ -21,7 +21,7 @@ public class limts {
     Activity activity;
     public limts(Activity activity){ this.activity=activity;}
     String [] limits=new String[]{
-            Manifest.permission.INTERNET,
+            Manifest.permission.INTERNET,               // 网络
             Manifest.permission.ACCESS_FINE_LOCATION,   // 较为精确的定位信息
             Manifest.permission.WRITE_EXTERNAL_STORAGE, // 允许写入
             Manifest.permission.CAMERA,                 // 调用摄像头
@@ -97,8 +97,7 @@ public class limts {
         // 获取最新的定位信息
         locationUpdates(location);
     }
-
-    public void locationUpdates(Location location){
+    private void locationUpdates(Location location){
         if(location!=null){
             // 判断定位信息是否为空
             StringBuilder stringBuilder = new StringBuilder();  // 创建字符串构建器，用于记录定位信息
@@ -112,5 +111,12 @@ public class limts {
         }else{
             setToGps("not get GPS");
         }
+    }
+
+    public void getWrite(){
+        if(ContextCompat.checkSelfPermission(activity.getBaseContext(),limits[2]) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(activity,new String[]{limits[2]},100);
+        }
+        Log.d("Visit External",(ContextCompat.checkSelfPermission(activity.getBaseContext(),limits[2]) == PackageManager.PERMISSION_GRANTED)+"");
     }
 }

@@ -13,7 +13,9 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
@@ -28,7 +30,18 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.moten.DemoA.R;
+import com.moten.DemoA.aboutIntent.UserOkhttp;
+import com.moten.DemoA.type.limts;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.InputStream;
+import java.io.Reader;
+import java.io.Writer;
 import java.lang.ref.WeakReference;
 
 import okhttp3.OkHttpClient;
@@ -42,6 +55,7 @@ public class userInfoActivity extends AppCompatActivity {
     Button user_info_newicon,user_info_save;
     SharedPreferences sp;
     ImageView user_info_icon;
+    File file;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,14 +109,20 @@ public class userInfoActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // 保存修改
                 // 本地数据修改
+
+                editor.putString("user_paper","123456789987654321");
+                editor.putString("email","123@45.com");
+                editor.putString("remark","hhhh");
+
                 editor.putString("user_info_name",user_info_newname.getText().toString());
                 editor.putString("user_info_sex",user_info_newsex.getText().toString());
                 editor.putString("user_info_phone",user_info_newphone.getText().toString());
                 editor.commit();
-                // 服务器端的修改
+                // 服务器端的修改，同步下本地数据就行了，懒得传值
+                Log.d("uri",file.getPath());
 
-                // 修改完成后
-                Toast.makeText(userInfoActivity.this,"修改成功",Toast.LENGTH_SHORT).show();
+                UserOkhttp userOkhttp = new UserOkhttp();
+                userOkhttp.updata(file,userInfoActivity.this);
             }
         });
     }
@@ -131,10 +151,40 @@ public class userInfoActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         // 读取相册图片文件
         super.onActivityResult(requestCode, resultCode, data);
+        limts limts = new limts(this);
+        limts.getWrite();
+        // 获取读写权限
         if (requestCode == 1 && resultCode == RESULT_OK){
             try {
                 Uri uri = data.getData();
-                Log.d("URI",uri.toString());
+                InputStream stream = this.getContentResolver().openInputStream(uri);
+                Log.d("size",stream.available()+"");
+                // 获取图片文件大小
+                String filePath = uri.getPath();
+                Log.d("URI",filePath);
+                // 图片文件地址
+                file = new File(
+                        this.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath(),
+                        "pic.jpg");
+//                file.createNewFile();
+                Log.d("filePath",file.getPath());
+                // 创建一个文件
+                // 输出，写入
+                FileReader reader = new FileReader(filePath);
+                BufferedReader reader1 = new BufferedReader(reader);
+                FileWriter writer = new FileWriter(file.getPath());
+                BufferedWriter writer1 = new BufferedWriter(writer);
+                char [] cr = new char[8192];
+                int i = 0;
+                while (i!=-1){
+                    writer1.write(cr);
+                    i = reader1.read();
+                }
+                writer1.close();
+                writer.close();
+                reader1.close();
+                reader.close();
+
                 Glide.with(this)
                         .load(uri)
                         .placeholder(R.mipmap.kls)
