@@ -128,7 +128,6 @@ public class HttpHelp {
     }
 
     // 6.1 查询地铁站首页
-    // 大部分地铁……385条都是哪里的啊！……
     public String getSubwayList(int pageNum,int pageSize,String currentName){
         return "/metro/list?" +
                 "pageNum=" +(pageNum)+
@@ -136,7 +135,7 @@ public class HttpHelp {
                 "&currentName="+currentName;
     }
 
-    // 6.2 查询地铁站详情……个屁，明明是地铁线路，还一共385条
+    // 6.2 查询地铁站详情……个屁，明明是地铁线路详情，还一共385条
     public String getSubwayOne(int id){
         return "/metro/"+id;
     }
@@ -155,4 +154,9 @@ public class HttpHelp {
 
     // 7.3 修改用户密码
     public String PutUpPass(){return "/system/user/resetPwd";}
+
+    // 7.4 查询订单总列表
+    public String orders(){return "/userinfo/orders/list?pageNum=1&pageSize=10";}
+    // 7.5 查询订单详情
+    public String order(){return "/userinfo/orders/1";}
 }

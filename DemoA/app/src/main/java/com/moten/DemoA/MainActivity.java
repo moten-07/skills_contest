@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import com.moten.DemoA.func.NewActivity;
+import com.moten.DemoA.func.UpPassActivity;
 import com.moten.DemoA.func.Subway2Activity;
 import com.moten.DemoA.func.SubwayActivity;
 import com.moten.DemoA.func.manySubway;
@@ -56,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case "user_update_pass":
                 textView.setText("跳转到修改密码……");
+                finish();
+                startActivity(new Intent(this, UpPassActivity.class));
                 break;
             case "user_feed":
                 textView.setText("跳转到意见反馈……");

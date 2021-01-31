@@ -353,6 +353,7 @@ public class UserOkhttp {
         });
     }
 
+    // 修改信息
     public void updata(File file, Activity activity){
         sp = activity.getSharedPreferences("location", Context.MODE_PRIVATE);
         String token = sp.getString("token",null);
@@ -404,6 +405,42 @@ public class UserOkhttp {
                             activity.finish();
                         }
                     });
+            }
+        });
+    }
+
+    public void PutUpPass(String oldPwd,String password,Activity activity){
+        String url = help.getHearUri()+help.PutUpPass();
+        sp = activity.getSharedPreferences("location", Context.MODE_PRIVATE);
+        String token = sp.getString("token",null);
+        int userId = sp.getInt("UserId",-1);
+        String json = "{\"userId\": \""+userId+"\",\n" +
+                "\"oldPwd\": \""+oldPwd+"\",\n" +
+                "\"password\": \""+password+"\"\n" +
+                "}";
+        // 。。。。API文档搞笑的对不对
+        // 顺便透露一下，随便一个账号都可以改。。。。
+        // 服务器设计也是搞笑的对不对......
+        RequestBody body = RequestBody.create(json,MediaType.parse("application/json"));
+        Request request = new Request.Builder()
+                .url(url)
+                .put(body)
+                .addHeader("authorization",token)
+                .build();
+        call = client.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) { e.printStackTrace(); }
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                String result = response.body().string();
+                TRJ trj = new Gson().fromJson(result,TRJ.class);
+                activity.runOnUiThread(()->{
+                    Toast.makeText(activity,trj.msg,Toast.LENGTH_SHORT).show();
+                    if (trj.code == 200){
+                        activity.finish();
+                    }
+                });
             }
         });
     }

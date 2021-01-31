@@ -67,8 +67,6 @@ public class userInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_info);
         init();
-        // 获取网络资源（指头像）
-        // 还没做
     }
 
     private void init(){
