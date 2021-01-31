@@ -3,6 +3,7 @@ package com.moten.DemoA.aboutIntent;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Environment;
 import android.util.Log;
@@ -29,6 +30,8 @@ import com.moten.DemoA.func.TNLJ;
 import com.moten.DemoA.func.TNTJ;
 import com.moten.DemoA.func.TPIJFID;
 import com.moten.DemoA.func.TPIJFT;
+import com.moten.DemoA.func.TRJ;
+import com.moten.DemoA.func.userInfoActivity;
 import com.moten.DemoA.type.limts;
 
 import org.jetbrains.annotations.NotNull;
@@ -261,19 +264,11 @@ public class UserOkhttp {
                 String result  = response.body().string();
                 TPIJFT tpijft = new Gson().fromJson(result,TPIJFT.class);
                 // 失策了，当时没做大致先解析数据来着，名字没统一
-//                editor.putInt("UserId",tpijft.user.userId);
-//                editor.putString("user_info_name",tpijft.user.nickName);
-//                editor.putString("user_info_sex",(tpijft.user.sex.equals("1"))?"男":"女");
-//                editor.putString("user_id",tpijft.user.userName);
-//                editor.putString("user_info_phone",tpijft.user.phonenumber);
-//                editor.putString("user_paper",(tpijft.user.idCard==null || tpijft.user.idCard.equals(""))?
-//                        "123456789876543210":tpijft.user.idCard);
-//                editor.putString("user_icon",tpijft.user.avatar);
-//                editor.commit();
                 getUserInfo2(tpijft.user.userId,token,editor);
             }
         });
     }
+
     public void getUserInfo2(int id,String token,SharedPreferences.Editor editor){
         // 总不能不用他给的接口吧，这就安排下,当然，用原来的也行...吧
         String url = help.getHearUri()+help.getUser(id);
@@ -293,12 +288,13 @@ public class UserOkhttp {
                 if (editor!=null){
                     editor.putInt("UserId",tpijfid.data.userId);
                     editor.putString("user_info_name",tpijfid.data.nickName);
-                    editor.putString("user_info_sex",(tpijfid.data.sex.equals("1"))?"男":"女");
+                    editor.putString("user_info_sex",tpijfid.data.sex);
                     editor.putString("user_id",tpijfid.data.userName);
                     editor.putString("user_info_phone",tpijfid.data.phonenumber);
                     editor.putString("user_paper",(tpijfid.data.idCard==null || tpijfid.data.idCard.equals(""))?
                             "123456789876543210":tpijfid.data.idCard);
                     editor.putString("user_icon",tpijfid.data.avatar);
+                    editor.putString("remark",tpijfid.data.remark);
                     editor.commit();
                 }
             }
@@ -361,32 +357,30 @@ public class UserOkhttp {
         sp = activity.getSharedPreferences("location", Context.MODE_PRIVATE);
         String token = sp.getString("token",null);
         String url = help.getHearUri()+help.update();
-        if (!file.exists()){
-            return;
-        }
         int UserId = sp.getInt("UserId",-1);
         String idCard = sp.getString("user_paper",null);
         String user_id = sp.getString("user_id",null);
         String userName = sp.getString("user_info_name",null);
-        String email = sp.getString("email",null);
+        // String email = sp.getString("email",null);
         String phonenumber = sp.getString("user_info_phone",null);
         String sex = sp.getString("user_info_sex",null);
         String remark = sp.getString("remark",null);
 
         // 文件问题，没复制到,搞定了
         MultipartBody.Builder builder = new MultipartBody.Builder();
-        RequestBody fileBody = RequestBody.create(file,MediaType.parse("application/octet-steam"));
-        builder.addFormDataPart("file",file.getName(),fileBody);
-        Log.d("file",file.getPath());
-//        System.exit(0);
+        if(file!=null){
+            RequestBody fileBody = RequestBody.create(file,MediaType.parse("application/octet-steam"));
+            builder.addFormDataPart("file",file.getName(),fileBody);
+            Log.d("file",file.getPath());
+        }
         RequestBody body = builder
                 .addFormDataPart("userId",UserId+"")
                 .addFormDataPart("idCard",idCard)
                 .addFormDataPart("userName",user_id)
                 .addFormDataPart("nickName",userName)
-                .addFormDataPart("email",email)
+                // .addFormDataPart("email",email)
                 .addFormDataPart("phonenumber",phonenumber)
-                .addFormDataPart("sex",(sex.equals("男"))? "1":"0")
+                .addFormDataPart("sex",sex)
                 .addFormDataPart("remark",remark)
                 .build();
         Request request = new Request.Builder()
@@ -401,8 +395,15 @@ public class UserOkhttp {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 String result = response.body().string();
-                file.delete();
-                activity.runOnUiThread(()->{ Toast.makeText(activity,result,Toast.LENGTH_SHORT).show(); });
+                TRJ trj = new Gson().fromJson(result,TRJ.class);
+                String msg = trj.msg;
+                Integer code = trj.code;
+                    activity.runOnUiThread(()->{
+                        Toast.makeText((userInfoActivity)activity,msg,Toast.LENGTH_SHORT).show();
+                        if (code!=500){
+                            activity.finish();
+                        }
+                    });
             }
         });
     }

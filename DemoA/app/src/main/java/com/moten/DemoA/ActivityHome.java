@@ -131,6 +131,7 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
                 break;
         }
     }
+
     private void choose(int i){
         // 事件
         if (i!=0){
@@ -215,15 +216,10 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
             // 先从列表移除
         }
         getSupportFragmentManager().beginTransaction().remove(fragment);
-        //
         if (fragment.equals(personFragment)){
             personFragment = new PersonFragment();
             list.add(0,personFragment);
-
-            finish();
-            Intent intent = new Intent(this,ActivityHome.class);
-            intent.putExtra("choose",1);
-            startActivity(intent);
+            choose(1);
         }
     }
 

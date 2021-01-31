@@ -134,28 +134,5 @@
                 android:text="点赞人数" />
         </LinearLayout>
     </LinearLayout>
-    <!--写评论，平时不可见，点击评论按钮替换,点击发送或edittext失去焦点时变为不可见-->
-    <LinearLayout
-        android:id="@+id/write_comm"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginRight="15dp"
-        android:visibility="gone">
-        <View
-            android:id="@+id/no_comm"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:background="@drawable/ic___return"/>
-        <EditText
-            android:id="@+id/comm"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-        <Button
-            android:id="@+id/get_comm"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="发送" />
-    </LinearLayout>
+
 </LinearLayout>

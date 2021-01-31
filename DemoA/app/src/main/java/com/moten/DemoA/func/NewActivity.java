@@ -13,12 +13,18 @@ import androidx.viewpager.widget.ViewPager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Point;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -103,6 +109,8 @@ public class NewActivity extends AppCompatActivity implements View.OnClickListen
                     TNLJ.Rows tr = userOkhttp.getNList().get(ran[i]);
                     if (tr.getId()!=newsID && i!=0 && i!=i-1){
                         list.add(tr);
+                    }else if (i!=0){
+                        i-=1;
                     }
                 }
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -149,15 +157,12 @@ public class NewActivity extends AppCompatActivity implements View.OnClickListen
 
         write_comm = findViewById(R.id.write_comm);
         go_to_comment = findViewById(R.id.go_to_comment);
-        comm = findViewById(R.id.comm);
 
         recyclerView = list.get(0).findViewById(R.id.newone_list);
         recyclerView1 = list.get(1).findViewById(R.id.newone_list);
 
         like_this_new.setOnClickListener(this);
         go_to_comment.setOnClickListener(this);
-        (findViewById(R.id.get_comm)).setOnClickListener(this);
-        (findViewById(R.id.no_comm)).setOnClickListener(this);
     }
 
     public void initDate(){
@@ -171,17 +176,6 @@ public class NewActivity extends AppCompatActivity implements View.OnClickListen
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));// 绑定其布局管理器（此处使用线性布局）
         recyclerView1.setLayoutManager(new LinearLayoutManager(this));// 绑定其布局管理器（此处使用线性布局）
-
-        comm.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus){
-                    // 失去焦点，好像没啥用
-                    cal.setVisibility(View.VISIBLE);
-                    write_comm.setVisibility(View.GONE);
-                }
-            }
-        });
 
         sp = this.getSharedPreferences("location", Context.MODE_PRIVATE);
         userId  = sp.getInt("UserId",0);
@@ -205,25 +199,35 @@ public class NewActivity extends AppCompatActivity implements View.OnClickListen
                 }
                 break;
             case R.id.go_to_comment:
-                // 写评论
-                cal.setVisibility(View.GONE);
-                write_comm.setVisibility(View.VISIBLE);
-                break;
-            case R.id.get_comm:
-                // 发送评论
+                // 评论
                 if (userId!=0){
-                    pressComment();
-                    Toast.makeText(NewActivity.this,"发送成功",Toast.LENGTH_SHORT).show();
-                    cal.setVisibility(View.VISIBLE);
-                    write_comm.setVisibility(View.GONE);
+                    // 应该是个弹窗,像微博
+                    View view = LayoutInflater.from(v.getContext()).inflate(R.layout.dialog_write,null);
+                    AlertDialog dialog = new AlertDialog.Builder(NewActivity.this)
+                            .setView(view)
+                            .create();
+                    Window window = dialog.getWindow();
+                    window.setGravity(Gravity.BOTTOM);  // 设置弹窗位置
+                    dialog.show();
+                    comm = view.findViewById(R.id.comm);
+                    view.findViewById(R.id.no_comm).setOnClickListener(new View.OnClickListener() {
+                        // 取消评论
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                        }
+                    });
+                    view.findViewById(R.id.get_comm).setOnClickListener(new View.OnClickListener() {
+                        // 发送
+                        @Override
+                        public void onClick(View v) {
+                            pressComment(dialog);
+                        }
+                    });
                 }else {
                     Toast.makeText(this,"请先登录",Toast.LENGTH_SHORT).show();
                     new PersonFragment().siupDialog(this);
                 }
-                break;
-            case R.id.no_comm:
-                cal.setVisibility(View.VISIBLE);
-                write_comm.setVisibility(View.GONE);
                 break;
         }
     }
@@ -253,7 +257,7 @@ public class NewActivity extends AppCompatActivity implements View.OnClickListen
         startActivity(intent2);
     }
 
-    public void pressComment(){
+    public void pressComment(AlertDialog dialog){
         // 评论功能
         SharedPreferences sp = this.getSharedPreferences("location", Context.MODE_PRIVATE);
         int userId  = sp.getInt("UserId",1);
@@ -262,6 +266,8 @@ public class NewActivity extends AppCompatActivity implements View.OnClickListen
             Toast.makeText(this,"不能为空",Toast.LENGTH_SHORT).show();
         }else {
             userOkhttp.pressComment(userId,newsID,newComment,this);
+            Toast.makeText(NewActivity.this,"发送成功",Toast.LENGTH_SHORT).show();
+            dialog.dismiss();
         }
 
     }

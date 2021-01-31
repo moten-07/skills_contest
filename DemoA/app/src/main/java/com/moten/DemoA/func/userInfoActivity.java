@@ -25,6 +25,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,12 +54,14 @@ import okhttp3.Response;
 
 public class userInfoActivity extends AppCompatActivity {
     Toolbar toolbar;
-    EditText user_info_newname,user_info_newsex,user_info_newphone,remark;
+    EditText user_info_newname,user_info_newphone,remark;
+    RadioButton user_info_newsex_n,user_info_newsex_w;
     TextView user_info_paper;
     Button user_info_newicon,user_info_save;
     SharedPreferences sp;
     ImageView user_info_icon;
     File file;
+    String sex;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,7 +84,8 @@ public class userInfoActivity extends AppCompatActivity {
         SharedPreferences.Editor editor=sp.edit();
 
         user_info_newname = findViewById(R.id.user_info_newname);
-        user_info_newsex = findViewById(R.id.user_info_newsex);
+        user_info_newsex_n = findViewById(R.id.user_info_newsex_n);
+        user_info_newsex_w = findViewById(R.id.user_info_newsex_w);
         user_info_newphone = findViewById(R.id.user_info_newphone);
         user_info_paper = findViewById(R.id.user_info_paper);
         user_info_icon= findViewById(R.id.user_info_icon);
@@ -96,10 +100,16 @@ public class userInfoActivity extends AppCompatActivity {
         ((TextView)findViewById(R.id.user_icon_id)).setText("账号："+sp.getString("user_id","..."));
         user_info_icon.setImageResource(R.drawable.ic_baseline_account_box_24);
         user_info_newname.setText(sp.getString("user_info_name","默认昵称"));
-        user_info_newsex.setText(sp.getString("user_info_sex","默认性别"));
+
         user_info_newphone.setText(sp.getString("user_info_phone","1234567890"));
         user_info_paper.setText("证件号码："+toId());// +存储的号码，但要打码
         remark.setText(sp.getString("remark",null));
+        sex = sp.getString("user_info_sex",null);
+        if (sex.equals("1")){
+            user_info_newsex_n.setChecked(true);
+        }else{
+            user_info_newsex_w.setChecked(true);
+        }
 
         user_info_newicon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,17 +126,13 @@ public class userInfoActivity extends AppCompatActivity {
                 // 本地数据修改
 
                 editor.putString("user_info_name",user_info_newname.getText().toString());
-                editor.putString("user_info_sex",user_info_newsex.getText().toString());
+//                editor.putString("user_info_sex",user_info_newsex.getText().toString());
                 editor.putString("user_info_phone",user_info_newphone.getText().toString());
-                editor.putString("email",((EditText)findViewById(R.id.email)).getText().toString());
                 editor.putString("remark",remark.getText().toString());
                 editor.commit();
                 // 服务器端的修改，同步下本地数据就行了，懒得传值
-                Log.d("uri",file.getPath());
-
                 UserOkhttp userOkhttp = new UserOkhttp();
                 userOkhttp.updata(file,userInfoActivity.this);
-                finish();
             }
         });
     }
@@ -191,7 +197,7 @@ public class userInfoActivity extends AppCompatActivity {
             }
         }else{
             // 没选择照片时的情况
-//            file = new File();
+            file = null;
         }
     }
 

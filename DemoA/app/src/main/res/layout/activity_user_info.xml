@@ -63,6 +63,26 @@
             app:layout_constraintTop_toTopOf="@+id/info_textview1"
             app:layout_constraintLeft_toRightOf="@id/info_textview1"/>
 
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toTopOf="@+id/info_textview2"
+            app:layout_constraintLeft_toRightOf="@id/info_textview2"
+            app:layout_constraintRight_toRightOf="@id/user_info_newname">
+            <RadioButton
+                android:id="@+id/user_info_newsex_n"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="男"/>
+            <RadioButton
+                android:id="@+id/user_info_newsex_w"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="女"/>
+        </RadioGroup>
+
         <TextView
             android:id="@+id/info_textview2"
             android:layout_width="wrap_content"
@@ -72,15 +92,6 @@
             android:textSize="20dp"
             app:layout_constraintTop_toBottomOf="@id/info_textview1"
             app:layout_constraintRight_toRightOf="@id/info_textview1"/>
-        <EditText
-            android:id="@+id/user_info_newsex"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="性别"
-            android:gravity="center"
-            app:layout_constraintTop_toTopOf="@+id/info_textview2"
-            app:layout_constraintLeft_toRightOf="@id/info_textview2"/>
 
         <TextView
             android:id="@+id/info_textview3"
@@ -98,6 +109,8 @@
             android:ems="10"
             android:hint="联系方式"
             android:gravity="center"
+            android:maxLength="11"
+            android:inputType="number"
             app:layout_constraintTop_toTopOf="@+id/info_textview3"
             app:layout_constraintLeft_toRightOf="@id/info_textview3"/>
 
@@ -127,28 +140,12 @@
             app:layout_constraintTop_toTopOf="@id/textView4"
             app:layout_constraintLeft_toRightOf="@id/textView4"
             app:layout_constraintRight_toRightOf="parent"/>
-        <TextView
-            android:id="@+id/textView5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="邮箱："
-            android:textSize="20dp"
-            android:layout_marginTop="20dp"
-            app:layout_constraintTop_toBottomOf="@id/textView4"
-            app:layout_constraintLeft_toLeftOf="@id/textView4"/>
-        <EditText
-            android:id="@+id/email"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="13"
-            app:layout_constraintTop_toTopOf="@id/textView5"
-            app:layout_constraintLeft_toRightOf="@id/textView5"/>
         <Button
             android:id="@+id/user_info_save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            app:layout_constraintTop_toBottomOf="@id/email"
+            app:layout_constraintTop_toBottomOf="@id/remark"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             android:text="保存修改"/>

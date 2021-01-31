@@ -61,7 +61,6 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
     SharedPreferences.Editor editor;
 
     OkHttpClient client;
-    Call call;
     HttpHelp help;
     UserOkhttp userOkhttp = new UserOkhttp();
 
@@ -148,11 +147,11 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
         if(siup){
             // 获取个人信息
             userOkhttp.getUserInfo(requireActivity());
-            user_id.setText("账号："+sp.getString("user_id","null"));
-            user_name.setText("昵称："+sp.getString("user_info_name","null"));
-            String imgUrl = help.getHearUri()+sp.getString("user_icon","/profile/0-yingdao.jpg");
+            user_id.setText("账号："+sp.getString("user_id",null));
+            user_name.setText("昵称："+sp.getString("user_info_name",null));
+            String imgUrl = help.getHearUri()+sp.getString("user_icon",null);
             Glide.with(view.getContext())
-                    .load(imgUrl)
+                    .load((imgUrl == null) ? R.mipmap.personage : imgUrl)
                     .placeholder(R.mipmap.kls)
                     .into(user_icon);
             user_siup.setVisibility(View.GONE);
@@ -273,5 +272,21 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
             }
         });
 
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        sp = requireActivity().getSharedPreferences("location", Context.MODE_PRIVATE);
+        editor = sp.edit();
+
+        String token = sp.getString("token",null);
+        int id = sp.getInt("UserId",-1);
+        if(token != null || id != -1){
+            userOkhttp.getUserInfo(requireActivity());
+        }else {
+            return;
+        }
     }
 }
