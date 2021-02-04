@@ -30,7 +30,7 @@
             android:id="@+id/user_info_newicon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="修改头像"
+            android:text="@string/userInfoBotton2"
             android:layout_marginTop="10dp"
             app:layout_constraintTop_toBottomOf="@id/user_info_icon"
             app:layout_constraintLeft_toLeftOf="@id/user_info_icon"
@@ -39,7 +39,7 @@
             android:id="@+id/user_icon_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="账号：1234567890"
+            android:text="@string/userInfoHint1"
             android:layout_marginRight="20dp"
             app:layout_constraintTop_toTopOf="@id/user_info_icon"
             app:layout_constraintRight_toRightOf="parent" />
@@ -48,7 +48,7 @@
             android:id="@+id/info_textview1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="昵称："
+            android:text="@string/userInfoTitile1"
             android:layout_marginTop="20dp"
             android:textSize="20dp"
             app:layout_constraintTop_toBottomOf="@id/user_info_newicon"
@@ -58,7 +58,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="昵称"
+            android:hint="@string/userInfoTitile1"
             android:gravity="center"
             app:layout_constraintTop_toTopOf="@+id/info_textview1"
             app:layout_constraintLeft_toRightOf="@id/info_textview1"/>
@@ -75,19 +75,19 @@
                 android:id="@+id/user_info_newsex_n"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="男"/>
+                android:text="@string/useInfoSex1"/>
             <RadioButton
                 android:id="@+id/user_info_newsex_w"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="女"/>
+                android:text="@string/useInfoSex0"/>
         </RadioGroup>
 
         <TextView
             android:id="@+id/info_textview2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="性别："
+            android:text="@string/userInfoTitile2"
             android:layout_marginTop="20dp"
             android:textSize="20dp"
             app:layout_constraintTop_toBottomOf="@id/info_textview1"
@@ -97,7 +97,7 @@
             android:id="@+id/info_textview3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="联系电话："
+            android:text="@string/userInfoTitile3"
             android:layout_marginTop="20dp"
             android:textSize="20dp"
             app:layout_constraintTop_toBottomOf="@id/info_textview2"
@@ -107,7 +107,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="联系方式"
+            android:hint="@string/userInfoTitile3"
             android:gravity="center"
             android:maxLength="11"
             android:inputType="number"
@@ -120,14 +120,14 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/info_textview3"
             app:layout_constraintLeft_toLeftOf="@id/info_textview3"
-            android:text="证件号码："
+            android:text="@string/userInfoTitile4"
             android:layout_marginTop="20dp"
             android:textSize="18dp"/>
         <TextView
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="备注："
+            android:text="@string/userInfoTitile5"
             android:textSize="20dp"
             android:layout_marginTop="20dp"
             app:layout_constraintTop_toBottomOf="@id/user_info_paper"
@@ -148,7 +148,7 @@
             app:layout_constraintTop_toBottomOf="@id/remark"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            android:text="保存修改"/>
+            android:text="@string/userInfoBotton1"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

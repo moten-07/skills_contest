@@ -20,40 +20,29 @@
     <!--  底线  -->
     <string name="endstr">--------------------我是有底线的--------------------</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment">智慧党建，大道至简🤣所以什么也没有呢</string>
+    <string name="guide_hint_web">网络设置</string>
+    <string name="guide_hint_go">进入主页</string>
     <string-array name="sub_beijing">
-        <item>地铁一号线</item>
-        <item>地铁二号线</item>
-        <item>地铁四号线</item>
-        <item>地铁五号线</item>
-        <item>地铁六号线</item>
-        <item>地铁七号线</item>
-        <item>地铁八号线</item>
-        <item>地铁九号线</item>
-        <item>地铁十号线</item>
-        <item>地铁十三号线</item>
-        <item>地铁十四号线</item>
-        <item>地铁十五号线</item>
-        <item>地铁十六号线</item>
-        <item>地铁房山线</item>
-        <item>地铁昌平线</item>
-        <item>地铁亦庄线</item>
-        <item>地铁燕房线</item>
-        <item>西郊线</item>
-        <item>S1线</item>
-        <item>首都机场线</item>
-        <item>大兴机场线</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
     </string-array>
-    <string-array name="newsType">
-        <item>最新</item>
-        <item>热门</item>
-        <item>世界</item>
-        <item>娱乐</item>
-        <item>军事</item>
-        <item>财经</item>
-        <item>体育</item>
-        <item>汽车</item>
-        <item>教育</item>
-        <item>科技</item>
-    </string-array>
+    <string name="userInfoHint1">账号：1234567890</string>
+    <string name="userInfoTitile1">昵称：</string>
+    <string name="userInfoTitile2">性别：</string>
+    <string name="useInfoSex0">女</string>
+    <string name="useInfoSex1">男</string>
+    <string name="userInfoTitile3">联系电话：</string>
+    <string name="userInfoTitile4">证件号码：</string>
+    <string name="userInfoTitile5">备注：</string>
+    <string name="userInfoBotton1">保存修改</string>
+    <string name="userInfoBotton2">修改头像</string>
+    <string name="user_up_pass_error">输入的密码不一致</string>
+    <string name="user_up_pass_ordpass">旧密码：</string>
+    <string name="user_up_pass_newpass">新密码：</string>
+    <string name="user_up_pass_newpass2">确认密码：</string>
+    <string name="user_up_pass_bottom">确认修改</string>
 </resources>

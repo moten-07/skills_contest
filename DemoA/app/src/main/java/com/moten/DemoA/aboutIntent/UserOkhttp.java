@@ -263,8 +263,15 @@ public class UserOkhttp {
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 String result  = response.body().string();
                 TPIJFT tpijft = new Gson().fromJson(result,TPIJFT.class);
-                // 失策了，当时没做大致先解析数据来着，名字没统一
-                getUserInfo2(tpijft.user.userId,token,editor);
+                Log.d("result",tpijft.code+"");
+                if (tpijft.code==200){
+                    Log.d("tpijft.user.id",tpijft.user.userId+"");
+                    getUserInfo2(tpijft.user.userId,token,editor);
+                }else if (tpijft.code==401){
+                    activity.runOnUiThread(()->{
+                        Toast.makeText(activity,"token已过期，建议重新登录",Toast.LENGTH_SHORT).show();
+                    });
+                }
             }
         });
     }

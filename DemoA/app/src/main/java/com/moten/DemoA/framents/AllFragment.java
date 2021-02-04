@@ -138,7 +138,7 @@ public class AllFragment extends Fragment {
         userOkhttp.getTRList2().clear();
         new Thread(()-> {
                 userOkhttp.getAllServe();
-                requireActivity().runOnUiThread(()->{
+            ((Activity)getContext()).runOnUiThread(()->{
                     List<TAFJ.Rows>list = userOkhttp.getTRList2();
                     adapeter=new lappAdapeter(view.getContext(),list);
                     recyclerView.setAdapter(adapeter);

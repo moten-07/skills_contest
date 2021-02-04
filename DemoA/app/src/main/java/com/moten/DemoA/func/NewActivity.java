@@ -102,20 +102,22 @@ public class NewActivity extends AppCompatActivity implements View.OnClickListen
         List<TNLJ.Rows>list = new ArrayList<>();
         new Thread(()->{
             userOkhttp.getNewsLists(1,100);
-            runOnUiThread(()->{
-                int [] ran = new int[3];
-                for (int i = 0;i<3;i++){
-                    ran[i] = new Random().nextInt(userOkhttp.getNList().size());
-                    TNLJ.Rows tr = userOkhttp.getNList().get(ran[i]);
-                    if (tr.getId()!=newsID && i!=0 && i!=i-1){
-                        list.add(tr);
-                    }else if (i!=0){
-                        i-=1;
+            if (userOkhttp.getNList().size()>0){
+                runOnUiThread(()->{
+                    int [] ran = new int[3];
+                    for (int i = 0;i<3;i++){
+                        ran[i] = new Random().nextInt(userOkhttp.getNList().size());
+                        TNLJ.Rows tr = userOkhttp.getNList().get(ran[i]);
+                        if (tr.getId()!=newsID && i!=0 && i!=i-1){
+                            list.add(tr);
+                        }else if (i!=0){
+                            i-=1;
+                        }
                     }
-                }
-                recyclerView.setLayoutManager(new LinearLayoutManager(this));
-                recyclerView.setAdapter(new newsAdapeter(this,/*推荐新闻列表*/list));
-            });
+                    recyclerView.setLayoutManager(new LinearLayoutManager(this));
+                    recyclerView.setAdapter(new newsAdapeter(this,/*推荐新闻列表*/list));
+                });
+            }
         }).start();
 
     }

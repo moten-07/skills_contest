@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -267,14 +268,24 @@ public class jGuideActivity extends AppCompatActivity {
                 for(int i = 0;i<result.size(); i++){
                     String url =new HttpHelp().getHearUri()+result.get(i).getImgUrl();
                     // 只要数据集中的ImgUrl,别的净TM扯淡
-                    Glide.with(jGuideActivity.this)
-                            .load(url)
+                    if (isDesort(jGuideActivity.this)){
+                        Glide.with(jGuideActivity.this)
+                                .load(url)
 //                            .placeholder(R.drawable.ic_baseline_all_inclusive_24)
-                            // 缓存图片，但还是不要了，报一堆蓝跟一堆红一样难受
-                            .into((ImageView)viewList.get(i).findViewById(R.id.imageView));
+                                // 缓存图片，但还是不要了，报一堆蓝跟一堆红一样难受
+                                .into((ImageView)viewList.get(i).findViewById(R.id.imageView));
+                    }
                 }
             }
         });
+
+    }
+
+    public static boolean isDesort(Activity activity){
+        if (activity==null|| activity.isFinishing() || (Build.VERSION.SDK_INT>=Build.VERSION_CODES.JELLY_BEAN_MR1 && activity.isDestroyed())){
+            return false;
+        }
+        return true;
     }
 
 }

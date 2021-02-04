@@ -1,6 +1,5 @@
 package com.moten.DemoA.Adapeter;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -41,8 +40,8 @@ public class commAdapeter extends RecyclerView.Adapter<commAdapeter.ViewHolder> 
             public void onClick(View v) {
                 // 查询用户信息，弹个窗
                 Log.d("id",holder.userId+"");
-                UserOkhttp userOkhttp = new UserOkhttp();
-                userOkhttp.getUserInfo2(holder.userId,"",null);
+//                UserOkhttp userOkhttp = new UserOkhttp();
+//                userOkhttp.getUserInfo2(holder.userId,"",null);
             }
         });
         return holder;
